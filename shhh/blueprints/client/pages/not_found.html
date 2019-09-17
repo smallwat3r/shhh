@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+ - File  : not_found.html
+ - Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
+ - Date  : 17.09.2019
+-->
+
+<html lang="en">
+{% include '_header.html' %}
+
+<body>
+
+  <main role="main" class="container">
+      <embed type="image/svg+xml" width="250px" src="{{ url_for('static', filename='img/fingerprint.svg') }}" />
+
+      <h1 class="mt-5">Shhh...</h1>
+      <h2>Not Found...</h2>
+
+      <br />
+      <a href="/create" class="btn btn-primary btn-lg">Create Secret</a>
+
+  </main>
+
+</body>
+
+{% include '_footer.html' %}
+
+</html>

@@ -1,0 +1,7 @@
+*.DS_Store
+__pycache__/
+
+shhh/venv/
+shhh/front/sdist/
+
+local.sh

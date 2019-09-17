@@ -1,0 +1,2 @@
+
+$('#secretSender').on('submit',function(event){event.preventDefault();$.ajax({url:'/api/send',data:$('#secretSender').serialize(),type:'POST',success:function(d){$('#linkPop').fadeIn(1000);$('#linkDetail').empty().append(window.location.hostname+'/read?secret='+d.slug);$('#linkExpire').empty().append(d.expires);}});});function myFunction(){var copyText=document.getElementById("linkDetail");copyText.select();copyText.setSelectionRange(0,99999);document.execCommand("copy");alert("Copied the text: "+copyText.value);}
