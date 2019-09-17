@@ -1,2 +1,0 @@
-
-$('#secretSender').on('submit',function(event){event.preventDefault();$.ajax({url:'/api/send',data:$('#secretSender').serialize(),type:'POST',complete:function(d){var data=JSON.parse(d);alert(data.result);}});});

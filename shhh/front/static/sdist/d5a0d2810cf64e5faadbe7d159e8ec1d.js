@@ -1,3 +1,0 @@
-
-$(document).ready(function(){$.urlParam=function(name){var results=new RegExp('[\?&]'+name+'=([^&#]*)').exec(window.location.href);if(results==null){return null;}else{return decodeURI(results[1])||0;}}
-$('#secretReader').on('submit',function(event){event.preventDefault();$.ajax({url:'/api/read?slug='+$.urlParam('slug'),data:$('#secretReader').serialize(),type:'POST',success:function(d){if(d.status=='error'){$('#errorMsg').empty().append(d.msg);$('#linkError').fadeIn(1000);setTimeout(function(){$('#linkError').fadeOut(1000)},2500);}else{$('#linkSuccess').fadeIn(1000);$('#secretMsg').empty().append(d.msg);$('#decryptBtn').attr('disabled',true);}}});});});
