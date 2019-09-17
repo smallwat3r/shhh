@@ -41,7 +41,7 @@ CREATE EVENT AutoDeleteExpiredRecords
 ON SCHEDULE
 EVERY 2 HOUR
 DO 
-  DELETE FROM links WHERE date_expires <= now()
+  DELETE FROM links WHERE date_expires <= now();
 ```
 
 ### Launch Sssh in local
