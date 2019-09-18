@@ -28,7 +28,7 @@ CREATE TABLE `links` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-In MySQL run the following to activate the `event_scheduler`. We need to make sure the `event_scheduler` is activated to schedule database clean-ups (in order to remove the records that has expired).
+In MySQL run the following to activate the `event_scheduler`. We need to make sure the `event_scheduler` is activated to schedule database clean-ups (in order to remove the records that have expired).
 
 ```sql
 SET GLOBAL event_scheduler = ON;
@@ -44,11 +44,15 @@ DO
   DELETE FROM links WHERE date_expires <= now();
 ```
 
-These MySQL queries can also be executed from the `mysql/initialize.sql` file.
+These MySQL queries can also be executed against the MySQL server instance via
+the `mysql/initialize.sql` file.
 
-### Launch Shhh in local
+### Launch Shhh
 
-We need to create a virtual environment, enter it, and install the needed dependencies.
+#### Natively Using Flask
+
+We recommend that you create a virtual environment for this project, so you can
+install the required dependencies.
 
 ```sh
 $ virtualenv -p python3 venv --no-site-package
@@ -56,7 +60,8 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-We then need to set-up our Environment Variables.
+You then need to set up a few environment variables. These will be used to
+configure Flask, as well as the app's connection to an instance of MySQL.
 
 ```sh
 export FLASK_APP=shhh
@@ -67,10 +72,21 @@ export PASS_MYSQL=<password>
 export DB_MYSQL=<name>
 ```
 
-Then run the below command to launch Shhh in local.
+Finally, run the below command to launch Shhh on localhost.
 
 ```sh
 $ python3 -m flask run --host='0.0.0.0'
+```
+
+#### Docker Compose
+
+For development instances of this app, this repo contains a docker-compose
+configuration. The configuration defines default settings for Shhh, as well as
+some default settings for a containerized instance of MySQL server. To run the
+app via docker-compose:
+
+```sh
+docker-compose up -d --build app
 ```
 
 ## 💡 Idea credits  
