@@ -38,7 +38,8 @@ def generate_link():
         db.commit('store_encrypt.sql', {
             'slug_link': link,
             'passphrase': utils.encrypt_passphrase(passphrase),
-            'encrypted_text': utils.encrypt_message(passphrase, secret),
+            'encrypted_text': utils.encrypt_message(
+                secret.encode(), passphrase),
             'date_created': now,
             'date_expires': (datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
                              + timedelta(days=int(expires)))
