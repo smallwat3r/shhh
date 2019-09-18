@@ -18,6 +18,7 @@ services:
       MYSQL_PASSWORD: shhh123
     volumes:
       - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
+      - mysql_data:/var/lib/mysql
     ports:
       - 3306:3306
 
@@ -41,3 +42,6 @@ services:
       - db
     ports:
       - 8080:8080
+
+volumes:
+  mysql_data:
