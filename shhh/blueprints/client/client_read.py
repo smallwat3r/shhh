@@ -45,4 +45,4 @@ def decrypt():
 
     return jsonify({'status': 'success',
                     'msg': utils.decrypt_message(
-                        passphrase, encrypted[0]['encrypted_text'])})
+                        encrypted[0]['encrypted_text'], passphrase)})

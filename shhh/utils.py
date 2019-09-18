@@ -8,15 +8,21 @@
 import os
 import string
 
-from base64 import b64decode, b64encode
+from base64 import urlsafe_b64decode as b64d, urlsafe_b64encode as b64e
 
 from passlib.hash import bcrypt
+
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 import pymysql
 import secrets
 
 from . import app
-from simplecrypt import decrypt, encrypt
+
+iterations = 100_000
 
 
 def generate_random_slug():
@@ -25,16 +31,35 @@ def generate_random_slug():
                    for _ in range(25))
 
 
-def encrypt_message(passphrase, message):
-    """Encrypt secret message."""
-    cipher = encrypt(passphrase, message)
-    return b64encode(cipher)
+def _derive_key(passphrase, salt, iterations=iterations):
+    """Derive a secret key from a given passphrase and salt."""
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(), length=32, salt=salt,
+        iterations=iterations, backend=default_backend()
+    )
+    return b64e(kdf.derive(passphrase))
 
 
-def decrypt_message(passphrase, encoded_data):
-    """Decode encrypted secret message."""
-    cipher = b64decode(encoded_data)
-    return decrypt(passphrase, cipher).decode('utf-8')
+def encrypt_message(message, passphrase, iterations=iterations):
+    """Encrypt secret with passphrase."""
+    salt = secrets.token_bytes(16)
+    key = _derive_key(passphrase.encode(), salt, 100000)
+    return b64e(
+        b'%b%b%b' % (
+            salt,
+            iterations.to_bytes(4, 'big'),
+            b64d(Fernet(key).encrypt(message)),
+        )
+    )
+
+
+def decrypt_message(crypted_data, passphrase):
+    """Decrypt secret with passphrase."""
+    decoded = b64d(crypted_data)
+    salt, iter, crypted_data = decoded[:16], decoded[16:20], b64e(decoded[20:])
+    iterations = int.from_bytes(iter, 'big')
+    key = _derive_key(passphrase.encode(), salt, iterations)
+    return Fernet(key).decrypt(crypted_data).decode('utf-8')
 
 
 def encrypt_passphrase(passphrase):
@@ -100,7 +125,7 @@ class DbConn:
         )
         r = [
             dict((self.cur.description[i][0], value if value
-                 else _return_null_format_by_type(value))
+                  else _return_null_format_by_type(value))
                  for i, value in enumerate(row))
             for row in self.cur.fetchall()
         ]
