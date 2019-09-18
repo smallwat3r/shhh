@@ -33,7 +33,7 @@ services:
       USER_MYSQL: shhh
       PASS_MYSQL: shhh123
     ports:
-      - 80:5000
+      - 5000:5000
 
   adminer:
     image: adminer

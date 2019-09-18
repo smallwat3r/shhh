@@ -72,7 +72,7 @@ export PASS_MYSQL=<password>
 export DB_MYSQL=<name>
 ```
 
-Finally, run the below command to launch Shhh on localhost.
+Finally, run the below command to launch Shhh on http://localhost:5000/.
 
 ```sh
 $ python3 -m flask run --host='0.0.0.0'
@@ -80,14 +80,17 @@ $ python3 -m flask run --host='0.0.0.0'
 
 #### Docker Compose
 
-For development instances of this app, this repo contains a docker-compose
+For development instances of Shhh, this repo contains a docker-compose
 configuration. The configuration defines default settings for Shhh, as well as
-some default settings for a containerized instance of MySQL server. To run the
-app via docker-compose:
+some default settings for a containerized instance of MySQL server. To build and
+run Shhh via docker-compose:
 
 ```sh
 docker-compose up -d --build app
 ```
+
+Once the container image has finished building and starting, Shhh will be
+available via http://localhost:5000/.
 
 ## 💡 Idea credits  
 

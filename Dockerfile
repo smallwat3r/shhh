@@ -3,7 +3,7 @@
 # Date  : 18.09.2019
 # Author: Austin Schaffer <schaffer.austin.t@gmail.com>
 
-FROM python:3
+FROM python:3-slim
 
 EXPOSE 5000
 
