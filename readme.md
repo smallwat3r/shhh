@@ -44,7 +44,7 @@ DO
   DELETE FROM links WHERE date_expires <= now();
 ```
 
-### Launch Sssh in local
+### Launch Shhh in local
 We need to create a virtual environment, enter it, and install the needed dependencies.
 ```sh
 $ virtualenv -p python3 venv --no-site-package
