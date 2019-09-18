@@ -25,8 +25,7 @@ from . import app
 
 def generate_random_slug():
     """Generate random slug to access data."""
-    return ''.join(secrets.choice(string.ascii_uppercase + string.digits)
-                   for _ in range(25))
+    return secrets.token_urlsafe()
 
 
 def _derive_key(passphrase, salt, iterations=100_000):
