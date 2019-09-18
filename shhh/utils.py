@@ -22,8 +22,6 @@ import secrets
 
 from . import app
 
-iterations = 100_000
-
 
 def generate_random_slug():
     """Generate random slug to access data."""
@@ -31,7 +29,7 @@ def generate_random_slug():
                    for _ in range(25))
 
 
-def _derive_key(passphrase, salt, iterations=iterations):
+def _derive_key(passphrase, salt, iterations=100_000):
     """Derive a secret key from a given passphrase and salt."""
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(), length=32, salt=salt,
@@ -40,10 +38,10 @@ def _derive_key(passphrase, salt, iterations=iterations):
     return b64e(kdf.derive(passphrase))
 
 
-def encrypt_message(message, passphrase, iterations=iterations):
+def encrypt_message(message, passphrase, iterations=100_000):
     """Encrypt secret with passphrase."""
     salt = secrets.token_bytes(16)
-    key = _derive_key(passphrase.encode(), salt, 100000)
+    key = _derive_key(passphrase.encode(), salt, iterations)
     return b64e(
         b'%b%b%b' % (
             salt,
