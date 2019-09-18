@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+# File  : docker-compose.yml
+# Author: Austin Schaffer <schaffer.austin.t@gmail.com>
+# Date  : 18.09.2019
+# Desc  : Describes the docker-compose configuration for development environments.
+#         These settings are not secure and are not intended for production use.
+#         Please override this configuration when configuring a production instance.
+
+version: '3.2'
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: shhh
+      MYSQL_USER: shhh
+      MYSQL_PASSWORD: shhh123
+    volumes:
+      - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
+      - mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  app:
+    image: smallwat3r/shhh:latest
+    build: .
+    depends_on:
+      - db
+    environment:
+      FLASK_ENV: development
+      HOST_MYSQL: db
+      DB_MYSQL: shhh
+      USER_MYSQL: shhh
+      PASS_MYSQL: shhh123
+    ports:
+      - 5000:5000
+
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql_data:
