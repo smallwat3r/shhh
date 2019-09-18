@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # File  : docker-compose.yml
 # Author: Austin Schaffer <schaffer.austin.t@gmail.com>
+# Date  : 18.09.2019
 # Desc  : Describes the docker-compose configuration for development environments.
 #         These settings are not secure and are not intended for production use.
 #         Please override this configuration when configuring a production instance.

@@ -1,6 +1,7 @@
 -- -*- coding: utf-8 -*-
 -- File  : initialize.sql
 -- Author: Austin Schaffer <schaffer.austin.t@gmail.com>
+-- Date  : 18.09.2019
 -- Desc  : Initializes tables, settings, and events for the MySQL instance.
 
 CREATE TABLE IF NOT EXISTS `links` (

@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+# File  : Dockerfile
+# Date  : 18.09.2019
+# Author: Austin Schaffer <schaffer.austin.t@gmail.com>
+
 FROM python:3
 
 EXPOSE 5000
