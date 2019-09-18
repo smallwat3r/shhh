@@ -55,9 +55,9 @@ We recommend that you create a virtual environment for this project, so you can
 install the required dependencies.
 
 ```sh
-$ virtualenv -p python3 venv --no-site-package
-$ source venv/bin/activate
-$ pip install -r requirements.txt
+virtualenv -p python3 venv --no-site-package
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 You then need to set up a few environment variables. These will be used to
@@ -75,7 +75,7 @@ export DB_MYSQL=<name>
 Finally, run the below command to launch Shhh on http://localhost:5000/.
 
 ```sh
-$ python3 -m flask run --host='0.0.0.0'
+python3 -m flask run --host='0.0.0.0'
 ```
 
 #### Docker Compose
