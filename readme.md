@@ -28,7 +28,10 @@ CREATE TABLE `links` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-In MySQL run the following to activate the `event_scheduler`. We need to make sure the `event_scheduler` is activated to schedule database clean-ups (in order to remove the records that have expired).
+In MySQL run the following to activate the `event_scheduler`. We need to make sure the `event_scheduler` is activated to schedule database clean-ups, in order to remove the records that have expired. In order to persist this setting in the event the MySQL server is restarted, you will need to either
+
+1. adjust your MySQL Server's `my.cnf` or `my.ini` file, or
+2. adjust the command that is used to start the MySQL Server instance, adding the `--event_scheduler=on` option
 
 ```sql
 SET GLOBAL event_scheduler = ON;

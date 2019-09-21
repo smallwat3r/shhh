@@ -11,6 +11,7 @@ version: '3.2'
 services:
   db:
     image: mysql/mysql-server:5.7
+    command: --event_scheduler=on
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: shhh
