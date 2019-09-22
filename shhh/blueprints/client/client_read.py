@@ -5,6 +5,8 @@
 # Date  : 17.09.2019
 
 """Client (reader) routes."""
+import cgi
+
 from flask import jsonify, render_template, request
 
 from . import client, DIR_PATH
@@ -43,6 +45,8 @@ def decrypt():
         return jsonify({'status': 'error',
                         'msg': 'Sorry the passphrase is not valid'})
 
+    msg = cgi.escape(utils.decrypt_message(
+        encrypted[0]['encrypted_text'], passphrase))
+
     return jsonify({'status': 'success',
-                    'msg': utils.decrypt_message(
-                        encrypted[0]['encrypted_text'], passphrase)})
+                    'msg': '<br />'.join(msg.split('\n'))})
