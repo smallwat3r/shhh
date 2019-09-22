@@ -45,6 +45,8 @@ def decrypt():
         return jsonify({'status': 'error',
                         'msg': 'Sorry the passphrase is not valid'})
 
+    msg = cgi.escape(utils.decrypt_message(
+        encrypted[0]['encrypted_text'], passphrase))
+
     return jsonify({'status': 'success',
-                    'msg': cgi.escape(utils.decrypt_message(
-                        encrypted[0]['encrypted_text'], passphrase))})
+                    'msg': '<br />'.join(msg.split('\n'))})
