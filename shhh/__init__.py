@@ -6,9 +6,6 @@
 
 """Init application."""
 import os
-import logging
-
-from datetime import datetime
 
 from flask import Flask
 from werkzeug.contrib.fixers import ProxyFix
