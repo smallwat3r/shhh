@@ -6,7 +6,6 @@
 
 """Utils."""
 import os
-import string
 
 from base64 import urlsafe_b64decode as b64d, urlsafe_b64encode as b64e
 
@@ -24,7 +23,10 @@ from . import app
 
 
 def generate_random_slug():
-    """Generate random slug to access data."""
+    """Generate random slug to access data.
+    This slug ID will be used by the recipient to read the
+    secret.
+    """
     return secrets.token_urlsafe()
 
 

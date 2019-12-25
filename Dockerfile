@@ -3,7 +3,13 @@
 # Date  : 18.09.2019
 # Author: Austin Schaffer <schaffer.austin.t@gmail.com>
 
-FROM python:3-slim
+FROM alpine:3.8
+
+RUN apk update && \
+    apk add build-base python3 python3-dev libffi-dev libressl-dev && \
+    cd /usr/local/bin && \
+    ln -s /usr/bin/python3 python && \
+    pip3 install --upgrade pip
 
 EXPOSE 5000
 
