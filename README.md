@@ -92,6 +92,9 @@ or via Makefile:
 
 ```sh
 make dc-start    # start app
+                 
+                 # other commands
+                 # --------------
 make dc-stop     # stop app
 make dc-reboot   # reboot app
 make dc-cleanup  # clean
