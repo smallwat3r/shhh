@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-{% include '_header.html' %}
+{% extends 'base.html' %}
 
-<body>
-    <main role="main" class="container">
-        <img class="mt-5" src="{{ url_for('static', filename='img/logo.png') }}">
-        <h2>Create Secret</h2>
-
-        {% if not data %}
+{% block container %}
+    <h2>Create Secret</h2>
+    {% if not data %}
 
         <form class="container" method="post">
             <label for="inputSecret">Secret message</label>
             <textarea class="form-control" name="inputSecret"
-                id="inputSecret" rows="4" cols="50"
-                placeholder="Your secret..." autocomplete="off" required></textarea>
+                id="inputSecret" rows="4" cols="50" placeholder="Your secret..."
+                autocomplete="off" required></textarea>
 
             <div class="mt-2 row">
                 <div class="col">
@@ -37,7 +32,7 @@
                 value="Generate Secret Link">
         </form>
 
-        {% else %}
+    {% else %}
 
         <div class="mt-2 alert alert-success" role="alert">
             <h4 class="alert-heading">{{ data.l }}</h4>
@@ -48,11 +43,5 @@
             </p>
         </div>
 
-        {% endif %}
-
-    </main>
-
-    {% include '_footer.html' %}
-</body>
-
-</html>
+    {% endif %}
+{% endblock %}

@@ -1,33 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-{% include '_header.html' %}
+{% extends 'base.html' %}
 
-<body>
-    <main role="main" class="container">
-        <img class="mt-5" src="{{ url_for('static', filename='img/logo.png') }}">
-        <h2>Read Secret</h2>
-        <label for="passPhrase">Passphrase to open secret</label>
-        <input class="form-control" name="passPhrase"
-            id="passPhrase" placeholder="Passphrase" autocomplete="off" required>
-        <button id="decryptBtn" class="mt-2 btn btn-primary btn-lg">
-            Decrypt
-        </button>
+{% block container %}
+    <h2>Read Secret</h2>
 
-        <div id="response" role="alert">
-            <p id="msg"></p>
-        </div>
-    </main>
+    <label for="passPhrase">Passphrase to open secret</label>
+    <input class="form-control" name="passPhrase" id="passPhrase"
+        placeholder="Passphrase" autocomplete="off" required>
+    <button id="decryptBtn" class="mt-2 btn btn-primary btn-lg">Decrypt</button>
 
-    {% include '_footer.html' %}
-</body>
+    <div id="response" role="alert"><p id="msg"></p></div>
+{% endblock %}
 
+{% block js %}
 <script>
     document.getElementById('decryptBtn').addEventListener('click', _ => {
         const slug = '{{ slug }}';
         const passphrase = document.getElementById('passPhrase').value;
-        fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, { method: 'GET', cache: 'no-store' })
-            .then(response => { return response.json(); })
-            .then( data => {
+        fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, {
+                method: 'GET',
+                cache: 'no-store'
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
                 switch (data.status) {
                     case 'error':
                         document.getElementById('response').className = 'alert alert-danger';
@@ -50,5 +46,4 @@
             });
     });
 </script>
-
-</html>
+{% endblock %}

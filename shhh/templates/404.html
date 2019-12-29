@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-{% include '_header.html' %}
+{% extends 'base.html' %}
 
-<body>
-    <main role="main" class="container">
-        <img class="mt-5" src="{{ url_for('static', filename='img/logo.png') }}">
-        <h2>Not Found...</h2>
-        <a href="/c" class="mt-2 btn btn-primary btn-lg">Back home</a>
-    </main>
-
-    {% include '_footer.html' %}
-</body>
-
-</html>
+{% block container %}
+<h2>Not Found...</h2>
+<a href="/c" class="mt-2 btn btn-primary btn-lg">Back home</a>
+{% endblock %}
