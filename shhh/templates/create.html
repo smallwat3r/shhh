@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include '_header.html' %}
+
+<body>
+    <main role="main" class="container">
+        <img class="mt-5" src="{{ url_for('static', filename='img/logo.png') }}">
+        <h2>Create Secret</h2>
+
+        {% if not data %}
+
+        <form class="container" method="post">
+            <label for="inputSecret">Secret message</label>
+            <textarea class="form-control" name="inputSecret"
+                id="inputSecret" rows="4" cols="50"
+                placeholder="Your secret..." autocomplete="off" required></textarea>
+
+            <div class="mt-2 row">
+                <div class="col">
+                    <label for="passPhrase">Passphrase to open secret</label>
+                    <input class="form-control" name="passPhrase"
+                        id="passPhrase" placeholder="Passphrase" autocomplete="off" required>
+                </div>
+
+                <div class="col">
+                    <label for="expiresValue">Destroy in</label>
+                    <select class="form-control" id="expiresValue" name="expiresValue">
+                        <option value="1">1 day</option>
+                        <option value="2">2 days</option>
+                        <option value="3">3 days</option>
+                        <option value="7">1 week</option>
+                    </select>
+                </div>
+            </div>
+
+            <input type="submit" class="mt-2 btn btn-primary btn-lg"
+                value="Generate Secret Link">
+        </form>
+
+        {% else %}
+
+        <div class="mt-2 alert alert-success" role="alert">
+            <h4 class="alert-heading">{{ data.l }}</h4>
+            <hr>
+            <p>
+                Send this link along with the passphrase to your recipient.
+                This link will expire in <b>{{ data.e }} day(s).</b>
+            </p>
+        </div>
+
+        {% endif %}
+
+    </main>
+
+    {% include '_footer.html' %}
+</body>
+
+</html>

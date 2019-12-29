@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include '_header.html' %}
+
+<body>
+    <main role="main" class="container">
+        <img class="mt-5" src="{{ url_for('static', filename='img/logo.png') }}">
+        <h2>Read Secret</h2>
+        <label for="passPhrase">Passphrase to open secret</label>
+        <input class="form-control" name="passPhrase"
+            id="passPhrase" placeholder="Passphrase" autocomplete="off" required>
+        <button id="decryptBtn" class="mt-2 btn btn-primary btn-lg">
+            Decrypt
+        </button>
+
+        <div id="response" role="alert">
+            <p id="msg"></p>
+        </div>
+    </main>
+
+    {% include '_footer.html' %}
+</body>
+
+<script>
+    document.getElementById('decryptBtn').addEventListener('click', _ => {
+        const slug = '{{ slug }}';
+        const passphrase = document.getElementById('passPhrase').value;
+        fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, { method: 'GET', cache: 'no-store' })
+            .then(response => { return response.json(); })
+            .then( data => {
+                switch (data.status) {
+                    case 'error':
+                        document.getElementById('response').className = 'alert alert-danger';
+                        break;
+                    case 'expired':
+                        document.getElementById('response').className = 'alert alert-danger';
+                        document.getElementById('passPhrase').value = '';
+                        document.getElementById('passPhrase').disabled = true;
+                        document.getElementById('decryptBtn').disabled = true;
+                        break;
+                    case 'success':
+                        document.getElementById('response').className = 'alert alert-success';
+                        document.getElementById('passPhrase').value = '';
+                        document.getElementById('passPhrase').disabled = true;
+                        document.getElementById('decryptBtn').disabled = true;
+                        break;
+                }
+                document.getElementById('msg').setAttribute('style', 'white-space: pre;');
+                document.getElementById('msg').textContent = data.msg;
+            });
+    });
+</script>
+
+</html>

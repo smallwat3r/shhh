@@ -4,12 +4,12 @@
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 17.09.2019
 
-"""Config file."""
+'''Config.'''
 import os
 
 
 class DefaultConfig:
-    """Default config values (Development)."""
+    '''Default config values (Development).'''
 
     DEBUG = True
     DB_CREDENTIALS = {
@@ -21,6 +21,6 @@ class DefaultConfig:
 
 
 class ProductionConfig(DefaultConfig):
-    """Production configuration."""
+    '''Production configuration.'''
 
     DEBUG = False
