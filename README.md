@@ -105,5 +105,5 @@ available via http://localhost:5000/.
 
 ## 💡 Idea credits  
 
-- (OneTimeSecret)[https://github.com/onetimesecret/onetimesecret]
-- (PasswordPusher)[https://github.com/pglombardo/PasswordPusher]
+- [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
+- [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
