@@ -4,10 +4,11 @@
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 17.09.2019
 
-"""Utils."""
-import os
-
+'''Utils.'''
 from base64 import urlsafe_b64decode as b64d, urlsafe_b64encode as b64e
+from datetime import datetime, timedelta
+
+import html
 
 from passlib.hash import bcrypt
 
@@ -16,22 +17,21 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-import pymysql
 import secrets
 
-from . import app
+from . import database, ROOT_PATH
 
 
-def generate_random_slug():
-    """Generate random slug to access data.
+def _generate_random_slug():
+    '''Generate random slug to access data.
     This slug ID will be used by the recipient to read the
     secret.
-    """
-    return secrets.token_urlsafe()
+    '''
+    return secrets.token_urlsafe(15)
 
 
-def _derive_key(passphrase, salt, iterations=100_000):
-    """Derive a secret key from a given passphrase and salt."""
+def __derive_key(passphrase, salt, iterations=100_000):
+    '''Derive a secret key from a given passphrase and salt.'''
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(), length=32, salt=salt,
         iterations=iterations, backend=default_backend()
@@ -39,10 +39,10 @@ def _derive_key(passphrase, salt, iterations=100_000):
     return b64e(kdf.derive(passphrase))
 
 
-def encrypt_message(message, passphrase, iterations=100_000):
-    """Encrypt secret with passphrase."""
+def _encrypt_message(message, passphrase, iterations=100_000):
+    '''Encrypt secret with passphrase.'''
     salt = secrets.token_bytes(16)
-    key = _derive_key(passphrase.encode(), salt, iterations)
+    key = __derive_key(passphrase.encode(), salt, iterations)
     return b64e(
         b'%b%b%b' % (
             salt,
@@ -52,86 +52,54 @@ def encrypt_message(message, passphrase, iterations=100_000):
     )
 
 
-def decrypt_message(crypted_data, passphrase):
-    """Decrypt secret with passphrase."""
+def _decrypt_message(crypted_data, passphrase):
+    '''Decrypt secret with passphrase.'''
     decoded = b64d(crypted_data)
     salt, iter, crypted_data = decoded[:16], decoded[16:20], b64e(decoded[20:])
     iterations = int.from_bytes(iter, 'big')
-    key = _derive_key(passphrase.encode(), salt, iterations)
+    key = __derive_key(passphrase.encode(), salt, iterations)
     return Fernet(key).decrypt(crypted_data).decode('utf-8')
 
 
-def encrypt_passphrase(passphrase):
-    """Encrypt passphrase to open message."""
+def _encrypt_passphrase(passphrase):
+    '''Encrypt passphrase to open message.'''
     return bcrypt.encrypt(passphrase)
 
 
-def validate_passphrase(passphrase, hashed):
-    """Validate passphrase to open message."""
+def _validate_passphrase(passphrase, hashed):
+    '''Validate passphrase to open message.'''
     return bcrypt.verify(passphrase, hashed)
 
 
-class DbConn:
-    """Manage Database connection and user actions.
+def generate_link(secret, passphrase, expires):
+    '''Generate link to access secret.'''
+    link = _generate_random_slug()
+    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    We are loading our SQL requests from raw files located inside each
-    module directories under a SQL folder.
-    """
+    with database.DbConn(ROOT_PATH) as db:
+        db.commit('store_encrypt.sql', {
+            'slug_link': link,
+            'passphrase': _encrypt_passphrase(passphrase),
+            'encrypted_text': _encrypt_message(secret.encode(), passphrase),
+            'date_created': now,
+            'date_expires': (datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
+                             + timedelta(days=int(expires)))
+        })
+    return {'slug': link, 'expires': expires}
 
-    __slots__ = ('cnx', 'cur', 'path_temp')
 
-    def __init__(self, path_temp):
-        """Make connection to MySql DB."""
-        self.cnx = pymysql.connect(charset="utf8",
-                                   **app.config['DB_CREDENTIALS'])
-        self.cur = self.cnx.cursor()
-        self.path_temp = os.path.join(path_temp, 'sql')
+def decrypt(slug, passphrase):
+    '''Decrypt message from slug.'''
+    with database.DbConn(ROOT_PATH) as db:
+        encrypted = db.get('retrieve_from_slug.sql', {'slug': slug})
 
-    def __enter__(self):
-        """Load context manager."""
-        return self
+    if not encrypted:
+        return {'status': 'error', 'msg': 'Sorry the data has expired'}
 
-    def __exit__(self, exception_type, exception_value, traceback):
-        """Close DB connection."""
-        self.cur.close()
+    if not _validate_passphrase(passphrase, encrypted[0]['passphrase']):
+        return {'status': 'error', 'msg': 'Sorry the passphrase is not valid'}
 
-    def close(self):
-        """Close DB connection."""
-        self.cur.close()
-
-    @staticmethod
-    def _render_template(filepath):
-        """Return SQL content from file."""
-        with open(filepath) as f:
-            return f.read()
-
-    def get(self, query, args={}):
-        """Return SQL results in a dict format."""
-
-        def _return_null_format_by_type(value):
-            """Return correct value from value type."""
-            if type(value).__name__ == 'int':
-                return 0
-
-            elif type(value).__name__ == 'float':
-                return 0.0
-
-            return ''
-
-        self.cur.execute(
-            self._render_template(os.path.join(self.path_temp, query)),
-            args
-        )
-        r = [
-            dict((self.cur.description[i][0], value if value
-                  else _return_null_format_by_type(value))
-                 for i, value in enumerate(row))
-            for row in self.cur.fetchall()
-        ]
-        return r if r else None
-
-    def commit(self, query, args={}):
-        """Commit SQL request."""
-        self.cur.execute(self._render_template(
-            os.path.join(self.path_temp, query)), args)
-        self.cnx.commit()
+    msg = html.escape(
+        _decrypt_message(encrypted[0]['encrypted_text'], passphrase)
+    )
+    return {'status': 'success', 'msg': '<br />'.join(msg.split('\n'))}

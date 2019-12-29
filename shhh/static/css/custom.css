@@ -4,11 +4,11 @@
  * Date  : 17.09.2019
  */
 
-
 html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   margin-bottom: 60px; /* Margin bottom by footer height */
   background-color: #f5f5f5;

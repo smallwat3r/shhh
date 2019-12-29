@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include '_header.html' %}
+
+<body>
+    <main role="main" class="container">
+
+        <form class="container" method="post">
+            <h1 class="mt-5">Shhh...</h1>
+            <h2>Read Secret</h2>
+
+            <label for="passPhrase">Passphrase to open secret</label>
+            <input class="form-control" name="passPhrase" id="passPhrase" placeholder="Passphrase" required>
+
+            <input id="decryptBtn" type="submit" class="mt-2 btn btn-primary btn-lg" value="Decrypt">
+        </form>
+
+        {% if data %}
+        {% if data.status == 'error' %}
+        <div class="alert alert-danger" role="alert">
+            <p>{{ data.msg }}</p>
+        </div>
+        {% else %}
+        <div class="alert alert-secondary" role="alert">
+            <p>{{ data.msg }}</p>
+        </div>
+        {% endif %}
+        {% endif %}
+
+    </main>
+
+</body>
+
+{% include '_footer.html' %}
+
+</html>
