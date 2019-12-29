@@ -13,7 +13,7 @@ from flask import redirect, request, url_for
 
 
 def on_post(arguments):
-    '''Handles POST request with mandatory args.'''
+    '''Check POST request got all mandatory args.'''
     def inner(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -25,8 +25,21 @@ def on_post(arguments):
     return inner
 
 
+def need_arg(arguments):
+    '''Check if all args are in the GET request.'''
+    def inner(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            for arg in arguments:
+                if not request.args.get(arg):
+                    return redirect(url_for('error_404'))
+            return f(*args, **kwargs)
+        return wrapper
+    return inner
+
+
 def check_arg(arg):
-    '''Check GET arg is valid.'''
+    '''Check if GET data arg is a valid JSON model.'''
     def inner(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -35,7 +48,7 @@ def check_arg(arg):
                     data = ast.literal_eval(request.args.get('data'))
                 except ValueError:
                     return redirect(url_for('create'))
-                if not data.get('slug') or not data.get('expires'):
+                if not data.get('l') or not data.get('e'):
                     return redirect(url_for('create'))
             return f(*args, **kwargs)
         return wrapper

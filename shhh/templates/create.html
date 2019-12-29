@@ -4,16 +4,20 @@
 
 <body>
     <main role="main" class="container">
+        <h1 class="mt-5">Shhh...</h1>
+        <h2>Create Secret</h2>
+
+        {% if not data %}
 
         <form class="container" method="post">
-            <h1 class="mt-5">Shhh...</h1>
-            <h2>Create Secret</h2>
-
             <label for="inputSecret">Secret message</label>
-            <textarea class="form-control" name="inputSecret" id="inputSecret" rows="4" cols="50" placeholder="Your secret..." required></textarea>
+            <textarea class="form-control" name="inputSecret"
+                id="inputSecret" rows="4" cols="50"
+                placeholder="Your secret..." required></textarea>
 
             <label for="passPhrase">Passphrase to open secret</label>
-            <input class="form-control" name="passPhrase" id="passPhrase" placeholder="Passphrase" required>
+            <input class="form-control" name="passPhrase"
+                id="passPhrase" placeholder="Passphrase" required>
 
             <label for="expiresValue">Destroy in</label>
             <select class="form-control" id="expiresValue" name="expiresValue">
@@ -23,23 +27,26 @@
                 <option value="7">1 week</option>
             </select>
 
-            <input type="submit" class="mt-2 btn btn-primary btn-lg" value="Generate Secret Link">
+            <input type="submit" class="mt-2 btn btn-primary btn-lg"
+                value="Generate Secret Link">
         </form>
 
-        {% if data %}
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">{{ data.url }}r/{{ data.slug }}</h4>
+        {% else %}
+
+        <div class="mt-2 alert alert-success" role="alert">
+            <h4 class="alert-heading">{{ data.l }}</h4>
             <hr>
             <p>
                 Send this link along with the passphrase to your recipient.
-                This link will expire in <b>{{ data.expires }} day(s).</b>
+                This link will expire in <b>{{ data.e }} day(s).</b>
             </p>
         </div>
+
         {% endif %}
 
     </main>
-</body>
 
-{% include '_footer.html' %}
+    {% include '_footer.html' %}
+</body>
 
 </html>

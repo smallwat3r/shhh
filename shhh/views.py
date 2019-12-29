@@ -7,11 +7,11 @@
 '''Flask views.'''
 import ast
 
-from flask import (redirect, render_template, request, send_from_directory,
-                   url_for)
+from flask import (jsonify, redirect, render_template, request,
+                   send_from_directory, url_for)
 
 from . import app, utils
-from .decorators import check_arg, on_post
+from .decorators import check_arg, need_arg, on_post
 
 
 @app.route('/')
@@ -22,42 +22,42 @@ def index():
 @app.route('/c', methods=['GET', 'POST'])
 @check_arg('data')
 def create():
-    '''Create a secret.'''
+    '''Create secret.'''
 
     @on_post(('inputSecret', 'passPhrase', 'expiresValue',))
     def _generate():
-        data = utils.generate_link(
+        '''Generate secret link.'''
+        e = request.form.get('expiresValue')
+        slug = utils.generate_link(
             secret=request.form.get('inputSecret'),
             passphrase=request.form.get('passPhrase'),
-            expires=request.form.get('expiresValue')
+            expires=e
         )
-        data['url'] = request.url_root
-        return data
+        return {'l': f"{request.url_root}r/{slug}", 'e': e}
 
-    def _data():
+    def data():
         if request.args.get('data'):
             return ast.literal_eval(request.args.get('data'))
 
     if request.method == 'POST':
         return redirect(url_for('create', data=_generate()))
 
-    return render_template('create.html', data=_data())
+    return render_template('create.html', data=data())
 
 
-@app.route('/r/<slug>', methods=['GET', 'POST'])
+@app.route('/r/<slug>')
 def read(slug):
-    '''Read a secret.'''
+    '''Read secret.'''
+    return render_template('read.html', slug=slug)
 
-    def _decrypt():
-        return utils.decrypt(
-            slug=slug,
-            passphrase=request.form.get('passPhrase')
-        )
 
-    if request.method == 'POST':
-        return redirect(f"read/{slug}?data={_decrypt}")
-
-    return render_template('read.html', data=None)
+@app.route('/api/r')
+@need_arg(('slug', 'passphrase',))
+def api_read():
+    '''Read secret, API call.'''
+    return jsonify(utils.decrypt(
+        slug=request.args.get('slug'),
+        passphrase=request.args.get('passphrase')))
 
 
 @app.errorhandler(404)

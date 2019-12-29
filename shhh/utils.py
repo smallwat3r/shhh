@@ -85,7 +85,7 @@ def generate_link(secret, passphrase, expires):
             'date_expires': (datetime.strptime(now, '%Y-%m-%d %H:%M:%S')
                              + timedelta(days=int(expires)))
         })
-    return {'slug': link, 'expires': expires}
+    return link
 
 
 def decrypt(slug, passphrase):
@@ -94,12 +94,12 @@ def decrypt(slug, passphrase):
         encrypted = db.get('retrieve_from_slug.sql', {'slug': slug})
 
     if not encrypted:
-        return {'status': 'error', 'msg': 'Sorry the data has expired'}
+        return {'status': 'expired', 'msg': 'Sorry the data has expired.'}
 
     if not _validate_passphrase(passphrase, encrypted[0]['passphrase']):
-        return {'status': 'error', 'msg': 'Sorry the passphrase is not valid'}
+        return {'status': 'error', 'msg': 'Sorry the passphrase is not valid.'}
 
     msg = html.escape(
         _decrypt_message(encrypted[0]['encrypted_text'], passphrase)
     )
-    return {'status': 'success', 'msg': '<br />'.join(msg.split('\n'))}
+    return {'status': 'success', 'msg': msg}
