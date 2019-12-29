@@ -88,6 +88,15 @@ run Shhh via docker-compose:
 docker-compose up -d --build app
 ```
 
+or via Makefile:
+
+```sh
+make dc-start    # start app
+make dc-stop     # stop app
+make dc-reboot   # reboot app
+make dc-cleanup  # clean
+```
+
 Once the container image has finished building and starting, Shhh will be
 available via http://localhost:5000/.
 
