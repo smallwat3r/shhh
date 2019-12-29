@@ -3,6 +3,6 @@
 __pycache__/
 
 venv/
-shhh/front/static/sdist/
+shhh/static/sdist/
 
 local.sh
