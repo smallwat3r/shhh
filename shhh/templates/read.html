@@ -4,11 +4,13 @@
     <h2>Read Secret</h2>
 
     <label for="passPhrase">Passphrase to open secret</label>
-    <input class="form-control" name="passPhrase" id="passPhrase"
-        placeholder="Passphrase" autocomplete="off" required>
-    <button id="decryptBtn" class="mt-2 btn btn-primary btn-lg">Decrypt</button>
+    <input name="passPhrase" id="passPhrase" placeholder="Passphrase" autocomplete="off" required>
 
-    <div id="response" role="alert"><p id="msg"></p></div>
+    <button id="decryptBtn" class="btn">Decrypt</button>
+
+    <div class="p-top">
+    <div id="response"><p id="msg"></p></div>
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -16,6 +18,7 @@
     document.getElementById('decryptBtn').addEventListener('click', _ => {
         const slug = '{{ slug }}';
         const passphrase = document.getElementById('passPhrase').value;
+        if (passphrase) {
         fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, {
                 method: 'GET',
                 cache: 'no-store'
@@ -26,16 +29,16 @@
             .then(data => {
                 switch (data.status) {
                     case 'error':
-                        document.getElementById('response').className = 'alert alert-danger';
+                        document.getElementById('response').className = 'p-top alert-error';
                         break;
                     case 'expired':
-                        document.getElementById('response').className = 'alert alert-danger';
+                        document.getElementById('response').className = 'p-top alert-expired';
                         document.getElementById('passPhrase').value = '';
                         document.getElementById('passPhrase').disabled = true;
                         document.getElementById('decryptBtn').disabled = true;
                         break;
                     case 'success':
-                        document.getElementById('response').className = 'alert alert-success';
+                        document.getElementById('response').className = 'p-top alert-success';
                         document.getElementById('passPhrase').value = '';
                         document.getElementById('passPhrase').disabled = true;
                         document.getElementById('decryptBtn').disabled = true;
@@ -44,6 +47,7 @@
                 document.getElementById('msg').setAttribute('style', 'white-space: pre;');
                 document.getElementById('msg').textContent = data.msg;
             });
+        }
     });
 </script>
 {% endblock %}

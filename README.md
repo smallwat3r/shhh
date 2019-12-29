@@ -6,7 +6,7 @@ The user can set up an expire date and a passphrase to access the secret.
 Secrets and Passphrases are encrypted in order to make the data anonymous, especially in MySQL.  
 
 **demo:**    
-![Alt Text](https://github.com/smallwat3r/shhh/blob/master/_demo/demo.gif)  
+![shhh](https://i.imgur.com/xI7uvfK.gif)
 
 ## ⚙️ Set up & Dependencies
 

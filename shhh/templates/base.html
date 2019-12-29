@@ -3,30 +3,47 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Shhh</title>
     <meta name="author" content="Smallwat3r">
-    <link rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-        crossorigin="anonymous">
-    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
 </head>
 
 <body>
-    <main role="main" class="container">
-      <img class="mt-5" src="{{ url_for('static', filename='img/logo.png') }}">
-      {% block container %}{% endblock %}
-    </main>
+    <div id="main" class="card container">
+        <div class="card__content">
+            <div class="card__content-header">
+                <div class="card__content-profile">
+                  <div class="card__content-profile-image-container">
+                    <picture class="card__content-profile-picture">
+                        <img class="card__content-profile-image" src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+                    </picture>
+                  </div>
+                  <div class="card__content-profile-details">
+                    <span class="card__content-profile-name">Shhh...</span>
+                    <span class="card__content-profile-job">Share your secrets</span>
+                  </div>
+                </div>
+            </div>
 
-    <footer class="mb-5 footer">
-        <div class="container">
-            <span class="text-muted">&copy; Matthieu Petiteau 2019</span>
+              <div class="card__content-body">
+                {% block container %}{% endblock %}
+              </div>
+
+
+            <div class="card__footer">
+              <p class="card__footer-body">
+                    <span class="text-muted">&copy; Matthieu Petiteau 2019</span>
+              </p>
+            </div>
+
+
         </div>
-    </footer>
+
+    </div>
 
 {% block js %}{% endblock %}
 </body>
