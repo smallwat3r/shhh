@@ -63,9 +63,6 @@ textarea {
 .p-top {
     padding-top: 10px;
 }
-.p-bot {
-    padding-bottom: 10px;
-}
 
 .alert-success {
     background-color: #99ff33;
@@ -84,11 +81,6 @@ textarea {
     background-color: #FFBF00;
     border-radius: 15px;
     padding: 10px;
-}
-
-.link {
-    text-align: center;
-    font-size: 0.9em;
 }
 
 .card {
@@ -152,17 +144,9 @@ textarea {
     font-size: 1em;
 }
 
-.card__content-profile-job {
+.card__content-profile-subname {
     display: block;
     font-size: 0.8em;
-}
-
-.card__content-title {
-    font-family: 'VT323', monospace;
-    margin-top: 0;
-    font-size: 2em;
-    font-weight: bold;
-    line-height: 1.3;
 }
 
 .card__content-body {
