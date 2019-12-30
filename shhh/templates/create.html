@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block container %}
+
     <h2>Create Secret</h2>
+
     {% if not data %}
 
         <form method="post">
@@ -32,11 +34,10 @@
         <div class="alert-success">
             <h4 class="link">{{ data.l }}</h4>
             <hr>
-            <p>
-                Send this link along with the passphrase to your recipient.
-                This link will expire in <b>{{ data.e }} day(s).</b>
-            </p>
+            <p>Send this link along with the passphrase to your recipient.
+               This link will expire in <b>{{ data.e }} day(s).</b></p>
         </div>
 
     {% endif %}
+
 {% endblock %}

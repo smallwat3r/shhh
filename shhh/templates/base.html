@@ -17,35 +17,34 @@
         <div class="card__content">
             <div class="card__content-header">
                 <div class="card__content-profile">
-                  <div class="card__content-profile-image-container">
-                    <picture class="card__content-profile-picture">
-                        <img class="card__content-profile-image" src="{{ url_for('static', filename='img/logo.png') }}" alt="">
-                    </picture>
-                  </div>
-                  <div class="card__content-profile-details">
-                    <span class="card__content-profile-name">Shhh...</span>
-                    <span class="card__content-profile-job">Share your secrets</span>
-                  </div>
+                    <div class="card__content-profile-image-container">
+                        <picture class="card__content-profile-picture">
+                            <img class="card__content-profile-image" src="{{ url_for('static', filename='img/logo.png') }}" alt="">
+                        </picture>
+                    </div>
+                    <div class="card__content-profile-details">
+                        <span class="card__content-profile-name">Shhh...</span>
+                        <span class="card__content-profile-job">Share your secrets</span>
+                    </div>
                 </div>
             </div>
 
-              <div class="card__content-body">
+            <div class="card__content-body">
+
                 {% block container %}{% endblock %}
-              </div>
 
-
-            <div class="card__footer">
-              <p class="card__footer-body">
-                    <span class="text-muted">&copy; Matthieu Petiteau 2019</span>
-              </p>
             </div>
 
-
+            <div class="card__footer">
+                <p class="card__footer-body">
+                    <span class="text-muted">&copy; Matthieu Petiteau 2019</span>
+                </p>
+            </div>
         </div>
-
     </div>
 
-{% block js %}{% endblock %}
+    {% block js %}{% endblock %}
+
 </body>
 
 </html>

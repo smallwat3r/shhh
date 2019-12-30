@@ -1,53 +1,58 @@
 {% extends 'base.html' %}
 
 {% block container %}
+
     <h2>Read Secret</h2>
 
     <label for="passPhrase">Passphrase to open secret</label>
-    <input name="passPhrase" id="passPhrase" placeholder="Passphrase" autocomplete="off" required>
+    <input name="passPhrase" id="passPhrase" placeholder="Passphrase"
+        autocomplete="off" required>
 
     <button id="decryptBtn" class="btn">Decrypt</button>
 
     <div class="p-top">
-    <div id="response"><p id="msg"></p></div>
+        <div id="response"><p id="msg"></p></div>
     </div>
+
 {% endblock %}
 
 {% block js %}
-<script>
-    document.getElementById('decryptBtn').addEventListener('click', _ => {
-        const slug = '{{ slug }}';
-        const passphrase = document.getElementById('passPhrase').value;
-        if (passphrase) {
-        fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, {
-                method: 'GET',
-                cache: 'no-store'
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                switch (data.status) {
-                    case 'error':
-                        document.getElementById('response').className = 'p-top alert-error';
-                        break;
-                    case 'expired':
-                        document.getElementById('response').className = 'p-top alert-expired';
-                        document.getElementById('passPhrase').value = '';
-                        document.getElementById('passPhrase').disabled = true;
-                        document.getElementById('decryptBtn').disabled = true;
-                        break;
-                    case 'success':
-                        document.getElementById('response').className = 'p-top alert-success';
-                        document.getElementById('passPhrase').value = '';
-                        document.getElementById('passPhrase').disabled = true;
-                        document.getElementById('decryptBtn').disabled = true;
-                        break;
-                }
-                document.getElementById('msg').setAttribute('style', 'white-space: pre;');
-                document.getElementById('msg').textContent = data.msg;
-            });
-        }
-    });
-</script>
+
+    <script>
+        document.getElementById('decryptBtn').addEventListener('click', _ => {
+            const slug = '{{ slug }}';
+            const passphrase = document.getElementById('passPhrase').value;
+            if (passphrase) {
+            fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, {
+                    method: 'GET',
+                    cache: 'no-store'
+                })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    switch (data.status) {
+                        case 'error':
+                            document.getElementById('response').className = 'p-top alert-error';
+                            break;
+                        case 'expired':
+                            document.getElementById('response').className = 'p-top alert-expired';
+                            document.getElementById('passPhrase').value = '';
+                            document.getElementById('passPhrase').disabled = true;
+                            document.getElementById('decryptBtn').disabled = true;
+                            break;
+                        case 'success':
+                            document.getElementById('response').className = 'p-top alert-success';
+                            document.getElementById('passPhrase').value = '';
+                            document.getElementById('passPhrase').disabled = true;
+                            document.getElementById('decryptBtn').disabled = true;
+                            break;
+                    }
+                    document.getElementById('msg').setAttribute('style', 'white-space: pre;');
+                    document.getElementById('msg').textContent = data.msg;
+                });
+            }
+        });
+    </script>
+
 {% endblock %}
