@@ -23,7 +23,7 @@
             const slug = '{{ slug }}';
             const passphrase = document.getElementById('passPhrase').value;
             if (passphrase) {
-            fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, {
+                fetch(`/api/r?slug=${slug}&passphrase=${passphrase}`, {
                     method: 'GET',
                     cache: 'no-store'
                 })
