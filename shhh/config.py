@@ -4,23 +4,23 @@
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 17.09.2019
 
-'''Config.'''
+"""Config."""
 import os
 
 
 class DefaultConfig:
-    '''Default config values (Development).'''
+    """Default config values (Development)."""
 
     DEBUG = True
     DB_CREDENTIALS = {
-        'host': os.getenv('HOST_MYSQL'),
-        'user': os.getenv('USER_MYSQL'),
-        'password': os.getenv('PASS_MYSQL'),
-        'db': os.getenv('DB_MYSQL')
+        "host": os.getenv("HOST_MYSQL"),
+        "user": os.getenv("USER_MYSQL"),
+        "password": os.getenv("PASS_MYSQL"),
+        "db": os.getenv("DB_MYSQL"),
     }
 
 
 class ProductionConfig(DefaultConfig):
-    '''Production configuration.'''
+    """Production configuration."""
 
     DEBUG = False
