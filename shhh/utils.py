@@ -96,8 +96,8 @@ def decrypt(slug, passphrase):
         return {"status": "expired", "msg": "Sorry the data has expired."}
 
     try:
-        msg = html.escape(_decrypt_message(encrypted[0]["encrypted_text"], passphrase))
+        msg = _decrypt_message(encrypted[0]["encrypted_text"], passphrase)
     except InvalidToken:
         return {"status": "error", "msg": "Sorry the passphrase is not valid."}
 
-    return {"status": "success", "msg": msg}
+    return {"status": "success", "msg": html.escape(msg)}
