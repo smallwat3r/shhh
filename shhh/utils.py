@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File  : utils.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
