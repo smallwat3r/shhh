@@ -2,7 +2,7 @@
 
 Shhh is a tiny Flask app to write encrypted secrets and share them with people using a secure link.  
 
-The sender can set up an expiration date along with the passphrase to access the secret. After this date the secret will be removed from the database.  
+The sender has to set up an expiration date along with the passphrase to access the secret. After this date the secret will be removed from the database.  
 
 The secrets are encrypted in order to make the data anonymous, especially in MySQL.  
 _Encryption method used: Fernet with password, random salt value and strong iteration count (100 000)._  
