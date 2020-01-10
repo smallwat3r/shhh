@@ -17,7 +17,6 @@ Create a MySQL database and run the following script to generate the table `link
 ```sql
 CREATE TABLE `links` (
   `slug_link` text,
-  `passphrase` text,
   `encrypted_text` text,
   `date_created` datetime DEFAULT NULL,
   `date_expires` datetime DEFAULT NULL
