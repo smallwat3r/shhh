@@ -98,7 +98,6 @@ def decrypt(slug, passphrase):
 
     try:
         msg = html.escape(_decrypt_message(encrypted[0]["encrypted_text"], passphrase))
-
     except InvalidToken:
         return {"status": "error", "msg": "Sorry the passphrase is not valid."}
 
