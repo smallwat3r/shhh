@@ -2,17 +2,17 @@
 
 {% block container %}
 
-    <h2>Read Secret</h2>
-
-    <label for="passPhrase">Passphrase to open secret</label>
-    <input name="passPhrase" id="passPhrase" placeholder="Passphrase"
-        autocomplete="off" required>
-
-    <button id="decryptBtn" class="btn">Decrypt</button>
-
-    <div class="p-top">
-        <div id="response"><p id="msg"></p></div>
+    <h2 class="subtitle">
+        Decrypt secret
+    </h2>
+    <div class="field is-grouped">
+        <p class="control is-expanded">
+        <input class="input" name="passPhrase" id="passPhrase" type="text" placeholder="Passphrase" autocomplete="off" required>
+        <p class="control">
+        <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
+        </p>
     </div>
+    <div id="response"><p id="msg"></p></div>
 
 {% endblock %}
 
