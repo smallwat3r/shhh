@@ -2,42 +2,48 @@
 
 {% block container %}
 
-    <h2>Create Secret</h2>
+{% if not data %}
 
-    {% if not data %}
-
-        <form method="post">
-            <p for="inputSecret">Secret message</p>
-            <textarea class="form-control" name="inputSecret"
-                id="inputSecret" rows="3" placeholder="Your secret..."
-                autocomplete="off" required></textarea>
-
-            <p>Passphrase to open secret</p>
-            <input name="passPhrase" id="passPhrase" placeholder="Passphrase"
-                autocomplete="off" required>
-
-            <p>Destroy in</p>
-            <select id="expiresValue" name="expiresValue">
-                <option value="1">1 day</option>
-                <option value="2">2 days</option>
-                <option value="3">3 days</option>
-                <option value="7">1 week</option>
-            </select>
-
-            <div class="p-top">
-                <input type="submit" class="btn" value="Generate Secret Link">
-            </div>
-        </form>
-
-    {% else %}
-
-        <div class="alert-success">
-            <h4 class="link">{{ data.l }}</h4>
-            <hr>
-            <p>Send this link along with the passphrase to your recipient.
-               This link will expire in <b>{{ data.e }} day(s).</b></p>
+    <form method="post">
+        <h2 class="subtitle">
+            Create new
+        </h2>
+        <p class="help has-text-left">Write your secret</p>
+        <div class="field">
+            <p class="control">
+            <textarea class="textarea" name="inputSecret" id="inputSecret" rows="3" placeholder="Your secret..." autocomplete="off" required></textarea>
+            </p>
         </div>
+        <p class="help has-text-left">Auto-destroy in</p>
+        <div class="field">
+            <div class="control ">
+                <div class="select">
+                    <select id="expiresValue" name="expiresValue">
+                        <option value="1">1 day</option>
+                        <option value="2">2 days</option>
+                        <option value="3">3 days</option>
+                        <option value="7">1 week</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <p class="help has-text-left">Passphrase to open secret</p>
+        <div class="field is-grouped">
+            <p class="control is-expanded">
+            <input class="input" name="passPhrase" type="text" placeholder="Passphrase" autocomplete="off" required>
+            <p class="control">
+            <input type="submit" class="button is-primary" value="Go">
+            </p>
+        </div>
+    </form>
 
-    {% endif %}
+{% else %}
+
+    <h4 class="alert-success">{{ data.l }}</h4>
+    <p class="info">Send this link along with the passphrase to your recipient.
+    This link will expire in <b>{{ data.e }} day(s).</b> Also note that as soon
+    as someone decrypt the message, <b>it will be burn 🔥</b></p>
+
+{% endif %}
 
 {% endblock %}

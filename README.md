@@ -2,15 +2,17 @@
 
 Shhh is a tiny Flask app to write encrypted secrets and share them with people using a secure link.  
 
-The sender has to set up an expiration date along with the passphrase to access the secret. After this date the secret will be removed from the database.  
+The sender has to set up an expiration date along with the passphrase to access the secret.
+After this date the secret will be removed from the database. Also as soon as someone decrypt a message, 
+it is erased permanently from the database.  
 
 The secrets are encrypted in order to make the data anonymous, especially in MySQL.  
 _Encryption method used: Fernet with password, random salt value and strong iteration count (100 000)._  
 
-**demo:**    
-![shhh](https://i.imgur.com/xI7uvfK.gif)
+**Click this image to see the demo:**    
+[![shhh demo](http://i.imgur.com/OaiH88c.png)](https://vimeo.com/384136359 "Shhh demo - Click to Watch!")
 
-## ⚙️ Set up & Dependencies
+## Set up & Dependencies
 
 ### MySQL
 
@@ -25,7 +27,9 @@ CREATE TABLE `links` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-In MySQL run the following to activate the `event_scheduler`. We need to make sure the `event_scheduler` is activated to schedule database clean-ups, in order to remove the records that have expired. In order to persist this setting in the event the MySQL server is restarted, you will need to either
+In MySQL run the following to activate the `event_scheduler`. We need to make sure the `event_scheduler` is activated
+to schedule database clean-ups, in order to remove the records that have expired. In order to persist this setting in 
+the event the MySQL server is restarted, you will need to either
 
 1. adjust your MySQL Server's `my.cnf` or `my.ini` file, or
 2. adjust the command that is used to start the MySQL Server instance, adding the `--event_scheduler=on` option
@@ -104,7 +108,7 @@ make dc-cleanup  # clean
 Once the container image has finished building and starting, Shhh will be
 available via http://localhost:5000/.
 
-## 💡 Idea credits  
+## Idea credits  
 
 - [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
 - [PasswordPusher](https://github.com/pglombardo/PasswordPusher)

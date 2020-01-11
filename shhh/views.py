@@ -66,7 +66,7 @@ def api_read():
 @app.errorhandler(404)
 def error_404(error):
     """404 not found."""
-    return render_template("404.html")
+    return render_template("404.html", e=error)
 
 
 @app.route("/robots.txt")
