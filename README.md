@@ -10,7 +10,7 @@ The secrets are encrypted in order to make the data anonymous, especially in MyS
 _Encryption method used: Fernet with password, random salt value and strong iteration count (100 000)._  
 
 **demo:**    
-![shhh](https://i.imgur.com/QyHLqkW.gif)  
+[![shhh demo](http://i.imgur.com/OaiH88c.png)](https://vimeo.com/384136359 "Shhh demo - Click to Watch!")
 
 ## Set up & Dependencies
 
