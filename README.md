@@ -9,7 +9,7 @@ it is erased permanently from the database.
 The secrets are encrypted in order to make the data anonymous, especially in MySQL.  
 _Encryption method used: Fernet with password, random salt value and strong iteration count (100 000)._  
 
-**demo:**    
+**Click this image to see the demo:**    
 [![shhh demo](http://i.imgur.com/OaiH88c.png)](https://vimeo.com/384136359 "Shhh demo - Click to Watch!")
 
 ## Set up & Dependencies
