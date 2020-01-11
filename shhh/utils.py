@@ -66,6 +66,12 @@ def _decrypt_message(crypted_data, passphrase):
     return Fernet(key).decrypt(crypted_data).decode("utf-8")
 
 
+def _burn_message(link):
+    """Automatically burn message when it has been read."""
+    with database.DbConn(ROOT_PATH) as db:
+        db.commit("burn_message.sql", {"slug_link": link})
+
+
 def generate_link(secret, passphrase, expires):
     """Generate link to access secret."""
     link = _generate_random_slug()
@@ -93,11 +99,15 @@ def decrypt(slug, passphrase):
         encrypted = db.get("retrieve_from_slug.sql", {"slug": slug})
 
     if not encrypted:
-        return {"status": "expired", "msg": "Sorry the data has expired."}
+        return {
+            "status": "expired",
+            "msg": "Sorry the data has expired or has already been read.",
+        }
 
     try:
         msg = _decrypt_message(encrypted[0]["encrypted_text"], passphrase)
     except InvalidToken:
         return {"status": "error", "msg": "Sorry the passphrase is not valid."}
 
+    _burn_message(slug)
     return {"status": "success", "msg": html.escape(msg)}
