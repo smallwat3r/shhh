@@ -19,8 +19,20 @@ class DefaultConfig:
         "db": os.getenv("DB_MYSQL"),
     }
 
+    CELERY_BROKER_URL = "redis://localhost:6379"
+    CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+    REDIS_HOST = "localhost"
+    REDIS_PORT = "6379"
+    REDIS_URL = "redis://localhost:6379"
+
 
 class ProductionConfig(DefaultConfig):
     """Production configuration."""
 
     DEBUG = False
+
+    CELERY_BROKER_URL = "redis://redis:6379"
+    CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+    REDIS_HOST = "redis"
