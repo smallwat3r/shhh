@@ -18,12 +18,12 @@ iteration count (100 000)._
 
 ## Set up & Dependencies
 
-- MySQL to store the links generated, the encrypted messages, creation
+- **MySQL** to store the links generated, the encrypted messages, creation
 and expiration dates.  
-- Celery to run scheduled tasks that checks for expired records to delete in MySQL
+- **Celery** to run scheduled tasks that checks for expired records to delete in MySQL
 every minutes.  
-- Redis that works as our Celery broker.  
-- Flask.  
+- **Redis** that works as our Celery broker.  
+- **Flask**.  
 
 
 ### MySQL
