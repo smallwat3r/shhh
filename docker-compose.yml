@@ -37,7 +37,7 @@ services:
     depends_on:
       - db
     environment:
-      FLASK_ENV: docker
+      FLASK_ENV: dev-docker
       HOST_MYSQL: db
       DB_MYSQL: shhh
       USER_MYSQL: shhh
@@ -49,7 +49,7 @@ services:
     build: .
     command: celery -A shhh.tasks worker --loglevel=INFO
     environment:
-      FLASK_ENV: docker
+      FLASK_ENV: dev-docker
       HOST_MYSQL: db
       DB_MYSQL: shhh
       USER_MYSQL: shhh
@@ -59,7 +59,7 @@ services:
     build: .
     command: celery -A shhh.tasks beat --loglevel=INFO
     environment:
-      FLASK_ENV: docker
+      FLASK_ENV: dev-docker
       HOST_MYSQL: db
       DB_MYSQL: shhh
       USER_MYSQL: shhh

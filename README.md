@@ -45,7 +45,7 @@ the `mysql/initialize.sql` file.
 
 ### Launch Shhh
 
-#### Natively Using Flask
+#### Natively Using Flask (env dev-local)
 
 We recommend that you create a virtual environment for this project, so you can
 install the required dependencies.
@@ -63,7 +63,7 @@ configure Flask, as well as the app's connection to an instance of MySQL.
 
 ```sh
 export FLASK_APP=shhh
-export FLASK_ENV=<development/production>
+export FLASK_ENV=dev-local
 export HOST_MYSQL=<localhost>
 export USER_MYSQL=<username>
 export PASS_MYSQL=<password>
@@ -83,7 +83,7 @@ python3 -m flask run --host='0.0.0.0'
 
 You can now access Shhh on http://localhost:5000/  
 
-#### Docker Compose
+#### Docker Compose (env dev-docker)
 
 For development instances of Shhh, this repo contains a docker-compose
 configuration. The configuration defines default settings for Shhh,

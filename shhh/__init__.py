@@ -16,8 +16,8 @@ ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 
 configurations = {
-    "localhost": "shhh.config.DefaultConfig",
-    "docker": "shhh.config.DockerConfig",
+    "dev-local": "shhh.config.DefaultConfig",
+    "dev-docker": "shhh.config.DockerConfig",
     "production": "shhh.config.ProductionConfig",
 }
 
