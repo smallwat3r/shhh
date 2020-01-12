@@ -72,6 +72,12 @@ def _burn_message(link):
         db.commit("burn_message.sql", {"slug_link": link})
 
 
+def delete_expired_links():
+    """Delete expired links from database."""
+    with database.DbConn(ROOT_PATH) as db:
+        db.commit("delete_expired_links.sql")
+
+
 def generate_link(secret, passphrase, expires):
     """Generate link to access secret."""
     link = _generate_random_slug()
