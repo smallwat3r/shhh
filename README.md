@@ -73,7 +73,7 @@ export DB_MYSQL=<name>
 You will need to run in parrallel Redis, Celery (both worker + beat) and Flask,
 to do so, you can run the below commands in a terminal window
 (note: the single `&` allows you to run these commands in the same terminal, but
-you can also open 4 terminals and type in the commands in the order below without `&`):  
+you can also open 4 terminals and type in the commands in this order without `&`):  
 ```sh
 redis-server &
 celery -A shhh.tasks worker --loglevel=INFO &
@@ -109,7 +109,6 @@ make dc-cleanup  # clean
 
 Once the container image has finished building and starting, Shhh will be
 available via http://localhost:5000/  
-
 You can also check the MySQL records data via http://localhost:8080/  
 
 ## Idea credits  
