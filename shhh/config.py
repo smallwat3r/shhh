@@ -26,8 +26,9 @@ class DefaultConfig:
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""
 
-    CELERY_BROKER_URL = "redis://redis:6379"
-    CELERY_RESULT_BACKEND = "redis://redis:6379"
+    REDIS_PASS = os.getenv("REDIS_PASS")
+    CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
+    CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
 
 
 class ProductionConfig(DefaultConfig):
@@ -36,5 +37,6 @@ class ProductionConfig(DefaultConfig):
 
     DEBUG = False
 
-    CELERY_BROKER_URL = "redis://redis:6379"
-    CELERY_RESULT_BACKEND = "redis://redis:6379"
+    REDIS_PASS = os.getenv("REDIS_PASS")
+    CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
+    CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
