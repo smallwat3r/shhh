@@ -25,8 +25,11 @@ every minutes.
 - **Redis** that works as our Celery broker.  
 - **Flask**.  
 
+### Launch Shhh
 
-### MySQL
+#### Natively Using Flask (env dev-local)
+
+**MySQL**
 
 Create a MySQL database and run the following script to generate the
 table `links` that will store our data.  
@@ -42,10 +45,6 @@ CREATE TABLE `links` (
 
 This MySQL query can also be executed against the MySQL server instance via
 the `mysql/initialize.sql` file.
-
-### Launch Shhh
-
-#### Natively Using Flask (env dev-local)
 
 We recommend that you create a virtual environment for this project, so you can
 install the required dependencies.
