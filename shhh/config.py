@@ -9,7 +9,7 @@ import os
 
 
 class DefaultConfig:
-    """Default config values (Development)."""
+    """Default config values (dev-local)."""
 
     DEBUG = True
     DB_CREDENTIALS = {
@@ -19,8 +19,22 @@ class DefaultConfig:
         "db": os.getenv("DB_MYSQL"),
     }
 
+    CELERY_BROKER_URL = "redis://localhost:6379"
+    CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+
+class DockerConfig(DefaultConfig):
+    """Docker development configuration (dev-docker)."""
+
+    CELERY_BROKER_URL = "redis://redis:6379"
+    CELERY_RESULT_BACKEND = "redis://redis:6379"
+
 
 class ProductionConfig(DefaultConfig):
-    """Production configuration."""
+    """Production configuration (production)."""
+    # Note that this app is not yet designed to run in production
 
     DEBUG = False
+
+    CELERY_BROKER_URL = "redis://redis:6379"
+    CELERY_RESULT_BACKEND = "redis://redis:6379"

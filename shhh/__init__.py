@@ -9,15 +9,24 @@ import os
 
 from flask import Flask
 
+from celery import Celery
+
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
-# Load Flask configuration from Class.
 configurations = {
-    "development": "shhh.config.DefaultConfig",
+    "dev-local": "shhh.config.DefaultConfig",
+    "dev-docker": "shhh.config.DockerConfig",
     "production": "shhh.config.ProductionConfig",
 }
+
 app.config.from_object(configurations[os.getenv("FLASK_ENV")])
+
+celery = Celery(
+    app.name,
+    broker=app.config["CELERY_BROKER_URL"],
+    backend=app.config["CELERY_RESULT_BACKEND"],
+)
 
 from shhh import views

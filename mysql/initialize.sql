@@ -2,6 +2,8 @@
 -- File  : initialize.sql
 -- Author: Austin Schaffer <schaffer.austin.t@gmail.com>
 -- Date  : 18.09.2019
+-- Last edit by : Matthieu Petiteau <mpetiteau.pro@gmail.com> on 12.01.2020
+--                Remove event_scheduler as deletion are managed by Celery
 -- Desc  : Initializes tables, settings, and events for the MySQL instance.
 
 CREATE TABLE IF NOT EXISTS `links` (
@@ -10,11 +12,3 @@ CREATE TABLE IF NOT EXISTS `links` (
   `date_created` datetime DEFAULT NULL,
   `date_expires` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-SET GLOBAL event_scheduler = ON;
-
-CREATE EVENT IF NOT EXISTS AutoDeleteExpiredRecords
-ON SCHEDULE
-EVERY 2 HOUR
-DO
-  DELETE FROM `links` WHERE `date_expires` <= now();

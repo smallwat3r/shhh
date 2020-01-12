@@ -28,13 +28,15 @@ def create():
     @on_post(("inputSecret", "passPhrase", "expiresValue",))
     def _generate():
         """Generate secret link."""
-        e = request.form.get("expiresValue")
-        slug = utils.generate_link(
+        slug, expires = utils.generate_link(
             secret=request.form.get("inputSecret"),
             passphrase=request.form.get("passPhrase"),
-            expires=e,
+            expires=request.form.get("expiresValue"),
         )
-        return {"l": f"{request.url_root}r/{slug}", "e": e}
+        return {
+            "link": f"{request.url_root}r/{slug}",
+            "expires": str(expires.strftime("%Y-%m-%d at %H:%M")),
+        }
 
     def data():
         if request.args.get("data"):

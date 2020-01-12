@@ -1,7 +1,7 @@
 .PHONY: dc-start
 dc-start:
 	@docker-compose stop;
-	@docker-compose up -d --build app;
+	@docker-compose up -d;
 
 .PHONY: dc-stop
 dc-stop:
@@ -16,4 +16,4 @@ dc-cleanup:
 dc-reboot:
 	@docker-compose stop;
 	printf 'y' | docker system prune;
-	@docker-compose up -d --build app;
+	@docker-compose up -d;
