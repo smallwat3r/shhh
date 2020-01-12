@@ -11,18 +11,16 @@ from flask import Flask
 
 from celery import Celery
 
-# import redis
-
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-
 
 app = Flask(__name__)
 
-# Load Flask configuration from Class.
 configurations = {
-    "development": "shhh.config.DefaultConfig",
+    "localhost": "shhh.config.DefaultConfig",
+    "docker": "shhh.config.DockerConfig",
     "production": "shhh.config.ProductionConfig",
 }
+
 app.config.from_object(configurations[os.getenv("FLASK_ENV")])
 
 celery = Celery(
@@ -30,7 +28,5 @@ celery = Celery(
     broker=app.config["CELERY_BROKER_URL"],
     backend=app.config["CELERY_RESULT_BACKEND"],
 )
-# redis_db = redis.StrictRedis(
-#     host=app.config["REDIS_HOST"], port=app.config["REDIS_PORT"], charset="utf-8", db=1
-# )
+
 from shhh import views

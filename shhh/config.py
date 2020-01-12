@@ -9,7 +9,7 @@ import os
 
 
 class DefaultConfig:
-    """Default config values (Development)."""
+    """Default config values (localhost)."""
 
     DEBUG = True
     DB_CREDENTIALS = {
@@ -23,8 +23,15 @@ class DefaultConfig:
     CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
 
+class DockerConfig(DefaultConfig):
+    """Docker development configuration (docker)."""
+
+    CELERY_BROKER_URL = "redis://redis:6379"
+    CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+
 class ProductionConfig(DefaultConfig):
-    """Production configuration."""
+    """Production configuration (production)."""
 
     DEBUG = False
 

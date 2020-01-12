@@ -2,6 +2,7 @@
 # File  : docker-compose.yml
 # Author: Austin Schaffer <schaffer.austin.t@gmail.com>
 # Date  : 18.09.2019
+# Last edit by: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Desc  : Describes the docker-compose configuration for development environments.
 #         These settings are not secure and are not intended for production use.
 #         Please override this configuration when configuring a production instance.
@@ -11,7 +12,6 @@ version: '3.2'
 services:
   db:
     image: mysql/mysql-server:5.7
-    command: --event_scheduler=on
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: shhh
@@ -23,19 +23,47 @@ services:
     ports:
       - 3306:3306
 
+  redis:
+    image: "redis:3.0-alpine"
+    command: redis-server
+    volumes:
+      - redis:/data
+    ports:
+      - 6379:6379
+
   app:
-    image: smallwat3r/shhh:latest
     build: .
+    command: python -m flask run --host="0.0.0.0" --port="5000"
     depends_on:
       - db
     environment:
-      FLASK_ENV: development
+      FLASK_ENV: docker
       HOST_MYSQL: db
       DB_MYSQL: shhh
       USER_MYSQL: shhh
       PASS_MYSQL: shhh123
     ports:
       - 5000:5000
+
+  celeryworker:
+    build: .
+    command: celery -A shhh.tasks worker --loglevel=INFO
+    environment:
+      FLASK_ENV: docker
+      HOST_MYSQL: db
+      DB_MYSQL: shhh
+      USER_MYSQL: shhh
+      PASS_MYSQL: shhh123
+
+  celerybeat:
+    build: .
+    command: celery -A shhh.tasks beat --loglevel=INFO
+    environment:
+      FLASK_ENV: docker
+      HOST_MYSQL: db
+      DB_MYSQL: shhh
+      USER_MYSQL: shhh
+      PASS_MYSQL: shhh123
 
   adminer:
     image: adminer
@@ -46,3 +74,4 @@ services:
 
 volumes:
   mysql_data:
+  redis:
