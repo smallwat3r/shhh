@@ -29,8 +29,6 @@ every minutes.
 
 #### Natively Using Flask (env dev-local)
 
-**MySQL**
-
 Create a MySQL database and run the following script to generate the
 table `links` that will store our data.  
 
