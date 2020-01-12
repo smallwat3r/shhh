@@ -1,22 +1,29 @@
 # -*- coding: utf-8 -*-
 # File     : Dockerfile
-# Date     : 18.09.2019
-# Author   : Austin Schaffer <schaffer.austin.t@gmail.com>
-# Last edit: Matthieu Petiteau <mpetiteau.pro@gmail.com>
+# Date     : 12.01.2020
+# Authors  : Austin Schaffer <schaffer.austin.t@gmail.com>
+#            Matthieu Petiteau <mpetiteau.pro@gmail.com>
 
-FROM alpine:3.8
+FROM alpine:3.11.0
 
 RUN apk update && \
     apk add build-base python3 python3-dev libffi-dev libressl-dev && \
-    cd /usr/bin && \
-    ln -sf python3 python && \
-    ln -sf pip3 pip && \
+    ln -sf /usr/bin/python3 /usr/bin/python && \
+    ln -sf /usr/bin/pip3 usr/bin/pip && \
     pip install --upgrade pip
 
-WORKDIR /app
+WORKDIR app/
+COPY shhh shhh
+
+RUN mkdir -p /var/log/celery/ /var/run/celery/
+RUN addgroup app && \
+    adduser --disabled-password --gecos "" --ingroup app --no-create-home app && \
+    chown app:app /var/run/celery/ && \
+    chown app:app /var/log/celery/
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 ENV FLASK_APP=shhh
-COPY shhh shhh
+
+USER app

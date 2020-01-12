@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# File  : docker-compose.yml
-# Author: Austin Schaffer <schaffer.austin.t@gmail.com>
-# Date  : 18.09.2019
-# Last edit by: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Desc  : Describes the docker-compose configuration for development environments.
-#         These settings are not secure and are not intended for production use.
-#         Please override this configuration when configuring a production instance.
+# File     : docker-compose.yml
+# Authors  : Austin Schaffer <schaffer.austin.t@gmail.com
+#            Matthieu Petiteau <mpetiteau.pro@gmail.com>
+# Date     : 12.01.2020
+# Desc     : Describes the docker-compose configuration for development environments.
+#            These settings are not secure and are not intended for production use.
+#            Please override this configuration when configuring a production instance.
 
 version: '3.2'
 
@@ -24,7 +24,7 @@ services:
       - 3306:3306
 
   redis:
-    image: "redis:3.0-alpine"
+    image: redis:6.0-rc-alpine
     command: redis-server
     volumes:
       - redis:/data
@@ -47,7 +47,11 @@ services:
 
   celeryworker:
     build: .
-    command: celery -A shhh.tasks worker --loglevel=INFO
+    command: >
+      celery -A shhh.tasks worker
+      --loglevel=INFO
+      --logfile=/var/log/celery/celeryworker-shhh.log
+      --pidfile=/var/run/celery/celeryworker-shhh.pid
     environment:
       FLASK_ENV: dev-docker
       HOST_MYSQL: db
@@ -57,7 +61,12 @@ services:
 
   celerybeat:
     build: .
-    command: celery -A shhh.tasks beat --loglevel=INFO
+    command: >
+      celery -A shhh.tasks beat
+      --loglevel=INFO
+      --logfile=/var/log/celery/celerybeat-shhh.log
+      --pidfile=/var/run/celery/celerybeat-shhh.pid
+      --schedule=/var/run/celery/celerybeat-schedule
     environment:
       FLASK_ENV: dev-docker
       HOST_MYSQL: db
