@@ -13,8 +13,6 @@ RUN apk update && \
     ln -sf pip3 pip && \
     pip install --upgrade pip
 
-# EXPOSE 5000
-
 WORKDIR /app
 
 COPY requirements.txt .
