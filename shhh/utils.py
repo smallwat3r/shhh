@@ -105,7 +105,7 @@ def decrypt(slug, passphrase):
     if not encrypted:
         return {
             "status": "expired",
-            "msg": "Sorry the data has expired or has already been read.",
+            "msg": "Sorry the data has expired \nor has already been read.",
         }
 
     try:

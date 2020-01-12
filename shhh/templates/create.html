@@ -39,11 +39,35 @@
 
 {% else %}
 
-    <h4 class="alert-success">{{ data.link }}</h4>
+    <div class="field has-addons">
+        <div class="control is-expanded">
+            <input class="input" type="text" id="link" value="{{ data.link }}" readonly>
+        </div>
+        <div class="control">
+            <button id="copy" class="button is-warning">Copy</button>
+        </div>
+    </div>
     <p class="info">Send this link along with the passphrase to your recipient.
     This link will expire on <b>{{ data.expires }}.</b> Also note that as soon
-    as someone decrypt the message, <b>it will be burn 🔥</b></p>
+    as someone decrypt the message, <b>it will be deleted forever 🔥</b></p>
 
 {% endif %}
+
+{% endblock %}
+
+{% block js %}
+
+  <script>
+    const copy = document.getElementById('copy');
+    if ( copy ) {
+        copy.addEventListener('click', _ => {
+            const link = document.getElementById('link');
+            link.select();
+            link.setSelectionRange(0, 99999); /* mobile */
+            document.execCommand('copy');
+            copy.textContent = 'Copied ✅';
+        });
+    }
+  </script>
 
 {% endblock %}
