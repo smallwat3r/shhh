@@ -12,7 +12,7 @@ from celery.schedules import crontab
 @celery.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
     """Register task to run periodically."""
-    sender.add_periodic_task(crontab(minute="*/5"), delete_expired_links.s())
+    sender.add_periodic_task(crontab(minute="*/1"), delete_expired_links.s())
 
 
 @celery.task

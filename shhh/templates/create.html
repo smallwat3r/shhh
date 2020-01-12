@@ -39,9 +39,9 @@
 
 {% else %}
 
-    <h4 class="alert-success">{{ data.l }}</h4>
+    <h4 class="alert-success">{{ data.link }}</h4>
     <p class="info">Send this link along with the passphrase to your recipient.
-    This link will expire in <b>{{ data.e }} day(s).</b> Also note that as soon
+    This link will expire on <b>{{ data.expires }}.</b> Also note that as soon
     as someone decrypt the message, <b>it will be burn 🔥</b></p>
 
 {% endif %}

@@ -82,6 +82,7 @@ def generate_link(secret, passphrase, expires):
     """Generate link to access secret."""
     link = _generate_random_slug()
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    expires = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(days=int(expires))
 
     with database.DbConn(ROOT_PATH) as db:
         db.commit(
@@ -90,13 +91,10 @@ def generate_link(secret, passphrase, expires):
                 "slug_link": link,
                 "encrypted_text": _encrypt_message(secret.encode(), passphrase),
                 "date_created": now,
-                "date_expires": (
-                    datetime.strptime(now, "%Y-%m-%d %H:%M:%S")
-                    + timedelta(days=int(expires))
-                ),
+                "date_expires": expires,
             },
         )
-    return link
+    return link, expires
 
 
 def decrypt(slug, passphrase):

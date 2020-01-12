@@ -55,7 +55,7 @@ def check_arg(arg):
                     data = ast.literal_eval(request.args.get("data"))
                 except ValueError:
                     return redirect(url_for("create"))
-                if not data.get("l") or not data.get("e"):
+                if not data.get("link") or not data.get("expires"):
                     return redirect(url_for("create"))
             return f(*args, **kwargs)
 
