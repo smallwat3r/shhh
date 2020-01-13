@@ -65,7 +65,7 @@ class Create(Resource):
                 ),
             )
 
-        if not utils.passphrase_strenght(passphrase):
+        if not utils.passphrase_strength(passphrase):
             return jsonify(
                 status="error",
                 details=(

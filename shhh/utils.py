@@ -10,8 +10,8 @@ import re
 import secrets
 
 
-def passphrase_strenght(passphrase):
-    """Check the passphrase strenght.
+def passphrase_strength(passphrase):
+    """Check the passphrase strength.
 
     Requirements: Min 5 chars, one number, one uppercase.
     """
