@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+    <div class="field has-addons">
+        <div class="control is-expanded">
+          <input class="input" type="text" id="link" value="{{ link }}" readonly>
+        </div>
+        <div class="control">
+            <button id="copy" class="button is-warning">copy</button>
+        </div>
+    </div>
+    <p class="info">
+        Send this link along with the passphrase to your recipient.
+        this link will expire on <b>{{ expires_on }}.</b> also note that as soon
+        as someone decrypt the message, <b>it will be deleted forever 🔥</b>
+    </p>
+
+{% endblock %}
+
+{% block js %}
+
+    <script>
+        const copy = document.getElementById('copy');
+        copy.addEventListener('click', _ => {
+            const link = document.getElementById('link');
+            link.select();
+            link.setSelectionRange(0, 99999); /* mobile */
+            document.execCommand('copy');
+            copy.textContent = 'Copied ✅';
+        });
+    </script>
+
+{% endblock %}

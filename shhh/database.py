@@ -9,19 +9,15 @@ import os
 
 import pymysql
 
-from . import app
+from . import app, ROOT_PATH
 
 
 class DbConn:
-    """Manage Database connection and user actions.
-
-    We are loading our SQL requests from raw files located inside each
-    module directories under a SQL folder.
-    """
+    """Manage database."""
 
     __slots__ = ("cnx", "cur", "path_temp")
 
-    def __init__(self, path_temp):
+    def __init__(self, path_temp=ROOT_PATH):
         """Make connection to MySql DB."""
         self.cnx = pymysql.connect(charset="utf8", **app.config["DB_CREDENTIALS"])
         self.cur = self.cnx.cursor()

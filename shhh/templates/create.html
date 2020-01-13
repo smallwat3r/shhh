@@ -2,8 +2,6 @@
 
 {% block container %}
 
-{% if not data %}
-
     <form method="post">
         <h2 class="subtitle">
             Create
@@ -27,47 +25,56 @@
                 </div>
             </div>
         </div>
-        <p class="help has-text-left">Passphrase to open secret</p>
+        <p class="help has-text-left">Passphrase to open secret (min 5 chars, 1 number, 1 uppercase)</p>
         <div class="field is-grouped">
             <p class="control is-expanded">
-            <input class="input" name="passPhrase" type="text" placeholder="Passphrase" autocomplete="off" required>
+            <input class="input" id="passPhrase" name="passPhrase" type="text" placeholder="Passphrase" autocomplete="off" required>
             <p class="control">
-            <input type="submit" class="button is-primary" value="Go">
+            <button type="button" class="button is-primary" id="createBtn">Go</button>
             </p>
         </div>
     </form>
 
-{% else %}
-
-    <div class="field has-addons">
-        <div class="control is-expanded">
-            <input class="input" type="text" id="link" value="{{ data.link }}" readonly>
-        </div>
-        <div class="control">
-            <button id="copy" class="button is-warning">Copy</button>
-        </div>
-    </div>
-    <p class="info">Send this link along with the passphrase to your recipient.
-    This link will expire on <b>{{ data.expires }}.</b> Also note that as soon
-    as someone decrypt the message, <b>it will be deleted forever 🔥</b></p>
-
-{% endif %}
-
+    <br />
+    <div id="response"><p id="msg"></p></div>
 {% endblock %}
 
 {% block js %}
 
-  <script>
-    const copy = document.getElementById('copy');
-    if ( copy ) {
-        copy.addEventListener('click', _ => {
-            const link = document.getElementById('link');
-            link.select();
-            link.setSelectionRange(0, 99999); /* mobile */
-            document.execCommand('copy');
-            copy.textContent = 'Copied ✅';
+    <script>
+        document.getElementById('createBtn').addEventListener('click', _ => {
+            const inputSecret = document.getElementById('inputSecret').value;
+            const passPhrase = document.getElementById('passPhrase').value;
+            const expiresValue = document.getElementById('expiresValue').value;
+            fetch('/api/c', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    secret: inputSecret,
+                    passphrase: passPhrase,
+                    days: parseInt(expiresValue)
+                }),
+                cache: 'no-store'
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                switch (data.status) {
+                    case 'created':
+                        window.location.href = `/c?link=${data.link}&expires_on=${data.expires_on}`;
+                        break;
+                    case 'error':
+                        document.getElementById('response').className = 'p-top alert-error';
+                        document.getElementById('msg').setAttribute('style', 'white-space: pre;');
+                        document.getElementById('msg').textContent = data.details;
+                        break;
+                }
+            });
         });
-    }
-  </script>
+    </script>
 
 {% endblock %}

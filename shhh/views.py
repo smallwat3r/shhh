@@ -5,64 +5,33 @@
 # Author: matthieu petiteau <mpetiteau.pro@gmail.com>
 
 """Flask views."""
-import ast
+from flask import render_template, request, send_from_directory
 
-from flask import (
-    jsonify, redirect, render_template, request, send_from_directory, url_for
-)
-
-from . import app, utils
-from .decorators import check_arg, need_arg, on_post
+from . import app
+from .decorators import mandatory
 
 
 @app.route("/")
-def index():
-    return redirect(url_for("create"))
-
-
-@app.route("/c", methods=["GET", "POST"])
-@check_arg("data")
-def create():
+def create_route():
     """Create secret."""
+    return render_template("create.html")
 
-    @on_post(("inputSecret", "passPhrase", "expiresValue",))
-    def _generate():
-        """Generate secret link."""
-        slug, expires = utils.generate_link(
-            secret=request.form.get("inputSecret"),
-            passphrase=request.form.get("passPhrase"),
-            expires=request.form.get("expiresValue"),
-        )
-        return {
-            "link": f"{request.url_root}r/{slug}",
-            "expires": str(expires.strftime("%Y-%m-%d at %H:%M")),
-        }
 
-    def data():
-        if request.args.get("data"):
-            return ast.literal_eval(request.args.get("data"))
-
-    if request.method == "POST":
-        return redirect(url_for("create", data=_generate()))
-
-    return render_template("create.html", data=data())
+@app.route("/c")
+@mandatory(("link", "expires_on",))
+def created_route():
+    """Secret created."""
+    args = {
+        "link": request.args.get("link"),
+        "expires_on": request.args.get("expires_on"),
+    }
+    return render_template("created.html", **args)
 
 
 @app.route("/r/<slug>")
-def read(slug):
+def read_route(slug):
     """Read secret."""
     return render_template("read.html", slug=slug)
-
-
-@app.route("/api/r")
-@need_arg(("slug", "passphrase",))
-def api_read():
-    """Read secret, API call."""
-    return jsonify(
-        utils.decrypt(
-            slug=request.args.get("slug"), passphrase=request.args.get("passphrase")
-        )
-    )
 
 
 @app.errorhandler(404)

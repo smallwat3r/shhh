@@ -158,7 +158,7 @@ make dc-start    # start app
                  # --------------
 make dc-stop     # stop app
 make dc-reboot   # reboot app
-make dc-cleanup  # clean
+make dc-cleanup  # clean
 ```
 
 Once the container image has finished building and starting, Shhh will be
@@ -168,9 +168,48 @@ You can also inspect the MySQL data via http://localhost:8080/
   
 </details>
 
+## Create and read secrets using the API
+
+If you like living in the terminal, you can use Shhh with CURL to create
+and read secrets.  
+
+Notes: 
+* Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
+* Max number of days to keep a secret alive is 7.  
+
+**Example**  
+
+Create a secret  
+```sh 
+curl -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"secret": "This is secret.", "passphrase": "Passw123", "days": 3}' \
+    https://shhh-encrypt.com/api/c
+
+# outputs
+{
+    "expires_on": "2020-01-16 at 22:53 GMT",
+    "link": "https://shhh-encrypt.com/r/BuMwIftk-T2GQIuewRB-",
+    "slug": "BuMwIftk-T2GQIuewRB-",
+    "status": "created"
+}
+```
+
+Read a secret  
+```sh
+curl -X GET \
+    https://shhh-encrypt/api/r?slug=BuMwIftk-T2GQIuewRB-&passphrase=Passw123
+
+# outputs
+{
+    "msg": "This is secret.",
+    "status": "success"
+}
+```
+
 ## Credits
 
-#### Existing cool apps that gave the idea to develop one in Flask
+#### Existing cool apps that gave me the idea to develop my own version using Flask
 
 * [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
 * [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
