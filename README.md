@@ -14,7 +14,7 @@ _Encryption method used: Fernet with password, random salt value and strong
 iteration count (100 000)._  
 
 **Click this image to see the demo:**    
-[![shhh demo](http://i.imgur.com/5fiMwQW.png)](https://vimeo.com/384136359 "Shhh demo - Click to Watch!")
+[![shhh demo](http://i.imgur.com/Exa8dUu.png)](https://vimeo.com/384411739 "Shhh demo - Click to Watch!")
 
 ## Set up & Dependencies
 
