@@ -31,10 +31,20 @@ class Create(Resource):
 
         passphrase = args["passphrase"]
         secret = args["secret"]
+        expire = args["days_expires"]
 
         if not secret or secret == "":
             return jsonify(
                 status="error", details="You need to enter a secret to encrypt."
+            )
+
+        if not passphrase:
+            return jsonify(
+                status="error",
+                details=(
+                    "Please enter a passphrase\n"
+                    "It needs min 5 chars, 1 number and 1 uppercase."
+                ),
             )
 
         if not utils.passphrase_strenght(passphrase):
@@ -47,9 +57,7 @@ class Create(Resource):
             )
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        expires = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(
-            days=int(args["days_expires"])
-        )
+        expires = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(days=expire)
 
         with database.DbConn() as db:
             slug = utils.generate_unique_slug(db)
