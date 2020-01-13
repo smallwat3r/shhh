@@ -58,7 +58,7 @@ the `mysql/initialize.sql` file.
 #### Redis  
 
 You will also need Redis running on localhost in the background has it will
-run as our Celery broker. Open a new terminal window and launch it.    
+work as our Celery broker. Open a new terminal window and launch it.    
 ```sh
 redis-server
 ```
@@ -131,6 +131,9 @@ Redis and our Celery worker trigerring tasks to Celery beat.
 <details>
 <summary>Using docker-compose</summary>
 
+#### docker-compose  
+
+You will need Docker, docker-compose and make installed on your machine.  
 
 For development instances of Shhh, this repo contains a docker-compose
 configuration. The configuration defines default settings for Shhh,
@@ -156,7 +159,8 @@ make dc-cleanup  # clean
 
 Once the container image has finished building and starting, Shhh will be
 available via http://localhost:5000/  
-You can also see the MySQL data via http://localhost:8080/  
+
+You can also inspect the MySQL data via http://localhost:8080/  
   
 </details>
 
