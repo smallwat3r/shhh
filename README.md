@@ -177,7 +177,7 @@ You can also inspect the MySQL data via http://localhost:8080/
 
 #### Thanks to
 
-* [@AustinTSchaffer](https://github.com/AustinTSchaffer) for contributing to set-up the Docker environment.
+* [@AustinTSchaffer](https://github.com/AustinTSchaffer) for contributing to set-up a Docker environment.
 * [@kleinfelter](https://github.com/kleinfelter) for finding bugs and security issues.
 
 ## License
