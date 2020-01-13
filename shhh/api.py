@@ -3,6 +3,8 @@
 # File  : api.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 13.01.2020
+
+"""Api management."""
 from datetime import datetime, timedelta, timezone
 
 import html
