@@ -37,7 +37,8 @@ every minutes.
 - [Natively using flask (dev-local env)](#natively-using-flask)
 - [Using docker-compose (dev-docker env)](#using-docker-compose)
 
-#### Natively Using Flask
+<details>
+<summary>Natively Using Flask</summary>
 
 Create a MySQL database and run the following script to generate the
 table `links` that will store our data.  
@@ -90,8 +91,11 @@ python3 -m flask run --host='0.0.0.0'
 
 You can now access Shhh on http://localhost:5000/  
 
-#### Using Docker Compose
+</details>
 
+<details>
+<summary> Using docker-compose</summary>
+  
 For development instances of Shhh, this repo contains a docker-compose
 configuration. The configuration defines default settings for Shhh,
 default settings for a containerized instance of MySQL server as well
@@ -116,7 +120,9 @@ make dc-cleanup  # clean
 
 Once the container image has finished building and starting, Shhh will be
 available via http://localhost:5000/  
-You can also check the MySQL records data via http://localhost:8080/  
+You can also see the MySQL data via http://localhost:8080/  
+  
+</details>
 
 ## Idea credits  
 
