@@ -36,8 +36,10 @@ every minutes.
 
 <details>
 <summary>Natively Using Flask</summary>
+  
+#### MySQL
 
-
+You will need a MySQL server running on localhost in the background.  
 Create a MySQL database and run the following script to generate the
 table `links` that will store our data.  
 
@@ -51,10 +53,25 @@ CREATE TABLE `links` (
 ```
 
 This MySQL query can also be executed against the MySQL server instance via
-the `mysql/initialize.sql` file.
+the `mysql/initialize.sql` file.  
+
+#### Redis  
+
+You will also need Redis running on localhost in the background has it will
+run as our Celery broker. Open a new terminal window and launch it.    
+```sh
+redis-server
+```
+
+#### Flask and Celery   
+
+In another terminal window, clone this repository and go inside it.
+```sh 
+git clone https://github.com/smallwat3r/shhh.git && cd shhh
+```
 
 We recommend that you create a virtual environment for this project, so you can
-install the required dependencies.
+install the required dependencies.  
 
 ```sh
 virtualenv -p python3 venv --no-site-package
@@ -65,29 +82,49 @@ pip install -r requirements.txt
 Stay in the virtual environment created.  
 
 You then need to set up a few environment variables. These will be used to
-configure Flask, as well as the app's connection to an instance of MySQL.
+configure Flask, as well as the app's connection to MySQL.  
 
 ```sh
 export FLASK_APP=shhh
 export FLASK_ENV=dev-local
-export HOST_MYSQL=<localhost>
-export USER_MYSQL=<username>
-export PASS_MYSQL=<password>
-export DB_MYSQL=<name>
+export HOST_MYSQL=127.0.0.1
+export USER_MYSQL=<your MySQL username>
+export PASS_MYSQL=<your MySQL password>
+export DB_MYSQL=<name of the MySQL database created>
 ```
 
-You will need to run in parrallel Redis, Celery (both worker + beat) and Flask,
-to do so, you can run the below commands in a terminal window
-(note: the single `&` allows you to run these commands in the same terminal, but
-you can also open 4 terminals and type in the commands in this order without `&`):  
+We then need to launch our Celery worker.  
+
+To launch our Celery worker, open a new terminal window, go to the
+project and run  
+
 ```sh
-redis-server &
-celery -A shhh.tasks worker --loglevel=INFO &
-celery -A shhh.tasks beat --loglevel=INFO &
+source venv/bin/activate  # make sure we are connected to our virtual env.
+celery -A shhh.tasks worker --loglevel=INFO
+```
+
+Then we need to launch Celery beat that will be triggered by the worker to
+delete the expired records from the database every minutes.  
+
+To launch our Celery worker, open a third terminal window, go to the
+project, activate your virtual env and run  
+
+```sh
+source venv/bin/activate  # make sure we are connected to our virtual env.
+celery -A shhh.tasks beat --loglevel=INFO
+```
+
+Then go back to your first terminal where you first set-up your virtual env
+and launch flask with
+
+```sh
 python3 -m flask run --host='0.0.0.0'
 ```
 
 You can now access Shhh on http://localhost:5000/  
+
+You should be able to see in your your other terminal windows the logs from 
+Redis and our Celery worker trigerring tasks to Celery beat.  
 
 </details>
 
