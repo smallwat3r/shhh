@@ -119,3 +119,11 @@ You can also check the MySQL records data via http://localhost:8080/
 
 - [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
 - [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
+
+## License
+
+See [LICENSE](https://github.com/smallwat3r/shhh/blob/master/LICENSE) file.  
+
+## Contact
+
+Please report issues or questions [here](https://github.com/smallwat3r/shhh/issues).
