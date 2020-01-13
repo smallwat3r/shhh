@@ -1,6 +1,6 @@
-![shhh](https://github.com/smallwat3r/shhh/blob/master/shhh/static/img/lock.png)  
+# Shhh  
 
-Shhh is a tiny Flask app to write encrypted secrets and share them with people
+**Shhh** is a tiny Flask app to write encrypted secrets and share them with people
 using a secure link.  
 
 The sender has to set up an expiration date along with a passphrase to access 
