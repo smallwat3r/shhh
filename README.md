@@ -168,10 +168,17 @@ You can also inspect the MySQL data via http://localhost:8080/
   
 </details>
 
-## Idea credits  
+## Credits
 
-- [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
-- [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
+#### Existing cool apps that gave the idea to develop one in Flask
+
+* [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
+* [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
+
+#### Thanks to
+
+* [@AustinTSchaffer](https://github.com/AustinTSchaffer) for contributing to set-up the Docker environment.
+* [@kleinfelter](https://github.com/kleinfelter) for finding bugs and security issues.
 
 ## License
 
