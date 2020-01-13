@@ -10,6 +10,7 @@ import os
 from flask import Flask
 
 from celery import Celery
+from flask_restful import Api
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -29,4 +30,10 @@ celery = Celery(
     backend=app.config["CELERY_RESULT_BACKEND"],
 )
 
-from shhh import views
+from shhh.api import Create, Read
+
+api_routes = Api(app, prefix="/api")
+api_routes.add_resource(Create, '/c')
+api_routes.add_resource(Read, '/r')
+
+import shhh.views

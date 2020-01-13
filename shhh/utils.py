@@ -1,117 +1,33 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # File  : utils.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date  : 17.09.2019
+# Date  : 13.01.2020
 
 """Utils."""
-from base64 import urlsafe_b64decode, urlsafe_b64encode
-from datetime import datetime, timedelta
-
-import html
-
-from cryptography.fernet import Fernet, InvalidToken
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import re
 
 import secrets
 
-from . import database, ROOT_PATH
 
+def passphrase_strenght(passphrase):
+    """Check the passphrase strenght.
 
-def _generate_random_slug():
-    """Generate random slug to access data.
-    This slug ID will be used by the recipient to read the
-    secret.
+    Requirements: Min 5 chars, one number, one uppercase.
     """
-    return secrets.token_urlsafe(15)
-
-
-def __derive_key(passphrase, salt, iterations=100_000):
-    """Derive a secret key from a given passphrase and salt."""
-    kdf = PBKDF2HMAC(
-        algorithm=hashes.SHA256(),
-        length=32,
-        salt=salt,
-        iterations=iterations,
-        backend=default_backend(),
-    )
-    return urlsafe_b64encode(kdf.derive(passphrase))
-
-
-def _encrypt_message(message, passphrase, iterations=100_000):
-    """Encrypt secret with passphrase."""
-    salt = secrets.token_bytes(16)
-    key = __derive_key(passphrase.encode(), salt, iterations)
-    return urlsafe_b64encode(
-        b"%b%b%b"
-        % (
-            salt,
-            iterations.to_bytes(4, "big"),
-            urlsafe_b64decode(Fernet(key).encrypt(message)),
-        )
+    return (
+        len(passphrase) >= 5 and
+        re.search('[0-9]', passphrase) is not None and
+        re.search('[A-Z]', passphrase) is not None
     )
 
 
-def _decrypt_message(crypted_data, passphrase):
-    """Decrypt secret with passphrase."""
-    decoded = urlsafe_b64decode(crypted_data)
-    salt, iter, crypted_data = (
-        decoded[:16],
-        decoded[16:20],
-        urlsafe_b64encode(decoded[20:]),
-    )
-    iterations = int.from_bytes(iter, "big")
-    key = __derive_key(passphrase.encode(), salt, iterations)
-    return Fernet(key).decrypt(crypted_data).decode("utf-8")
+def generate_unique_slug(db):
+    """Generate a unique slug."""
+    slug = secrets.token_urlsafe(15)
+    exists = db.get("check_slug_availability.sql", {"slug_link": slug})
 
+    if not exists:
+        return slug
 
-def _burn_message(link):
-    """Automatically burn message when it has been read."""
-    with database.DbConn(ROOT_PATH) as db:
-        db.commit("burn_message.sql", {"slug_link": link})
-
-
-def delete_expired_links():
-    """Delete expired links from database."""
-    with database.DbConn(ROOT_PATH) as db:
-        db.commit("delete_expired_links.sql")
-
-
-def generate_link(secret, passphrase, expires):
-    """Generate link to access secret."""
-    link = _generate_random_slug()
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    expires = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(days=int(expires))
-
-    with database.DbConn(ROOT_PATH) as db:
-        db.commit(
-            "store_encrypt.sql",
-            {
-                "slug_link": link,
-                "encrypted_text": _encrypt_message(secret.encode(), passphrase),
-                "date_created": now,
-                "date_expires": expires,
-            },
-        )
-    return link, expires
-
-
-def decrypt(slug, passphrase):
-    """Decrypt message from slug."""
-    with database.DbConn(ROOT_PATH) as db:
-        encrypted = db.get("retrieve_from_slug.sql", {"slug": slug})
-
-    if not encrypted:
-        return {
-            "status": "expired",
-            "msg": "Sorry the data has expired \nor has already been read.",
-        }
-
-    try:
-        msg = _decrypt_message(encrypted[0]["encrypted_text"], passphrase)
-    except InvalidToken:
-        return {"status": "error", "msg": "Sorry the passphrase is not valid."}
-
-    _burn_message(slug)
-    return {"status": "success", "msg": html.escape(msg)}
+    return generate_unique_slug(db)

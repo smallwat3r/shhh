@@ -10,3 +10,4 @@ __pycache__/
 venv/
 
 local.sh
+flask.sh
