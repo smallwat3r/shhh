@@ -23,7 +23,7 @@ HELP_CREATE = {
         "Passphrase to encrypt secret, "
         "requirements: min 5 chars, 1 number, 1 uppercase."
     ),
-    "days": "(integer) Number of days to keep alive.",
+    "days": "Number of days to keep alive (needs to be an integer).",
 }
 
 HELP_READ = {
