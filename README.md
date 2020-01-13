@@ -38,68 +38,7 @@ These methods are for development purpose only. If you want to use it in product
 you probably want to use Gunicorn, and use a more secure configuration.  
 
 <details>
-<summary>Natively only Flask and MySQL</summary>
-**Important: please note that if you don't use Redis + Celery the messages won't be deleted
-automatically if unread after expiration date**  
-
-#### MySQL
-
-You will need a MySQL server running on localhost in the background.  
-Create a MySQL database and run the following script to generate the
-table `links` that will store our data.  
-
-```sql
-CREATE TABLE `links` (
-  `slug_link` text,
-  `encrypted_text` text,
-  `date_created` datetime DEFAULT NULL,
-  `date_expires` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-```
-
-This MySQL query can also be executed against the MySQL server instance via
-the `mysql/initialize.sql` file.  
-
-In a terminal, clone this repository and go inside it.
-```sh 
-git clone https://github.com/smallwat3r/shhh.git && cd shhh
-```
-
-We recommend that you create a virtual environment for this project, so you can
-install the required dependencies.  
-
-```sh
-virtualenv -p python3 venv --no-site-package
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-Stay in the virtual environment created.  
-
-You then need to set up a few environment variables. These will be used to
-configure Flask, as well as the app's connection to MySQL.  
-
-```sh
-export FLASK_APP=shhh
-export FLASK_ENV=dev-local
-export HOST_MYSQL=127.0.0.1
-export USER_MYSQL=<your MySQL username>
-export PASS_MYSQL=<your MySQL password>
-export DB_MYSQL=<name of the MySQL database created>
-```
-
-Launch flask with
-
-```sh
-python3 -m flask run --host='0.0.0.0'
-```
-
-You can now access Shhh on http://localhost:5000/  
-
-</details>
-
-<details>
-<summary>Natively with all services</summary>
+<summary>Natively</summary>
   
 #### MySQL
 
