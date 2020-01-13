@@ -17,6 +17,20 @@ from flask_restful import reqparse, Resource
 from . import database, utils
 from .encryption import Secret
 
+HELP_CREATE = {
+    "secret": "Secret message to encrypt.",
+    "passphrase": (
+        "Passphrase to encrypt secret, "
+        "requirements: min 5 chars, 1 number, 1 uppercase."
+    ),
+    "days_expires": "(integer) Number of days to keep alive.",
+}
+
+HELP_READ = {
+    "slug": "Secret slug id.",
+    "passphrase": "Passphrase shared to decrypt message.",
+}
+
 
 class Create(Resource):
     """Create secret API."""
@@ -24,9 +38,15 @@ class Create(Resource):
     def post(self):
         """Process POST request."""
         parser = reqparse.RequestParser(bundle_errors=True)
-        parser.add_argument("secret", type=str, required=True)
-        parser.add_argument("passphrase", type=str, required=True)
-        parser.add_argument("days_expires", type=int, required=True)
+        parser.add_argument(
+            "secret", type=str, required=True, help=HELP_CREATE["secret"]
+        )
+        parser.add_argument(
+            "passphrase", type=str, required=True, help=HELP_CREATE["passphrae"]
+        )
+        parser.add_argument(
+            "days_expires", type=int, required=True, help=HELP_CREATE["days_expires"]
+        )
         args = parser.parse_args()
 
         passphrase = args["passphrase"]
@@ -74,6 +94,7 @@ class Create(Resource):
         timez = datetime.now(timezone.utc).astimezone().tzname()
         return jsonify(
             status="created",
+            slug=slug,
             link=f"{request.url_root}r/{slug}",
             expires_on=f"{expires.strftime('%Y-%m-%d at %H:%M')} {timez}",
         )
@@ -85,8 +106,10 @@ class Read(Resource):
     def get(self):
         """Process GET request."""
         parser = reqparse.RequestParser(bundle_errors=True)
-        parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("passphrase", type=str, required=True)
+        parser.add_argument("slug", type=str, required=True, help=HELP_READ["slug"])
+        parser.add_argument(
+            "passphrase", type=str, required=True, help=HELP_READ["passphrase"]
+        )
         args = parser.parse_args()
 
         slug = args["slug"]
