@@ -106,7 +106,7 @@ celery -A shhh.tasks worker --loglevel=INFO
 Then we need to launch Celery beat that will be triggered by the worker to
 delete the expired records from the database every minutes.  
 
-To launch our Celery worker, open a third terminal window, go to the
+To launch Celery beat, open a third terminal window, go to the
 project, activate your virtual env and run  
 
 ```sh
