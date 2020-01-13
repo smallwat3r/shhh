@@ -5,7 +5,7 @@ using a secure link.
 
 The sender has to set up an expiration date along with a passphrase to access 
 the secret. After the specified date the secret will be removed from the database.
-Also as soon as someone decrypt a message, it is erased permanently from the 
+Also as soon as someone decrypts a message, it is erased permanently from the 
 database.  
 
 The secrets are encrypted in order to make the data anonymous, especially
