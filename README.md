@@ -34,7 +34,10 @@ every minutes.
 
 ### Launch Shhh
 
-#### Natively Using Flask (dev-local)
+- [Natively using flask (dev-local env)](#natively-using-flask)
+- [Using docker-compose (dev-docker env)](#using-docker-compose)
+
+#### Natively Using Flask
 
 Create a MySQL database and run the following script to generate the
 table `links` that will store our data.  
@@ -87,7 +90,7 @@ python3 -m flask run --host='0.0.0.0'
 
 You can now access Shhh on http://localhost:5000/  
 
-#### Using Docker Compose (dev-docker)
+#### Using Docker Compose
 
 For development instances of Shhh, this repo contains a docker-compose
 configuration. The configuration defines default settings for Shhh,
