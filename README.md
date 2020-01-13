@@ -34,6 +34,9 @@ every minutes.
 
 ### Launch Shhh
 
+These methods are for development purpose only. If you want to use it in production
+you probably want to use Gunicorn, and use a more secure configuration.  
+
 <details>
 <summary>Natively</summary>
   
