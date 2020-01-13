@@ -1,4 +1,4 @@
-![shhh](https://github.com/smallwat3r/shhh/blob/master/shhh/static/img/logo.png)  
+![shhh](https://github.com/smallwat3r/shhh/blob/master/shhh/static/img/lock.png)  
 
 Shhh is a tiny Flask app to write encrypted secrets and share them with people
 using a secure link.  
