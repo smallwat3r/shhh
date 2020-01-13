@@ -13,8 +13,8 @@ in MySQL.
 _Encryption method used: Fernet with password, random salt value and strong
 iteration count (100 000)._  
 
-Shhh is now live at https://shhh-encrypt.com, but for more privacy / security it's 
-still advise to host the app on a personnal / private server.  
+Shhh is now live at https://shhh-encrypt.com, but for even more privacy / security you can
+find in this repo everything you need to host the app on a personal / private server.  
 
 _Tip: For added security, avoid telling in Shhh what is the use of the secret you're 
 sharing. Instead, explain this in your email, and copy paste the Shhh link with the passphrase
