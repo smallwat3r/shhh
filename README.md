@@ -173,9 +173,11 @@ You can also inspect the MySQL data via http://localhost:8080/
 If you like living in the terminal, you can use Shhh with CURL to create
 and read secrets.  
 
-Note: Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
+Notes: 
+* Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
+* Max number of days to keep a secret alive is 7.  
 
-**Examples**  
+**Example**  
 
 Create a secret  
 ```sh 
