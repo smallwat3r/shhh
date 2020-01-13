@@ -35,7 +35,7 @@ every minutes.
 ### Launch Shhh
 
 <details>
-<summary>Natively Using Flask</summary>
+<summary>Natively</summary>
   
 #### MySQL
 
@@ -129,7 +129,7 @@ Redis and our Celery worker trigerring tasks to Celery beat.
 </details>
 
 <details>
-<summary>Using docker-compose</summary>
+<summary>Using docker-compose (recommended)</summary>
 
 #### docker-compose  
 
