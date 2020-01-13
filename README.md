@@ -123,8 +123,9 @@ python3 -m flask run --host='0.0.0.0'
 
 You can now access Shhh on http://localhost:5000/  
 
-You should be able to see in your your other terminal windows the logs from 
-Redis and our Celery worker trigerring tasks to Celery beat.  
+You should be able to see in your other terminal windows the logs from 
+Redis, Celery and Celery beat trigerring and receiving tasks to check
+and deleted the expired records.  
 
 </details>
 
