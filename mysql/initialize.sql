@@ -3,7 +3,7 @@
 -- Author: Austin Schaffer <schaffer.austin.t@gmail.com>
 -- Date  : 18.09.2019
 -- Last edit by : Matthieu Petiteau <mpetiteau.pro@gmail.com> on 12.01.2020
---                Remove event_scheduler as deletion are managed by Celery
+--                Remove event_scheduler as deletions are managed by Celery
 -- Desc  : Initializes tables, settings, and events for the MySQL instance.
 
 CREATE TABLE IF NOT EXISTS `links` (
