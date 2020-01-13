@@ -107,7 +107,7 @@ Then we need to launch Celery beat that will be triggered by the worker to
 delete the expired records from the database every minutes.  
 
 To launch Celery beat, open a third terminal window, go to the
-project, activate your virtual env and run  
+project and run  
 
 ```sh
 source venv/bin/activate  # make sure we are connected to our virtual env.
