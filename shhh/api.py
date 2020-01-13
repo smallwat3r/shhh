@@ -23,7 +23,7 @@ HELP_CREATE = {
         "Passphrase to encrypt secret, "
         "requirements: min 5 chars, 1 number, 1 uppercase."
     ),
-    "days_expires": "(integer) Number of days to keep alive.",
+    "days": "(integer) Number of days to keep alive.",
 }
 
 HELP_READ = {
@@ -42,16 +42,14 @@ class Create(Resource):
             "secret", type=str, required=True, help=HELP_CREATE["secret"]
         )
         parser.add_argument(
-            "passphrase", type=str, required=True, help=HELP_CREATE["passphrae"]
+            "passphrase", type=str, required=True, help=HELP_CREATE["passphrase"]
         )
-        parser.add_argument(
-            "days_expires", type=int, required=True, help=HELP_CREATE["days_expires"]
-        )
+        parser.add_argument("days", type=int, required=True, help=HELP_CREATE["days"])
         args = parser.parse_args()
 
         passphrase = args["passphrase"]
         secret = args["secret"]
-        expire = args["days_expires"]
+        expire = args["days"]
 
         if not secret or secret == "":
             return jsonify(
@@ -74,6 +72,11 @@ class Create(Resource):
                     "The passphrase you used is too weak\n"
                     "It needs min 5 chars, 1 number and 1 uppercase."
                 ),
+            )
+
+        if expire > 7:
+            return jsonify(
+                status="error", details="Max. nb of days to keep the secret alive is 7."
             )
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
