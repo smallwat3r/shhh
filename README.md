@@ -45,7 +45,7 @@ You can find the list of the Python dependencies [here](https://github.com/small
 ## How to launch Shhh?
 
 These methods are for development purpose only. If you want to use it in production
-you probably want to use Gunicorn, and use a more secure configuration.  
+you probably want to use Gunicorn with Nginx, and use a more secure configuration.  
 
 <details>
 <summary>Launch it natively</summary>
