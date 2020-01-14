@@ -1,4 +1,4 @@
-# Shhh  
+![Shhh](https://i.imgur.com/0MPGbQj.png)
 
 **Shhh** is a tiny Flask app to write encrypted secrets and share them with people
 using a secure link.  
