@@ -40,7 +40,7 @@ so the user can retrieve it._
 
 ## What are the dependencies?
 
-You can find the list of the Python dependencies (here)[https://github.com/smallwat3r/shhh/blob/master/requirements.txt].  
+You can find the list of the Python dependencies [here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt).  
 
 ## How to launch Shhh?
 
