@@ -16,26 +16,6 @@ input, textarea, select {
   font-family: 'Chivo', sans-serif;
 }
 
-.alert-success {
-  background-color: #99ff33;
-  color: #210000;
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.alert-error {
-  background-color: #FF4D4D;
-  color: #fff;
-  border-radius: 15px;
-  padding: 10px;
-}
-
-.alert-expired {
-  background-color: #FFBF00;
-  border-radius: 15px;
-  padding: 10px;
-}
-
 .info {
   padding-top: 20px;
 }

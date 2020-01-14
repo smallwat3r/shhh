@@ -38,22 +38,22 @@
                 .then(data => {
                     switch (data.status) {
                         case 'error':
-                            document.getElementById('response').className = 'p-top alert-error';
+                            document.getElementById('response').className = 'notification is-danger';
                             break;
                         case 'expired':
-                            document.getElementById('response').className = 'p-top alert-expired';
+                            document.getElementById('response').className = 'notification is-warning';
                             document.getElementById('passPhrase').value = '';
                             document.getElementById('passPhrase').disabled = true;
                             document.getElementById('decryptBtn').disabled = true;
                             break;
                         case 'success':
-                            document.getElementById('response').className = 'p-top alert-success';
+                            document.getElementById('response').className = 'notification is-success';
                             document.getElementById('passPhrase').value = '';
                             document.getElementById('passPhrase').disabled = true;
                             document.getElementById('decryptBtn').disabled = true;
+                            document.getElementById('msg').setAttribute('style', 'white-space: pre;');
                             break;
                     }
-                    document.getElementById('msg').setAttribute('style', 'white-space: pre;');
                     document.getElementById('msg').innerHTML = data.msg;
                 });
             }

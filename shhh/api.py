@@ -57,11 +57,17 @@ class Create(Resource):
                 status="error", details="You need to enter a secret to encrypt."
             )
 
+        if len(secret) > 150:
+            return jsonify(
+                status="error",
+                details="Your secret needs to have less than 150 characters.",
+            )
+
         if not passphrase:
             return jsonify(
                 status="error",
                 details=(
-                    "Please enter a passphrase\n"
+                    "Please enter a passphrase. "
                     "It needs min 5 chars, 1 number and 1 uppercase."
                 ),
             )
@@ -70,14 +76,15 @@ class Create(Resource):
             return jsonify(
                 status="error",
                 details=(
-                    "The passphrase you used is too weak\n"
-                    "It needs min 5 chars, 1 number and 1 uppercase."
+                    "The passphrase you used is too weak. "
+                    "It needs minimun 5 characters, 1 number and 1 uppercase."
                 ),
             )
 
         if expire > 7:
             return jsonify(
-                status="error", details="Max. nb of days to keep the secret alive is 7."
+                status="error",
+                details="The maximum number of days to keep the secret alive is 7.",
             )
 
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -125,7 +132,7 @@ class Read(Resource):
             if not encrypted:
                 return jsonify(
                     status="expired",
-                    msg="Sorry the data has expired \nor has already been read.",
+                    msg="Sorry the data has expired or has already been read.",
                 )
 
             try:

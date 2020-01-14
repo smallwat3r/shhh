@@ -176,6 +176,7 @@ and read secrets.
 Notes: 
 * Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
 * Max number of days to keep a secret alive is 7.  
+* Max number of characters for the secret is 150.  
 
 **Example**  
 
