@@ -45,6 +45,7 @@ class Create(Resource):
             "passphrase", type=str, required=True, help=HELP_CREATE["passphrase"]
         )
         parser.add_argument("days", type=int, required=True, help=HELP_CREATE["days"])
+
         args = parser.parse_args()
 
         passphrase = args["passphrase"]

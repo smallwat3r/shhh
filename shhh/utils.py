@@ -16,9 +16,9 @@ def passphrase_strength(passphrase):
     Requirements: Min 5 chars, one number, one uppercase.
     """
     return (
-        len(passphrase) >= 5 and
-        re.search('[0-9]', passphrase) is not None and
-        re.search('[A-Z]', passphrase) is not None
+        len(passphrase) >= 5
+        and re.search("[0-9]", passphrase) is not None
+        and re.search("[A-Z]", passphrase) is not None
     )
 
 
