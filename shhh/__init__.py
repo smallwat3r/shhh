@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 # File  : __init__.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date  : 17.09.2019
+# Date  : 14.01.2020
 
 """Init application."""
 import os
+import logging
 
 from flask import Flask
 
@@ -13,6 +14,7 @@ from celery import Celery
 from flask_restful import Api
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 
 app = Flask(__name__)
 
@@ -31,12 +33,24 @@ celery = Celery(
     backend=app.config["CELERY_RESULT_BACKEND"],
 )
 
+# Logs config
+# For security reasons do not log the user IP as this could compromise the data
+# security for this app.
+logging.basicConfig(
+    filename=app.config["LOG_FILE"],
+    level=logging.INFO,
+    format='[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s',
+    datefmt='%a, %d %b %Y %H:%M:%S'
+)
+# Change default werkzeug logger to show only at WARNING level.
+logging.getLogger("werkzeug").setLevel(logging.WARNING)
+
 # Api routes
 from shhh.api import Create, Read
 
 api_routes = Api(app, prefix="/api")
-api_routes.add_resource(Create, '/c')
-api_routes.add_resource(Read, '/r')
+api_routes.add_resource(Create, "/c")
+api_routes.add_resource(Read, "/r")
 
 # Flask views
 import shhh.views

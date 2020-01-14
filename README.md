@@ -100,6 +100,7 @@ configure Flask, as well as the app's connection to MySQL.
 ```sh
 export FLASK_APP=shhh
 export FLASK_ENV=dev-local
+export FLASK_DEBUG=1
 export HOST_MYSQL=127.0.0.1
 export USER_MYSQL=<your MySQL username>
 export PASS_MYSQL=<your MySQL password>

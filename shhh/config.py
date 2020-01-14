@@ -7,6 +7,8 @@
 """Config."""
 import os
 
+from . import ROOT_PATH
+
 
 class DefaultConfig:
     """Default config values (dev-local)."""
@@ -22,6 +24,8 @@ class DefaultConfig:
     CELERY_BROKER_URL = "redis://localhost:6379"
     CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
+    LOG_FILE = f"{ROOT_PATH}/logs/shhh.log"
+
 
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""
@@ -29,6 +33,8 @@ class DockerConfig(DefaultConfig):
     REDIS_PASS = os.getenv("REDIS_PASS")
     CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
     CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
+
+    LOG_FILE = "/var/log/shhh/shhh.log"
 
 
 class ProductionConfig(DefaultConfig):
@@ -40,3 +46,5 @@ class ProductionConfig(DefaultConfig):
     REDIS_PASS = os.getenv("REDIS_PASS")
     CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
     CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
+
+    LOG_FILE = "/var/log/shhh/shhh.log"
