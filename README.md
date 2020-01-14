@@ -155,30 +155,30 @@ as default settings for Redis, Celery (worker + beat) and Nginx. To build and
 run Shhh via docker-compose:  
 
 ```sh
-docker-compose -f docker-compose.yml up -d         # run native Flask 
-docker-compose -f docker-compose-nginx.yml up -d   # run using Gunicorn and Nginx 
+docker-compose -f docker-compose.yml up -d         # run app with native Flask 
+docker-compose -f docker-compose-nginx.yml up -d   # run app with Gunicorn <> Nginx 
 ```
 
 or via Makefile:
 
 ```sh
-make dc-start          # start app (native Flask)
-made dc-start-nginx    # start app (Gunicorn + Nginx)
+make dc-start          # start app (with native Flask)
+made dc-start-nginx    # start app (with Gunicorn <> Nginx)
 
                        # other commands
                        # --------------
-make dc-stop           # stop app (native Flask)
-make dc-stop-nginx     # stop app (Gunicorn + Nginx)
-make dc-reboot         # reboot app (native Flask)
-make dc-reboot-nginx   # reboot app (Gunicorn + Nginx)
-make dc-cleanup        # clean (native Flask)
-make dc-cleanup-nginx  # clean (Gunicorn + Nginx)
+make dc-stop           # stop app (with native Flask)
+make dc-stop-nginx     # stop app (with Gunicorn <> Nginx)
+make dc-reboot         # reboot app (with native Flask)
+make dc-reboot-nginx   # reboot app (with Gunicorn <> Nginx)
+make dc-cleanup        # clean (with native Flask)
+make dc-cleanup-nginx  # clean (with Gunicorn <> Nginx)
 ```
 
 Once the container image has finished building and starting, Shhh will be
-available via http://localhost:5000/ (native Flask) or http://localhost (Nginx)  
+available via http://localhost:5000/ (native Flask) or http://localhost (Gunicorn <> Nginx)  
 
-You can also inspect the MySQL data via http://localhost:8080/  
+You can also check the MySQL data records using Adminer via http://localhost:8080/  
 </details>
 
 ## Is there an API?  
