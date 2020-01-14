@@ -31,7 +31,7 @@ def created_route():
 @app.route("/r/<slug>")
 def read_route(slug):
     """Read secret."""
-    return render_template("read.html", slug=slug)
+    return render_template("read.html")
 
 
 @app.errorhandler(404)

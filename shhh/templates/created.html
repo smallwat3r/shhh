@@ -20,15 +20,6 @@
 
 {% block js %}
 
-    <script>
-        const copy = document.getElementById('copy');
-        copy.addEventListener('click', _ => {
-            const link = document.getElementById('link');
-            link.select();
-            link.setSelectionRange(0, 99999); /* mobile */
-            document.execCommand('copy');
-            copy.textContent = 'Copied ✅';
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/created.js') }}"></script>
 
 {% endblock %}
