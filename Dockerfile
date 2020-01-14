@@ -15,11 +15,12 @@ RUN apk update && \
 WORKDIR app/
 COPY shhh shhh
 
-RUN mkdir -p /var/log/celery/ /var/run/celery/
+RUN mkdir -p /var/log/celery/ /var/run/celery/ /var/log/shhh/
 RUN addgroup app && \
     adduser --disabled-password --gecos "" --ingroup app --no-create-home app && \
     chown app:app /var/run/celery/ && \
-    chown app:app /var/log/celery/
+    chown app:app /var/log/celery/ && \
+    chown app:app /var/log/shhh/
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
