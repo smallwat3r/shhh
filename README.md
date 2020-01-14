@@ -20,8 +20,8 @@ _Tip: For added security, avoid telling in Shhh what is the use of the secret yo
 sharing. Instead, explain this in your email, and copy paste the Shhh link with the passphrase
 so the user can retrieve it._  
 
-**Click this image to see the demo:**    
-[![shhh demo](http://i.imgur.com/Exa8dUu.png)](https://vimeo.com/384411739 "Shhh demo - Click to Watch!")
+**Demo:**  
+[shhh demo](http://i.imgur.com/48SvAPa.gif)
 
 ## Set up & Dependencies
 
