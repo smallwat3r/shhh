@@ -1,5 +1,7 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
 
+You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif)  
+
 **Shhh** is a tiny Flask app to write encrypted secrets and share them with people
 using a secure link.  
 
@@ -19,8 +21,6 @@ find in this repo everything you need to host the app on a personal / private se
 _Tip: For added security, avoid telling in Shhh what is the use of the secret you're 
 sharing. Instead, explain this in your email, and copy paste the Shhh link with the passphrase
 so the user can retrieve it._  
-
-You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif)  
 
 ## Set up & Dependencies
 
