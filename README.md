@@ -148,30 +148,35 @@ and deleted the expired records.
 
 You will need Docker, docker-compose and make installed on your machine.  
 
-For development instances of Shhh, this repo contains a docker-compose
-configuration. The configuration defines default settings for Shhh,
-default settings for a containerized instance of MySQL server as well
-as default settings for Redis and Celery (worker + beat). To build and
+For development instances of Shhh, this repo contains 2 docker-compose
+configurations. The configurations defines default settings for Shhh,
+default settings for a containerized instance of MySQL server,
+as default settings for Redis, Celery (worker + beat) and Nginx. To build and
 run Shhh via docker-compose:  
 
 ```sh
-docker-compose up -d
+docker-compose -f docker-compose-flask.yml up -d   # run native Flask 
+docker-compose -f docker-compose-nginx.yml up -d   # run using Gunicorn and Nginx 
 ```
 
 or via Makefile:
 
 ```sh
-make dc-start    # start app
-                 
-                 # other commands
-                 # --------------
-make dc-stop     # stop app
-make dc-reboot   # reboot app
-make dc-cleanup  # clean
+make dc-start          # start app (native Flask)
+made dc-start-nginx    # start app (Gunicorn + Nginx)
+
+                       # other commands
+                       # --------------
+make dc-stop           # stop app (native Flask)
+make dc-stop-nginx     # stop app (Gunicorn + Nginx)
+make dc-reboot         # reboot app (native Flask)
+make dc-reboot-nginx   # reboot app (Gunicorn + Nginx)
+make dc-cleanup        # clean (native Flask)
+make dc-cleanup-nginx  # clean (Gunicorn + Nginx)
 ```
 
 Once the container image has finished building and starting, Shhh will be
-available via http://localhost:5000/  
+available via http://localhost:5000/ (native Flask) or http://localhost (Nginx)  
 
 You can also inspect the MySQL data via http://localhost:8080/  
 </details>
