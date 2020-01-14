@@ -1,9 +1,9 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
 
-You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif)  
-
 **Shhh** is a tiny Flask app to write encrypted secrets and share them with people
 using a secure link.  
+
+You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif)  
 
 The sender has to set up an expiration date along with a passphrase to access 
 the secret. After the specified date the secret will be removed from the database.
