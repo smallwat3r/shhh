@@ -1,23 +1,16 @@
 # -*- coding: utf-8 -*-
-# File     : docker-compose-nginx.yml
+# File     : docker-compose.yml
 # Authors  : Austin Schaffer <schaffer.austin.t@gmail.com
 #            Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date     : 12.01.2020
 # Desc     : Describes the docker-compose configuration for development environments.
 #            These settings are not secure and are not intended for production use.
 #            Please override this configuration when configuring a production instance.
-#            This config launch Gunicorn / MySQL / Redis / Celery and Nginx
+#            This config launch Flask / MySQL / Redis / Celery
 
 version: '3.2'
 
 services:
-  nginx:
-    build: ./nginx
-    depends_on:
-      - app_gunicorn
-    ports:
-      - 80:80
-
   db:
     image: mysql/mysql-server:5.7
     environment:
@@ -39,11 +32,9 @@ services:
     ports:
       - 6379:6379
 
-  app_gunicorn:
-    build:
-      context: .
-      dockerfile: gunicorn/Dockerfile.gunicorn
-    command: gunicorn -c gunicorn.conf.py shhh:app
+  app:
+    build: .
+    command: python -m flask run --host="0.0.0.0" --port="5000"
     depends_on:
       - db
     environment:
@@ -56,10 +47,8 @@ services:
     ports:
       - 5000:5000
 
-  celeryworker_gunicorn:
-    build:
-      context: .
-      dockerfile: gunicorn/Dockerfile.gunicorn
+  celeryworker:
+    build: .
     command: >
       celery -A shhh.tasks worker
       --loglevel=INFO
@@ -73,10 +62,8 @@ services:
       PASS_MYSQL: shhh123
       REDIS_PASS: redis123
 
-  celerybeat_gunicorn:
-    build:
-      context: .
-      dockerfile: gunicorn/Dockerfile.gunicorn
+  celerybeat:
+    build: .
     command: >
       celery -A shhh.tasks beat
       --loglevel=INFO

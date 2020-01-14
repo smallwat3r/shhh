@@ -155,7 +155,7 @@ as default settings for Redis, Celery (worker + beat) and Nginx. To build and
 run Shhh via docker-compose:  
 
 ```sh
-docker-compose -f docker-compose-flask.yml up -d   # run native Flask 
+docker-compose -f docker-compose.yml up -d         # run native Flask 
 docker-compose -f docker-compose-nginx.yml up -d   # run using Gunicorn and Nginx 
 ```
 
