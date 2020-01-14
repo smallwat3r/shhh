@@ -20,11 +20,8 @@ services:
 
   db:
     image: mysql/mysql-server:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: shhh
-      MYSQL_USER: shhh
-      MYSQL_PASSWORD: shhh123
+    env_file:
+      - env.dev-mysql
     volumes:
       - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
       - mysql_data:/var/lib/mysql
@@ -46,13 +43,8 @@ services:
     command: gunicorn -c gunicorn.conf.py shhh:app
     depends_on:
       - db
-    environment:
-      FLASK_ENV: dev-docker
-      HOST_MYSQL: db
-      DB_MYSQL: shhh
-      USER_MYSQL: shhh
-      PASS_MYSQL: shhh123
-      REDIS_PASS: redis123
+    env_file:
+      - env.dev-shhh
     ports:
       - 5000:5000
 
@@ -65,13 +57,8 @@ services:
       --loglevel=INFO
       --logfile=/var/log/celery/celeryworker-shhh.log
       --pidfile=/var/run/celery/celeryworker-shhh.pid
-    environment:
-      FLASK_ENV: dev-docker
-      HOST_MYSQL: db
-      DB_MYSQL: shhh
-      USER_MYSQL: shhh
-      PASS_MYSQL: shhh123
-      REDIS_PASS: redis123
+    env_file:
+      - env.dev-shhh
 
   celerybeat_gunicorn:
     build:
@@ -83,13 +70,8 @@ services:
       --logfile=/var/log/celery/celerybeat-shhh.log
       --pidfile=/var/run/celery/celerybeat-shhh.pid
       --schedule=/var/run/celery/celerybeat-schedule
-    environment:
-      FLASK_ENV: dev-docker
-      HOST_MYSQL: db
-      DB_MYSQL: shhh
-      USER_MYSQL: shhh
-      PASS_MYSQL: shhh123
-      REDIS_PASS: redis123
+    env_file:
+      - env.dev-shhh
 
   adminer:
     image: adminer
