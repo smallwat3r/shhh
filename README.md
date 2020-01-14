@@ -21,7 +21,7 @@ sharing. Instead, explain this in your email, and copy paste the Shhh link with 
 so the user can retrieve it._  
 
 **Demo:**  
-![shhh demo](http://i.imgur.com/uxhqO4G.gif)
+![shhh demo](https://github.com/smallwat3r/shhh/blob/master/_demo/demo.gif)
 
 ## Set up & Dependencies
 
