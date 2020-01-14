@@ -5,7 +5,7 @@
 # Date  : 12.01.2020
 
 """Celery tasks management."""
-from . import celery, database, logging
+from . import celery, database, logger
 from celery.schedules import crontab
 
 
@@ -21,4 +21,4 @@ def delete_expired_links():
     with database.DbConn() as db:
         db.commit("delete_expired_links.sql")
 
-    logging.getLogger("celery").info("ran to check and delete expired records")
+    logger.info("celery ran to check and delete expired records")

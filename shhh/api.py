@@ -14,7 +14,7 @@ from cryptography.fernet import InvalidToken
 
 from flask_restful import reqparse, Resource
 
-from . import database, logging, utils
+from . import database, logger, utils
 from .encryption import Secret
 
 HELP_CREATE = {
@@ -99,7 +99,7 @@ class Create(Resource):
                 },
             )
 
-        logging.getLogger("shhh").info(f"{slug} created and expires on {expires}")
+        logger.info(f"{slug} created and expires on {expires}")
         timez = datetime.now(timezone.utc).astimezone().tzname()
         return jsonify(
             status="created",
@@ -131,9 +131,7 @@ class Read(Resource):
             encrypted = db.get("retrieve_from_slug.sql", {"slug_link": slug})
 
             if not encrypted:
-                logging.getLogger("shhh").warn(
-                    f"{slug} tried to read but do not exists in database"
-                )
+                logger.warn(f"{slug} tried to read but do not exists in database")
                 return jsonify(
                     status="expired",
                     msg="Sorry the data has expired or has already been read.",
@@ -142,11 +140,11 @@ class Read(Resource):
             try:
                 msg = Secret(encrypted[0]["encrypted_text"], passphrase).decrypt()
             except InvalidToken:
-                logging.getLogger("shhh").warn(f"{slug} wrong passphrase used")
+                logger.warn(f"{slug} wrong passphrase used")
                 return jsonify(status="error", msg="Sorry the passphrase is not valid.")
 
             # Automatically delete message from the database.
             db.commit("burn_message.sql", {"slug_link": slug})
-            logging.getLogger("shhh").info(f"{slug} was decrypted and deleted")
+            logger.info(f"{slug} was decrypted and deleted")
 
         return jsonify(status="success", msg=html.escape(msg))

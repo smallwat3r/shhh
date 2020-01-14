@@ -44,6 +44,7 @@ logging.basicConfig(
 )
 # Change default werkzeug logger to show only at WARNING level.
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
+logger = logging.getLogger("shhh")
 
 # Api routes
 from shhh.api import Create, Read
