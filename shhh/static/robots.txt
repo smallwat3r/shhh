@@ -2,4 +2,3 @@ User-Agent: *
 
 Disallow: /api/
 Disallow: /r/
-Disallow: /c
