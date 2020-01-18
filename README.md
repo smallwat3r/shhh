@@ -32,23 +32,23 @@ so the user can retrieve it._
 ## What's the stack?
 
 Core application  
-* **Flask** Python backend web-framework.  
+* **Flask**, used as our Python backend web-framework.  
 * **Celery** runs scheduled tasks very minutes that checks for expired records to delete.  
 * **Redis** that works as our Celery broker.  
 
 Database  
-* **MySQL** stores only: the unique links, the encrypted messages, the creation and expiration dates.  
+* **MySQL** used to store only: the unique links, the encrypted messages, the creation and expiration dates.  
 
 Frontend  
 * **JS**, only pure Javascript code.  
 * **Bulma**, the CSS framework.  
 
 Monitoring  
-* **Flower** Celery monitoring  
+* **Flower**, used for Celery monitoring  
 
 Server  
-* **Gunicorn** App WSGI server  
-* **Nginx** Web server  
+* **Gunicorn**, used for the app WSGI server  
+* **Nginx**, used for the web server  
 
 
 ## What are the dependencies?
