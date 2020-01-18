@@ -73,6 +73,12 @@ services:
     env_file:
       - ./env/env.dev-shhh
 
+  flower:
+    image: mher/flower
+    command: flower --broker=redis://:redis123@redis:6379 --port=8888
+    ports:
+      - 8888:8888
+
   adminer:
     image: adminer
     depends_on:
