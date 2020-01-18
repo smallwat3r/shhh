@@ -189,11 +189,10 @@ make dc-cleanup        # clean (with native Flask)
 make dc-cleanup-nginx  # clean (with Gunicorn <> Nginx)
 ```
 
-Once the container image has finished building and starting, Shhh will be
-available via http://localhost:5000/ (native Flask) or http://localhost (Gunicorn <> Nginx)  
+Once the container image has finished building and starting, you can access:  
 
-You can also check:
-* the MySQL data records using Adminer via http://localhost:8080/  
+* Shhh at http://localhost:5000 (native Flask) or http://localhost (Gunicorn <> Nginx)  
+* MySQL data records using Adminer via http://localhost:8080/  
 * Celery monitoring using Flower via http://localhost:8888/  
 
 </details>
