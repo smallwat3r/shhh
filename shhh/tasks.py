@@ -5,8 +5,8 @@
 # Date  : 12.01.2020
 
 """Celery tasks management."""
-from . import celery, database
 from celery.schedules import crontab
+from . import celery, database
 
 
 @celery.on_after_configure.connect

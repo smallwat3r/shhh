@@ -4,7 +4,7 @@
  * Date   : 14.01.2020
  */
 document.getElementById('decryptBtn').addEventListener('click', _ => {
-    const slug_id = window.location.href.split('/').slice(-1)[0];
+    const slug_id = document.getElementById('slugId').value;
     const passphrase = document.getElementById('passPhrase').value;
     if (passphrase) {
         fetch(`/api/r?slug=${slug_id}&passphrase=${passphrase}`, {
