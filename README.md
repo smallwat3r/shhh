@@ -203,14 +203,13 @@ Once the container image has finished building and starting, you can access:
 ## Is there an API?  
 
 Yes, the endpoints are `/api/c` (create) and `/api/r` (read).  
-You can use Shhh with CURL to create and read secrets.  
 
 Notes: 
 * Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
 * Max number of days to keep a secret alive is 7.  
 * Max number of characters for the secret is 150.  
 
-**Example**  
+**Example with CURL**  
 
 Create a secret  
 ```sh 
