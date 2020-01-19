@@ -34,24 +34,24 @@ so the user can retrieve it._
 ## What's the stack?
 
 Core application  
-* **Flask**, used as our Python backend web-framework.  
-* **Celery** runs scheduled tasks very minutes that checks for expired records to delete.  
-* **Redis** that works as our Celery broker.  
+* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, used as our Python backend web-framework.  
+* **[Celery](http://www.celeryproject.org/)** runs scheduled tasks very minutes that checks for expired records to delete.  
+* **[Redis](https://redis.io/)** that works as our Celery broker.  
 
 Database  
-* **MySQL** used to store only: the unique links, the encrypted messages, the creation and expiration dates.  
+* **[MySQL](https://www.mysql.com/)** used to store only: the unique links, the encrypted messages, the creation and expiration dates.  
 
 Frontend  
 * **JS**, only pure Javascript code.  
-* **Bulma**, the CSS framework.  
+* **[Bulma](https://bulma.io/)**, the CSS framework.  
 
 Monitoring  
-* **Flower**, used for Celery monitoring.  
-* **Adminer**, check MySQL records.  
+* **[Flower](https://flower.readthedocs.io/en/latest/)**, used for Celery monitoring.  
+* **[Adminer](https://www.adminer.org/)**, check MySQL records.  
 
 Server  
-* **Gunicorn**, used for the app WSGI server.  
-* **Nginx**, used for the web server.  
+* **[Gunicorn](https://gunicorn.org/)**, used for the app WSGI server.  
+* **[Nginx](https://www.nginx.com/)**, used for the web server.  
 
 
 ## What are the dependencies?
