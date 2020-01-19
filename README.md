@@ -46,11 +46,12 @@ Frontend
 * **Bulma**, the CSS framework.  
 
 Monitoring  
-* **Flower**, used for Celery monitoring  
+* **Flower**, used for Celery monitoring.  
+* **Adminer**, check MySQL records.  
 
 Server  
-* **Gunicorn**, used for the app WSGI server  
-* **Nginx**, used for the web server  
+* **Gunicorn**, used for the app WSGI server.  
+* **Nginx**, used for the web server.  
 
 
 ## What are the dependencies?
