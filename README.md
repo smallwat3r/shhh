@@ -56,7 +56,7 @@ Server
 
 ## What are the dependencies?
 
-You can find the list of the Python dependencies [here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt) and [here](https://github.com/smallwat3r/shhh/blob/master/gunicorn/requirements-gunicorn.txt) if you're using Gunicorn.  
+You can find the list of the Python dependencies [here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt), plus [here](https://github.com/smallwat3r/shhh/blob/master/gunicorn/requirements-gunicorn.txt) if you're using Gunicorn.  
 
 ## How to launch Shhh?
 
