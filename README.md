@@ -7,8 +7,10 @@ using a secure link.
 
 You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif).  
 
-Shhh is live at [shhh-encrypt.com](https://shhh-encrypt.com), but for even more privacy 
-/ security you can find in this repo **everything you need to host the app on a personal / private server.**  
+Shhh is live at [shhh-encrypt.com](https://shhh-encrypt.com), but as you can't trust 
+everyone with your data, **the goal of this app is for organizations or people to run 
+it on their own personal / private server for more security**. You can find in this repo 
+everything you need to host the app.  
 
 ## How does it work?
 
