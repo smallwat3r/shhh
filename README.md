@@ -197,7 +197,8 @@ Once the container image has finished building and starting, you can access:
 * Shhh at http://localhost:5000 (native Flask) or http://localhost (Gunicorn <> Nginx)  
 * MySQL data records using Adminer via http://localhost:8080/  
 * Celery monitoring using Flower via http://localhost:8888/  
-_Note that Adminer and Flower are not running within the Nginx config example_   
+
+_Note that Adminer and Flower are not running within Nginx._   
 
 </details>
 
