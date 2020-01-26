@@ -49,11 +49,11 @@ class Secret:
     def decrypt(self):
         """Decrypt secret."""
         decoded = urlsafe_b64decode(self.secret)
-        salt, iter, message = (
+        salt, iteration, message = (
             decoded[:16],
             decoded[16:20],
             urlsafe_b64encode(decoded[20:]),
         )
-        iterations = int.from_bytes(iter, "big")
+        iterations = int.from_bytes(iteration, "big")
         key = self.__derive_key(salt, iterations)
         return Fernet(key).decrypt(message).decode("utf-8")

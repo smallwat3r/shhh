@@ -1,0 +1,39 @@
+[Tue, 14 Jan 2020 21:05:33] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:05:33] "GET /r/xlAygzHTFZKMzf0IZA9i HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:05:37] [sev 30] [WARNING] [shhh]> xlAygzHTFZKMzf0IZA9i tried to read but do not exists in database
+[Tue, 14 Jan 2020 21:05:37] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:05:37] "GET /api/r?slug=xlAygzHTFZKMzf0IZA9i&passphrase=wqdqwdwq HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:07:50] [sev 20] [INFO] [werkzeug]>  * Detected change in '/Users/smallwat3r/Smallwat3r Projects/shhh/shhh/__init__.py', reloading
+[Tue, 14 Jan 2020 21:07:51] [sev 20] [INFO] [werkzeug]>  * Detected change in '/Users/smallwat3r/Smallwat3r Projects/shhh/shhh/__init__.py', reloading
+[Tue, 14 Jan 2020 21:07:57] [sev 20] [INFO] [werkzeug]>  * Detected change in '/Users/smallwat3r/Smallwat3r Projects/shhh/shhh/__init__.py', reloading
+[Tue, 14 Jan 2020 21:08:07] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:07] "GET / HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:07] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:07] "GET /static/css/main.css HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:08] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:08] "GET /static/img/lock.png HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:16] [sev 20] [INFO] [shhh]> IAMa5JomQZE-F8A138I6 created and expires on 2020-01-15 21:08:16
+[Tue, 14 Jan 2020 21:08:16] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:16] "POST /api/c HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:16] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:16] "GET /c?link=http://0.0.0.0:5000/r/IAMa5JomQZE-F8A138I6&expires_on=2020-01-15%20at%2021:08%20GMT HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:19] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:19] "GET /r/IAMa5JomQZE-F8A138I6 HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:19] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:19] "GET /static/img/lock.png HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:08:21] [sev 30] [WARNING] [shhh]> IAMa5JomQZE-F8A138I6 wrong passphrase used
+[Tue, 14 Jan 2020 21:08:21] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:08:21] "GET /api/r?slug=IAMa5JomQZE-F8A138I6&passphrase=qwdwqfqw HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:09:00] [sev 20] [INFO] [werkzeug]> 127.0.0.1 - - [14/Jan/2020 21:09:00] "GET /static/img/lock.png HTTP/1.1" 200 -
+[Tue, 14 Jan 2020 21:10:11] [sev 20] [INFO] [werkzeug]>  * Detected change in '/Users/smallwat3r/Smallwat3r Projects/shhh/shhh/__init__.py', reloading
+[Tue, 14 Jan 2020 21:10:11] [sev 20] [INFO] [werkzeug]>  * Restarting with stat
+[Tue, 14 Jan 2020 21:10:13] [sev 20] [INFO] [werkzeug]>  * Restarting with stat
+[Tue, 14 Jan 2020 21:10:14] [sev 20] [INFO] [werkzeug]>  * Restarting with stat
+[Tue, 14 Jan 2020 21:10:18] [sev 20] [INFO] [werkzeug]>  * Restarting with stat
+[Tue, 14 Jan 2020 21:10:21] [sev 20] [INFO] [werkzeug]>  * Restarting with stat
+[Tue, 14 Jan 2020 21:10:43] [sev 30] [WARNING] [shhh]> xlAygzHTFZKMzf0IZA9i tried to read but do not exists in database
+[Tue, 14 Jan 2020 21:10:51] [sev 30] [WARNING] [shhh]> xlAygzHTFZKMzf0IZA9i tried to read but do not exists in database
+[Tue, 14 Jan 2020 21:11:03] [sev 30] [WARNING] [shhh]> xlAygzHTFZKMzf0IZA9i tried to read but do not exists in database
+[Tue, 14 Jan 2020 21:11:11] [sev 20] [INFO] [shhh]> S4o3XJWse-GAA0M3IoMr created and expires on 2020-01-15 21:11:11
+[Tue, 14 Jan 2020 21:11:28] [sev 20] [INFO] [shhh]> S4o3XJWse-GAA0M3IoMr was decrypted and deleted
+[Tue, 14 Jan 2020 21:43:24] [sev 20] [INFO] [shhh]> O4nrAnOYBTSa4as6tJKS created and expires on 2020-01-15 21:43:24
+[Tue, 14 Jan 2020 21:43:36] [sev 30] [WARNING] [shhh]> O4nrAnOYBTSa4as6tJKS wrong passphrase used
+[Fri, 17 Jan 2020 03:14:06] [sev 40] [ERROR] [werkzeug]> 127.0.0.1 - - [17/Jan/2020 03:14:06] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x02\x00\x01\x00\x01ü\x03\x03S^öã¬ý\x9f]âmºxO\x9a8³°\x98*')
+[Sun, 19 Jan 2020 03:52:56] [sev 20] [INFO] [shhh]> sjgIEgef-qwveFftGENq created and expires on 2020-01-21 03:52:56
+[Sun, 19 Jan 2020 03:53:02] [sev 30] [WARNING] [shhh]> sjgIEgef-qwveFftGENq wrong passphrase used
+[Sun, 19 Jan 2020 03:53:18] [sev 30] [WARNING] [shhh]> sjgIEgef-qwveFftGENq wrong passphrase used
+[Sun, 19 Jan 2020 03:53:23] [sev 20] [INFO] [shhh]> sjgIEgef-qwveFftGENq was decrypted and deleted
+[Sun, 26 Jan 2020 17:16:11] [sev 20] [INFO] [shhh]> mYfThE6sUljZjvU7cWlV created and expires on 2020-01-27 17:16:10
+[Sun, 26 Jan 2020 17:16:16] [sev 30] [WARNING] [shhh]> mYfThE6sUljZjvU7cWlV wrong passphrase used
+[Sun, 26 Jan 2020 17:16:21] [sev 30] [WARNING] [shhh]> mYfThE6sUljZjvU7cWlV wrong passphrase used
+[Sun, 26 Jan 2020 17:16:26] [sev 20] [INFO] [shhh]> mYfThE6sUljZjvU7cWlV was decrypted and deleted

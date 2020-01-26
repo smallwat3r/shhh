@@ -41,17 +41,15 @@ class DbConn:
         with open(filepath) as f:
             return f.read()
 
-    def get(self, query, args={}):
+    def get(self, query, args=None):
         """Return SQL results in a dict format."""
 
         def _return_null_format_by_type(value):
             """Return correct value from value type."""
-            if type(value).__name__ == "int":
+            if isinstance(value, int):
                 return 0
-
-            elif type(value).__name__ == "float":
+            if isinstance(value, float):
                 return 0.0
-
             return ""
 
         self.cur.execute(
@@ -69,7 +67,7 @@ class DbConn:
         ]
         return r if r else None
 
-    def commit(self, query, args={}):
+    def commit(self, query, args=None):
         """Commit SQL request."""
         self.cur.execute(
             self._render_template(os.path.join(self.path_temp, query)), args
