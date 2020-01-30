@@ -6,7 +6,6 @@
 
 """Utils."""
 import re
-
 import secrets
 
 

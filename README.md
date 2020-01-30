@@ -221,7 +221,8 @@ curl -X POST \
     https://shhh-encrypt.com/api/c
 
 # outputs
-{
+{   
+    "details": "Secret successfully created.",
     "expires_on": "2020-01-16 at 22:53 GMT",
     "link": "https://shhh-encrypt.com/r/BuMwIftk-T2GQIuewRB-",
     "slug": "BuMwIftk-T2GQIuewRB-",

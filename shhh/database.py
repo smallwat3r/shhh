@@ -6,7 +6,6 @@
 
 """Database management"""
 import os
-
 import pymysql
 
 from . import app, ROOT_PATH

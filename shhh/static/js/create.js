@@ -28,13 +28,13 @@ document.getElementById('createBtn').addEventListener('click', _ => {
             return response.json();
         })
         .then(data => {
-            switch (data.status) {
+            switch (data.response.status) {
                 case 'created':
-                    window.location.href = `/c?link=${data.link}&expires_on=${data.expires_on}`;
+                    window.location.href = `/c?link=${data.response.link}&expires_on=${data.response.expires_on}`;
                     break;
                 case 'error':
                     document.getElementById('response').className = 'notification is-danger';
-                    document.getElementById('msg').textContent = data.details;
+                    document.getElementById('msg').textContent = data.response.details;
                     break;
             }
         });

@@ -7,10 +7,8 @@
 """Init application."""
 import os
 import logging
-
-from flask import Flask
-
 from celery import Celery
+from flask import Flask
 from flask_restful import Api
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))

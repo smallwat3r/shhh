@@ -6,6 +6,7 @@
 
 """Celery tasks management."""
 from celery.schedules import crontab
+
 from . import celery, database
 
 

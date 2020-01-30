@@ -15,7 +15,7 @@ document.getElementById('decryptBtn').addEventListener('click', _ => {
                 return response.json();
             })
             .then(data => {
-                switch (data.status) {
+                switch (data.response.status) {
                     case 'error':
                         document.getElementById('response').className = 'notification is-danger';
                         break;
@@ -33,7 +33,7 @@ document.getElementById('decryptBtn').addEventListener('click', _ => {
                         document.getElementById('msg').setAttribute('style', 'white-space: pre;');
                         break;
                 }
-                document.getElementById('msg').innerHTML = data.msg;
+                document.getElementById('msg').innerHTML = data.response.msg;
             });
     }
 });
