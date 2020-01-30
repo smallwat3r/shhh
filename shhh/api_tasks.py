@@ -6,12 +6,9 @@
 
 """Api tasks management."""
 from datetime import datetime, timedelta, timezone
-
 import html
-
-from flask import request
-
 from cryptography.fernet import InvalidToken
+from flask import request
 
 from . import database, logger, utils
 from .encryption import Secret

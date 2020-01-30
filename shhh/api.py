@@ -5,7 +5,7 @@
 # Date  : 13.01.2020
 
 """Api management."""
-from flask_restful import reqparse, Resource, fields, marshal
+from flask_restful import Resource, fields, marshal, reqparse
 
 from . import api_tasks
 
