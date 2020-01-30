@@ -36,7 +36,7 @@ def create_secret(passphrase, secret, expire):
             "status": "error",
             "details": (
                 "Please enter a passphrase. "
-                "It needs min 5 chars, 1 number and 1 uppercase."
+                "It needs minimun 5 characters, 1 number and 1 uppercase."
             ),
         }
 

@@ -48,10 +48,10 @@ class Create(Resource):
         self.parser.add_argument(
             "days", type=int, required=True, help=HELP_CREATE["days"]
         )
-        super(Create, self).__init__()
+        super().__init__()
 
     def post(self):
-        """Process POST request."""
+        """Process POST request to create secret."""
         args = self.parser.parse_args()
         response = api_tasks.create_secret(
             args["passphrase"], args["secret"], args["days"]
@@ -70,10 +70,10 @@ class Read(Resource):
         self.parser.add_argument(
             "passphrase", type=str, required=True, help=HELP_READ["passphrase"]
         )
-        super(Read, self).__init__()
+        super().__init__()
 
     def get(self):
-        """Process GET request."""
+        """Process GET request to read secret."""
         args = self.parser.parse_args()
         response = api_tasks.read_secret(args["slug"], args["passphrase"])
         return {"response": marshal(response, FIELDS_READ)}
