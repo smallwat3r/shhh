@@ -54,6 +54,7 @@ class Secret:
             decoded[16:20],
             urlsafe_b64encode(decoded[20:]),
         )
+
         iterations = int.from_bytes(iteration, "big")
         key = self.__derive_key(salt, iterations)
         return Fernet(key).decrypt(message).decode("utf-8")
