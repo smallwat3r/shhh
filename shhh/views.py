@@ -21,11 +21,11 @@ def create_route():
 @mandatory(("link", "expires_on",))
 def created_route():
     """Secret created."""
-    args = {
+    context = {
         "link": request.args.get("link"),
         "expires_on": request.args.get("expires_on"),
     }
-    return render_template("created.html", **args)
+    return render_template("created.html", **context)
 
 
 @app.route("/r/<slug>")
