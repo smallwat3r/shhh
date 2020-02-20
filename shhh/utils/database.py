@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# File  : db.py
+# File  : database.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 28.12.2019
 
 """Database management"""
 import os
+
 import pymysql
 
-from . import app, ROOT_PATH
+from .. import app, ROOT_PATH
 
 
 class DbConn:

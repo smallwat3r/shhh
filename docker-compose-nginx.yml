@@ -44,7 +44,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./env/env.dev-shhh
+      - ./dockerenv/env.dev-shhh
     ports:
       - 5000:5000
 
@@ -53,25 +53,25 @@ services:
       context: .
       dockerfile: gunicorn/Dockerfile.gunicorn
     command: >
-      celery -A shhh.tasks worker
+      celery -A shhh.celery.tasks worker
       --loglevel=INFO
       --logfile=/var/log/celery/celeryworker-shhh.log
       --pidfile=/var/run/celery/celeryworker-shhh.pid
     env_file:
-      - ./env/env.dev-shhh
+      - ./dockerenv/env.dev-shhh
 
   celerybeat_gunicorn:
     build:
       context: .
       dockerfile: gunicorn/Dockerfile.gunicorn
     command: >
-      celery -A shhh.tasks beat
+      celery -A shhh.celery.tasks beat
       --loglevel=INFO
       --logfile=/var/log/celery/celerybeat-shhh.log
       --pidfile=/var/run/celery/celerybeat-shhh.pid
       --schedule=/var/run/celery/celerybeat-schedule
     env_file:
-      - ./env/env.dev-shhh
+      - ./dockerenv/env.dev-shhh
 
   flower:
     image: mher/flower

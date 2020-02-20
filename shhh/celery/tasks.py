@@ -7,7 +7,8 @@
 """Celery tasks management."""
 from celery.schedules import crontab
 
-from . import celery, database
+from .. import celery
+from ..utils import database
 
 
 @celery.on_after_configure.connect

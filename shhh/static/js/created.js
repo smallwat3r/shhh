@@ -3,6 +3,7 @@
  * @author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
  * Date   : 14.01.2020
  */
+
 const copy = document.getElementById('copy');
 copy.addEventListener('click', _ => {
     const link = document.getElementById('link');

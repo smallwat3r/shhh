@@ -8,18 +8,18 @@
 from flask import render_template, request, send_from_directory
 
 from . import app
-from .decorators import mandatory
+from .utils.decorators import mandatory
 
 
 @app.route("/")
-def create_route():
+def create():
     """Create secret."""
     return render_template("create.html")
 
 
 @app.route("/c")
 @mandatory(("link", "expires_on",))
-def created_route():
+def created():
     """Secret created."""
     context = {
         "link": request.args.get("link"),
@@ -29,18 +29,18 @@ def created_route():
 
 
 @app.route("/r/<slug>")
-def read_route(slug):
+def read(slug):
     """Read secret."""
     return render_template("read.html", slug=slug)
 
 
 @app.errorhandler(404)
-def error_404(error):
+def not_found(error):
     """404 not found."""
     return render_template("404.html", e=error)
 
 
 @app.route("/robots.txt")
-def static_from_root():
+def robots():
     """Robots.txt"""
     return send_from_directory(app.static_folder, request.path[1:])
