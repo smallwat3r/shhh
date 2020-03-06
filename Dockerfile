@@ -4,7 +4,7 @@
 # Authors  : Austin Schaffer <schaffer.austin.t@gmail.com>
 #            Matthieu Petiteau <mpetiteau.pro@gmail.com>
 
-FROM alpine:3.11.0
+FROM alpine:latest
 
 RUN apk update && \
     apk add build-base python3 python3-dev libffi-dev libressl-dev && \

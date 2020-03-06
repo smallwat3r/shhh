@@ -130,7 +130,7 @@ project and run
 
 ```sh
 source venv/bin/activate  # make sure we are connected to our virtual env.
-celery -A shhh.celery.tasks worker --loglevel=INFO
+celery -A shhh._celery.tasks worker --loglevel=INFO
 ```
 
 Then we need to launch Celery beat that will be triggered by the worker to
@@ -141,7 +141,7 @@ project and run
 
 ```sh
 source venv/bin/activate  # make sure we are connected to our virtual env.
-celery -A shhh.celery.tasks beat --loglevel=INFO
+celery -A shhh._celery.tasks beat --loglevel=INFO
 ```
 
 Then go back to your first terminal where you first set-up your virtual env

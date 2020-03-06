@@ -12,7 +12,6 @@ from celery import Celery
 from flask import Flask
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-
 app = Flask(__name__)
 
 # Application config
@@ -34,11 +33,16 @@ celery = Celery(
 logging.basicConfig(
     filename=app.config["LOG_FILE"],
     level=logging.INFO,
-    format='[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s',
-    datefmt='%a, %d %b %Y %H:%M:%S'
+    format="[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s",
+    datefmt="%a, %d %b %Y %H:%M:%S",
 )
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
 logger = logging.getLogger("shhh")
+
+# API Blueprint
+from .api import _api
+
+app.register_blueprint(_api)
 
 # Flask views
 import shhh.views

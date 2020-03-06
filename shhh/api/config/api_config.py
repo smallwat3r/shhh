@@ -34,6 +34,7 @@ FIELDS_READ = {
     "msg": fields.String,
 }
 
+
 @unique
 class Status(Enum):
     """Api response status."""

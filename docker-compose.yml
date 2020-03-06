@@ -42,7 +42,7 @@ services:
   celeryworker:
     build: .
     command: >
-      celery -A shhh.celery.tasks worker
+      celery -A shhh._celery.tasks worker
       --loglevel=INFO
       --logfile=/var/log/celery/celeryworker-shhh.log
       --pidfile=/var/run/celery/celeryworker-shhh.pid
@@ -52,7 +52,7 @@ services:
   celerybeat:
     build: .
     command: >
-      celery -A shhh.celery.tasks beat
+      celery -A shhh._celery.tasks beat
       --loglevel=INFO
       --logfile=/var/log/celery/celerybeat-shhh.log
       --pidfile=/var/run/celery/celerybeat-shhh.pid
