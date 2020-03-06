@@ -14,7 +14,7 @@ services:
   db:
     image: mysql/mysql-server:5.7
     env_file:
-      - ./env/env.dev-mysql
+      - ./dockerenv/env.dev-mysql
     volumes:
       - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
       - mysql_data:/var/lib/mysql
@@ -35,30 +35,30 @@ services:
     depends_on:
       - db
     env_file:
-      - ./env/env.dev-shhh
+      - ./dockerenv/env.dev-shhh
     ports:
       - 5000:5000
 
   celeryworker:
     build: .
     command: >
-      celery -A shhh.tasks worker
+      celery -A shhh._celery.tasks worker
       --loglevel=INFO
       --logfile=/var/log/celery/celeryworker-shhh.log
       --pidfile=/var/run/celery/celeryworker-shhh.pid
     env_file:
-      - ./env/env.dev-shhh
+      - ./dockerenv/env.dev-shhh
 
   celerybeat:
     build: .
     command: >
-      celery -A shhh.tasks beat
+      celery -A shhh._celery.tasks beat
       --loglevel=INFO
       --logfile=/var/log/celery/celerybeat-shhh.log
       --pidfile=/var/run/celery/celerybeat-shhh.pid
       --schedule=/var/run/celery/celerybeat-schedule
     env_file:
-      - ./env/env.dev-shhh
+      - ./dockerenv/env.dev-shhh
 
   flower:
     image: mher/flower

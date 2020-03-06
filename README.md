@@ -103,7 +103,7 @@ We recommend that you create a virtual environment for this project, so you can
 install the required dependencies.  
 
 ```sh
-virtualenv -p python3 venv --no-site-package
+virtualenv -p python3 venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
@@ -130,7 +130,7 @@ project and run
 
 ```sh
 source venv/bin/activate  # make sure we are connected to our virtual env.
-celery -A shhh.tasks worker --loglevel=INFO
+celery -A shhh._celery.tasks worker --loglevel=INFO
 ```
 
 Then we need to launch Celery beat that will be triggered by the worker to
@@ -141,14 +141,14 @@ project and run
 
 ```sh
 source venv/bin/activate  # make sure we are connected to our virtual env.
-celery -A shhh.tasks beat --loglevel=INFO
+celery -A shhh._celery.tasks beat --loglevel=INFO
 ```
 
 Then go back to your first terminal where you first set-up your virtual env
 and launch flask with
 
 ```sh
-python3 -m flask run --host='0.0.0.0'
+python -m flask run --host='0.0.0.0'
 ```
 
 You can now access Shhh on http://localhost:5000/  
@@ -244,7 +244,7 @@ curl -X GET \
 
 ## Credits
 
-#### Existing cool apps that gave me the idea to develop my own version using Flask
+#### Existing cool apps that gave me the idea to develop my own version using Python and Flask
 
 * [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
 * [PasswordPusher](https://github.com/pglombardo/PasswordPusher)

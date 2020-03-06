@@ -3,6 +3,7 @@
  * @author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
  * Date   : 14.01.2020
  */
+
 document.getElementById('inputSecret').onkeyup = function() {
     document.getElementById('count').textContent = "Characters left: " + (150 - this.value.length);
 };

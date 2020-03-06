@@ -4,7 +4,7 @@
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 17.09.2019
 
-"""Config."""
+"""Application config."""
 import os
 
 from . import ROOT_PATH

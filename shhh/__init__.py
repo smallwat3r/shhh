@@ -7,16 +7,14 @@
 """Init application."""
 import os
 import logging
+
 from celery import Celery
 from flask import Flask
-from flask_restful import Api
 
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-
-
 app = Flask(__name__)
 
-# Global config
+# Application config
 configurations = {
     "dev-local": "shhh.config.DefaultConfig",
     "dev-docker": "shhh.config.DockerConfig",
@@ -32,24 +30,19 @@ celery = Celery(
 )
 
 # Logs config
-# For security reasons do not log the user IP as this could compromise the data
-# security for this app.
 logging.basicConfig(
     filename=app.config["LOG_FILE"],
     level=logging.INFO,
-    format='[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s',
-    datefmt='%a, %d %b %Y %H:%M:%S'
+    format="[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s",
+    datefmt="%a, %d %b %Y %H:%M:%S",
 )
-# Change default werkzeug logger to show only at WARNING level.
 logging.getLogger("werkzeug").setLevel(logging.WARNING)
 logger = logging.getLogger("shhh")
 
-# Api routes
-from shhh.api import Create, Read
+# API Blueprint
+from .api import _api
 
-api_routes = Api(app, prefix="/api")
-api_routes.add_resource(Create, "/c")
-api_routes.add_resource(Read, "/r")
+app.register_blueprint(_api)
 
 # Flask views
 import shhh.views

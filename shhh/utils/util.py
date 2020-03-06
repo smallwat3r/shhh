@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# File  : utils.py
+# File  : util.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 13.01.2020
 
-"""Utils."""
+"""General utils."""
 import re
 import secrets
 
@@ -22,7 +22,7 @@ def passphrase_strength(passphrase):
 
 
 def generate_unique_slug(db):
-    """Generate a unique slug."""
+    """Generates a unique slug link."""
     slug = secrets.token_urlsafe(15)
     exists = db.get("check_slug_availability.sql", {"slug_link": slug})
 

@@ -5,8 +5,9 @@
 # Date  : 13.01.2020
 
 """Encryption management."""
-from base64 import urlsafe_b64decode, urlsafe_b64encode
 import secrets
+from base64 import urlsafe_b64decode, urlsafe_b64encode
+
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
