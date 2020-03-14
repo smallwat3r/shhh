@@ -221,24 +221,28 @@ curl -X POST \
     https://shhh-encrypt.com/api/c
 
 # outputs
-{   
-    "details": "Secret successfully created.",
-    "expires_on": "2020-01-16 at 22:53 GMT",
-    "link": "https://shhh-encrypt.com/r/BuMwIftk-T2GQIuewRB-",
-    "slug": "BuMwIftk-T2GQIuewRB-",
-    "status": "created"
+{
+    "response": {
+        "status": "created",
+        "details": "Secret successfully created.",
+        "slug": "VC16EgYLsXTuECsX9fTZ",
+        "link": "http://shhh-encrypt.com/r/VC16EgYLsXTuECsX9fTZ",
+        "expires_on": "2020-03-17 at 16:44 UTC"
+    }
 }
 ```
 
 Read a secret  
 ```sh
 curl -X GET \
-    https://shhh-encrypt.com/api/r?slug=BuMwIftk-T2GQIuewRB-&passphrase=Passw123
+    https://shhh-encrypt.com/api/r?slug=VC16EgYLsXTuECsX9fTZ&passphrase=Passw123
 
 # outputs
 {
-    "msg": "This is secret.",
-    "status": "success"
+    "response": {
+        "status": "success",
+        "msg": "This is secret."
+    }
 }
 ```
 
