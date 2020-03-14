@@ -33,7 +33,7 @@ so the user can retrieve it._
 
 ## Is there an API?
 
-Yes, you can find some info [here](https://github.com/smallwat3r/shhh/tree/master/shhh/api)
+Yes, you can find some info [here](https://github.com/smallwat3r/shhh/tree/master/shhh/api).  
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), a Go client to interact with Shhh API via command line.  
 
 ## What's the stack?
