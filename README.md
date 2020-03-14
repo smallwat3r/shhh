@@ -233,7 +233,7 @@ curl -X POST \
 Read a secret  
 ```sh
 curl -X GET \
-    https://shhh-encrypt/api/r?slug=BuMwIftk-T2GQIuewRB-&passphrase=Passw123
+    https://shhh-encrypt.com/api/r?slug=BuMwIftk-T2GQIuewRB-&passphrase=Passw123
 
 # outputs
 {
