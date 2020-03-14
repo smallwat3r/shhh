@@ -31,16 +31,10 @@ _Tip: For added security, avoid telling in Shhh what is the use of the secret yo
 sharing. Instead, explain this in your email, and copy paste the Shhh link with the passphrase
 so the user can retrieve it._  
 
-## Is there an API?  
+## Is there an API?
 
-Yes, the endpoints are `/api/c` (create) and `/api/r` (read).  
-
-Notes: 
-* Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
-* Max number of days to keep a secret alive is 7.  
-* Max number of characters for the secret is 150.  
-
-Checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), a Go client to interact with Shhh API via command line.  
+Yes, you can find some info [here](https://github.com/smallwat3r/shhh/tree/master/shhh/api)
+Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), a Go client to interact with Shhh API via command line.  
 
 ## What's the stack?
 
