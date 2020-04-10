@@ -14,18 +14,19 @@ RUN apk update && \
 
 RUN mkdir -p /var/log/celery/ /var/run/celery/ /var/log/shhh/
 RUN addgroup app && \
-    adduser --disabled-password --gecos "" --ingroup app --no-create-home app && \
+    adduser --disabled-password --gecos "" --ingroup app app && \
     chown app:app /var/run/celery/ && \
     chown app:app /var/log/celery/ && \
     chown app:app /var/log/shhh/
 
+USER app
+
+ENV PATH="/home/app/.local/bin:${PATH}"
 WORKDIR app/
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --user -r requirements.txt
 
 COPY shhh shhh
 
 ENV FLASK_APP=shhh
-
-USER app
