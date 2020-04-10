@@ -18,15 +18,16 @@ RUN addgroup app && \
     chown app:app /var/log/celery/ && \
     chown app:app /var/log/shhh/
 
+USER app
+
+ENV PATH="/home/app/.local/bin:${PATH}"
 WORKDIR app/
 
 COPY requirements.txt .
 COPY ./gunicorn/requirements-gunicorn.txt .
-RUN pip install -r requirements.txt -r requirements-gunicorn.txt
+RUN pip install --user -r requirements.txt -r requirements-gunicorn.txt
 
 COPY ./gunicorn/gunicorn.conf.py .
 COPY shhh shhh
 
 ENV FLASK_APP=shhh
-
-USER app
