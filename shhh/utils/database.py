@@ -11,18 +11,15 @@ class DbConn:
     __slots__ = ("cnx", "cur", "path_temp")
 
     def __init__(self, path_temp=ROOT_PATH):
-        """Make connection to MySql DB."""
         self.cnx = pymysql.connect(charset="utf8",
                                    **app.config["DB_CREDENTIALS"])
         self.cur = self.cnx.cursor()
         self.path_temp = os.path.join(path_temp, "sql")
 
     def __enter__(self):
-        """Load context manager."""
         return self
 
     def __exit__(self, exception_type, exception_value, traceback):
-        """Close DB connection."""
         self.cur.close()
 
     def close(self):
