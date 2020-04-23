@@ -3,7 +3,6 @@
 # File  : tasks.py
 # Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
 # Date  : 12.01.2020
-
 """Celery tasks management."""
 from celery.schedules import crontab
 

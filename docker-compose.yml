@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
-# File     : docker-compose.yml
-# Authors  : Austin Schaffer <schaffer.austin.t@gmail.com
-#            Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date     : 12.01.2020
-# Desc     : Describes the docker-compose configuration for development environments.
-#            These settings are not secure and are not intended for production use.
-#            Please override this configuration when configuring a production instance.
-#            This config launch Flask / MySQL / Redis / Celery
+# Describes the docker-compose configuration for development environments.
+# These settings are not secure and are not intended for production use.
+# Please override this configuration when configuring a production instance.
+# This config launch Flask / MySQL / Redis / Celery
 
 version: '3.2'
 

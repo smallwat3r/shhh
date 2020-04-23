@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-# File     : Dockerfile
-# Date     : 12.01.2020
-# Authors  : Austin Schaffer <schaffer.austin.t@gmail.com>
-#            Matthieu Petiteau <mpetiteau.pro@gmail.com>
-
 FROM alpine:latest
 
 RUN apk update && \

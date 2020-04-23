@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-# File     : Dockerfile.gunicorn
-# Date     : 12.01.2020
-# Author   : Matthieu Petiteau <mpetiteau.pro@gmail.com>
-
-FROM alpine:3.11.0
+FROM alpine:latest
 
 RUN apk update && \
     apk add build-base python3 python3-dev libffi-dev libressl-dev && \

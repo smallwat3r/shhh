@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File  : task_read.py
-# Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date  : 20.02.2020
-
-"""Api task task to read a secret."""
 import html
 
 from cryptography.fernet import InvalidToken
@@ -18,16 +11,19 @@ from ...utils.encryption import Secret
 def read_secret(slug, passphrase):
     """Read a secret."""
     if not passphrase:
-        return {"status": Status.ERROR.value, "msg": "Please enter a passphrase."}
+        return {
+            "status": Status.ERROR.value, "msg": "Please enter a passphrase."
+        }
 
     with database.DbConn() as db:
         encrypted = db.get("retrieve_from_slug.sql", {"slug_link": slug})
 
         if not encrypted:
-            logger.warning(f"{slug} tried to read but do not exists in database")
+            logger.warning(
+                f"{slug} tried to read but do not exists in database")
             return {
                 "status": Status.EXPIRED.value,
-                "msg": "Sorry the data has expired or has already been read.",
+                "msg": "Sorry the data has expired or has already been read."
             }
 
         try:
@@ -36,7 +32,7 @@ def read_secret(slug, passphrase):
             logger.warning(f"{slug} wrong passphrase used")
             return {
                 "status": Status.ERROR.value,
-                "msg": "Sorry the passphrase is not valid.",
+                "msg": "Sorry the passphrase is not valid."
             }
 
         # Automatically delete message from the database.

@@ -1,6 +1,7 @@
 # Shhh API
 
-Checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), a Go client to interact with Shhh API via command line.  
+Checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), a Go 
+client to interact with Shhh API via command line.  
 
 The endpoints are `/api/c` (create) and `/api/r` (read).  
 

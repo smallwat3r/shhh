@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File  : encryption.py
-# Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date  : 13.01.2020
-
-"""Encryption management."""
 import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 
@@ -23,13 +16,11 @@ class Secret:
 
     def __derive_key(self, salt, iterations):
         """Derive a secret key from a given passphrase and salt."""
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt,
-            iterations=iterations,
-            backend=default_backend(),
-        )
+        kdf = PBKDF2HMAC(algorithm=hashes.SHA256(),
+                         length=32,
+                         salt=salt,
+                         iterations=iterations,
+                         backend=default_backend())
         return urlsafe_b64encode(kdf.derive(self.passphrase.encode()))
 
     def encrypt(self, iterations=100_000):
@@ -37,13 +28,9 @@ class Secret:
         salt = secrets.token_bytes(16)
         key = self.__derive_key(salt, iterations)
         return urlsafe_b64encode(
-            b"%b%b%b"
-            % (
-                salt,
-                iterations.to_bytes(4, "big"),
-                urlsafe_b64decode(Fernet(key).encrypt(self.secret)),
-            )
-        )
+            b"%b%b%b" % (salt,
+                         iterations.to_bytes(4, "big"),
+                         urlsafe_b64decode(Fernet(key).encrypt(self.secret))))
 
     def decrypt(self):
         """Decrypt secret."""
@@ -51,7 +38,7 @@ class Secret:
         salt, iteration, message = (
             decoded[:16],
             decoded[16:20],
-            urlsafe_b64encode(decoded[20:]),
+            urlsafe_b64encode(decoded[20:])
         )
 
         iterations = int.from_bytes(iteration, "big")

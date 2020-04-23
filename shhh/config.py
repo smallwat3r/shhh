@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File  : config.py
-# Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date  : 17.09.2019
-
-"""Application config."""
 import os
 
 from . import ROOT_PATH
@@ -18,7 +11,7 @@ class DefaultConfig:
         "host": os.getenv("HOST_MYSQL"),
         "user": os.getenv("USER_MYSQL"),
         "password": os.getenv("PASS_MYSQL"),
-        "db": os.getenv("DB_MYSQL"),
+        "db": os.getenv("DB_MYSQL")
     }
 
     CELERY_BROKER_URL = "redis://localhost:6379"

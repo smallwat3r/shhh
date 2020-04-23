@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File  : views.py
-# Date  : 17.09.2019
-# Author: matthieu petiteau <mpetiteau.pro@gmail.com>
-
-"""Flask views."""
 from flask import render_template, request, send_from_directory
 
 from . import app
@@ -18,12 +11,12 @@ def create():
 
 
 @app.route("/c")
-@mandatory(("link", "expires_on",))
+@mandatory(("link", "expires_on"))
 def created():
     """Secret created."""
     context = {
         "link": request.args.get("link"),
-        "expires_on": request.args.get("expires_on"),
+        "expires_on": request.args.get("expires_on")
     }
     return render_template("created.html", **context)
 

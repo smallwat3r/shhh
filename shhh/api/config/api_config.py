@@ -1,24 +1,18 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# File  : api_config.py
-# Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-# Date  : 20.02.2020
-
-"""Api configs."""
 from enum import Enum, unique
 
 from flask_restful import fields
 
-
 HELP_CREATE = {
-    "secret": "Secret message to encrypt.",
-    "passphrase": "Passphrase to encrypt secret, min 5 chars, 1 number, 1 uppercase.",
-    "days": "Number of days to keep alive (needs to be an integer).",
+    "secret":
+        "Secret message to encrypt.",
+    "passphrase":
+        "Passphrase to encrypt secret, min 5 chars, 1 number, 1 uppercase.",
+    "days":
+        "Number of days to keep alive (needs to be an integer)."
 }
-
 HELP_READ = {
     "slug": "Secret slug id.",
-    "passphrase": "Passphrase shared to decrypt message.",
+    "passphrase": "Passphrase shared to decrypt message."
 }
 
 FIELDS_CREATE = {
@@ -26,13 +20,9 @@ FIELDS_CREATE = {
     "details": fields.String,
     "slug": fields.String,
     "link": fields.String,
-    "expires_on": fields.String,
+    "expires_on": fields.String
 }
-
-FIELDS_READ = {
-    "status": fields.String,
-    "msg": fields.String,
-}
+FIELDS_READ = {"status": fields.String, "msg": fields.String}
 
 
 @unique
