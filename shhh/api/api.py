@@ -2,8 +2,8 @@ from flask_restful import Resource, marshal, reqparse
 
 from .enums import ApiCreateArgs, ApiReadArgs
 from .config import FIELDS_CREATE, FIELDS_READ, HELP_READ, HELP_CREATE
-from .tasks.create import create_secret
-from .tasks.read import read_secret
+from .secret.create import create_secret
+from .secret.read import read_secret
 
 
 class Create(Resource):

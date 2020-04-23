@@ -48,7 +48,7 @@ services:
       context: .
       dockerfile: gunicorn/Dockerfile.gunicorn
     command: >
-      celery -A shhh._celery.tasks worker
+      celery -A shhh.tasks.tasks worker
       --loglevel=INFO
       --logfile=/var/log/celery/celeryworker-shhh.log
       --pidfile=/var/run/celery/celeryworker-shhh.pid
@@ -60,7 +60,7 @@ services:
       context: .
       dockerfile: gunicorn/Dockerfile.gunicorn
     command: >
-      celery -A shhh._celery.tasks beat
+      celery -A shhh.tasks.tasks beat
       --loglevel=INFO
       --logfile=/var/log/celery/celerybeat-shhh.log
       --pidfile=/var/run/celery/celerybeat-shhh.pid
