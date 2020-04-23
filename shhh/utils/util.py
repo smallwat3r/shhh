@@ -17,4 +17,5 @@ def generate_unique_slug(db):
     exists = db.get("check_slug_availability.sql", {"slug_link": slug})
     if not exists:
         return slug
+
     return generate_unique_slug(db)

@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 from flask import request
 
-from ..config.api_config import Status
+from ..enums import Status
 from ... import logger
 from ...utils import database, util
 from ...utils.encryption import Secret

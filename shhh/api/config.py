@@ -1,5 +1,3 @@
-from enum import Enum, unique
-
 from flask_restful import fields
 
 HELP_CREATE = {
@@ -10,6 +8,7 @@ HELP_CREATE = {
     "days":
         "Number of days to keep alive (needs to be an integer)."
 }
+
 HELP_READ = {
     "slug": "Secret slug id.",
     "passphrase": "Passphrase shared to decrypt message."
@@ -22,31 +21,5 @@ FIELDS_CREATE = {
     "link": fields.String,
     "expires_on": fields.String
 }
+
 FIELDS_READ = {"status": fields.String, "msg": fields.String}
-
-
-@unique
-class Status(Enum):
-    """Api response status."""
-
-    CREATED = "created"
-    SUCCESS = "success"
-    EXPIRED = "expired"
-    ERROR = "error"
-
-
-@unique
-class ApiCreateArgs(Enum):
-    """Create api arguments."""
-
-    SECRET = "secret"
-    PASSPHRASE = "passphrase"
-    DAYS = "days"
-
-
-@unique
-class ApiReadArgs(Enum):
-    """Read api arguments."""
-
-    SLUG = "slug"
-    PASSPHRASE = "passphrase"

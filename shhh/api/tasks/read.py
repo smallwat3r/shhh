@@ -2,7 +2,7 @@ import html
 
 from cryptography.fernet import InvalidToken
 
-from ..config.api_config import Status
+from ..enums import Status
 from ... import logger
 from ...utils import database
 from ...utils.encryption import Secret
