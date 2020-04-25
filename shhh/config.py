@@ -41,8 +41,6 @@ class HerokuConfig(DefaultConfig):
     """Heroku configuration (production)."""
 
     DEBUG = False
-    SQLALCHEMY_ECHO = False
-
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
 
