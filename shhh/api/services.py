@@ -142,7 +142,7 @@ def create_secret(passphrase, secret, expire):
             status=Status.ERROR.value,
             details=(
                 "Please enter a passphrase. "
-                "It needs minimun 5 characters, 1 number and 1 uppercase."))
+                "It needs minimun 8 characters, 1 number and 1 uppercase."))
     if not passphrase_strength(passphrase):
         return dict(
             status=Status.ERROR.value,

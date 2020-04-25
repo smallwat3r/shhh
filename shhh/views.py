@@ -29,7 +29,9 @@ def create():
 @need(("link", "expires_on", ))
 def created():
     """View to see the link for the created secret."""
-    return rt("created.html", link=link, expires_on=expires_on)
+    return rt("created.html",
+              link=request.args.get("link"),
+              expires_on=request.args.get("expires_on"))
 
 
 @app.route("/r/<slug>")
