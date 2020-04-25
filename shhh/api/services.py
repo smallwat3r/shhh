@@ -2,12 +2,12 @@ import enum
 import html
 import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
+from datetime import datetime, timedelta, timezone
+
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from datetime import datetime, timedelta, timezone
-
 from flask import request
 from flask import current_app as app
 from marshmallow import Schema
@@ -30,6 +30,8 @@ class Status(enum.Enum):
 
 class Secret:
     """Secrets encryption / decryption management."""
+
+    __slots__ = ("secret", "passphrase", )
 
     def __init__(self, secret, passphrase):
         self.secret = secret
@@ -69,69 +71,53 @@ class Secret:
 def read_secret(slug, passphrase):
     """Read a secret."""
     if not passphrase:
-        return {
-            "status": Status.ERROR.value, "msg": "Please enter a passphrase."
-        }
+        return dict(status=Status.ERROR.value, msg="Please enter a passphrase.")
     secret = db.session.query(Slugs).filter_by(slug_link=slug).first()
     if not secret:
         app.logger.warning(
             f"{slug} tried to read but do not exists in database")
-        return {
-            "status": Status.EXPIRED.value,
-            "msg": "Sorry the data has expired or has already been read."
-        }
+        return dict(status=Status.EXPIRED.value,
+                    msg="Sorry the data has expired or has already been read.")
     try:
         msg = Secret(secret.encrypted_text, passphrase).decrypt()
     except InvalidToken:
         app.logger.warning(f"{slug} wrong passphrase used")
-        return {
-            "status": Status.ERROR.value,
-            "msg": "Sorry the passphrase is not valid."
-        }
+        return dict(status=Status.ERROR.value,
+                    msg="Sorry the passphrase is not valid.")
 
     # Automatically delete message from the database.
     db.session.query(Slugs).filter_by(slug_link=slug).delete()
     db.session.commit()
 
     app.logger.info(f"{slug} was decrypted and deleted")
-    return {"status": Status.SUCCESS.value, "msg": html.escape(msg)}
+    return dict(status=Status.SUCCESS.value, msg=html.escape(msg))
 
 
 def create_secret(passphrase, secret, expire):
     """Create a secret."""
     if not secret or secret == "":
-        return {
-            "status": Status.ERROR.value,
-            "details": "You need to enter a secret to encrypt."
-        }
+        return dict(status=Status.ERROR.value,
+                    details="You need to enter a secret to encrypt.")
     if len(secret) > 150:
-        return {
-            "status": Status.ERROR.value,
-            "details": "Your secret needs to have less than 150 characters."
-        }
+        return dict(
+            status=Status.ERROR.value,
+            details="Your secret needs to have less than 150 characters.")
     if not passphrase:
-        return {
-            "status":
-                Status.ERROR.value,
-            "details":
-                ("Please enter a passphrase. "
-                 "It needs minimun 5 characters, 1 number and 1 uppercase.")
-        }
+        return dict(
+            status=Status.ERROR.value,
+            details=(
+                "Please enter a passphrase. "
+                "It needs minimun 5 characters, 1 number and 1 uppercase."))
     if not utils.passphrase_strength(passphrase):
-        return {
-            "status":
-                Status.ERROR.value,
-            "details":
-                ("The passphrase you used is too weak. "
-                 "It needs minimun 8 characters, 1 number and 1 uppercase.")
-        }
+        return dict(
+            status=Status.ERROR.value,
+            details=(
+                "The passphrase you used is too weak. "
+                "It needs minimun 8 characters, 1 number and 1 uppercase."))
     if expire > 7:
-        return {
-            "status":
-                Status.ERROR.value,
-            "details":
-                "The maximum number of days to keep the secret alive is 7."
-        }
+        return dict(
+            status=Status.ERROR.value,
+            details="The maximum number of days to keep the secret alive is 7.")
 
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     expiration_date = datetime.strptime(
@@ -147,10 +133,9 @@ def create_secret(passphrase, secret, expire):
 
     app.logger.info(f"{slug} created and expires on {expiration_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()
-    return {
-        "status": Status.CREATED.value,
-        "details": "Secret successfully created.",
-        "slug": slug,
-        "link": f"{request.url_root}r/{slug}",
-        "expires_on": f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}"
-    }
+    return dict(
+        status=Status.CREATED.value,
+        details="Secret successfully created.",
+        slug=slug,
+        link=f"{request.url_root}r/{slug}",
+        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}")

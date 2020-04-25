@@ -43,7 +43,7 @@ class Create(Resource):
     def post(self, passphrase, secret, days):
         """Post request handler."""
         response = create_secret(passphrase, secret, days)
-        return {"response": response}, 201
+        return {"response": response}
 
 
 # /api/r
@@ -54,7 +54,7 @@ class Read(Resource):
     def get(self, slug, passphrase):
         """Get request handler."""
         response = read_secret(slug, passphrase)
-        return {"response": response}, 200
+        return {"response": response}
 
 
 endpoint.add_resource(Create, "/c")

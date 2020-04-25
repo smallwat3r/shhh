@@ -5,7 +5,6 @@ from celery import Celery
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-ROOT_PATH = path.dirname(path.abspath(__file__))
 db = SQLAlchemy()
 
 

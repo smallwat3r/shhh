@@ -1,5 +1,4 @@
 from os import environ
-from . import ROOT_PATH
 
 
 class DefaultConfig:
