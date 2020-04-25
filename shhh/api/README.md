@@ -6,11 +6,12 @@ client to interact with Shhh API via command line.
 The endpoints are `/api/c` (create) and `/api/r` (read).  
 
 Notes: 
-* Passphrases needs min. 5 chars, 1 number and 1 uppercase.  
+* Passphrases needs min. 8 characters, including at least 1 number 
+and 1 uppercase.  
 * Max number of days to keep a secret alive is 7.  
 * Max number of characters for the secret is 150.  
 
-**Example with CURL**  
+**Example using CURL**  
 
 Create a secret  
 ```sh 
