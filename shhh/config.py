@@ -37,6 +37,15 @@ class DockerConfig(DefaultConfig):
     SQLALCHEMY_ECHO = False
 
 
+class HerokuConfig(DefaultConfig):
+    """Heroku configuration (production)."""
+
+    DEBUG = False
+    SQLALCHEMY_ECHO = False
+
+    SQLALCHEMY_DATABASE_URI = os.environ("DATABASE_URL")
+
+
 class ProductionConfig(DefaultConfig):
     """Production configuration (production)."""
 

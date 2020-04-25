@@ -31,6 +31,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     configurations = {
         "dev-local": "shhh.config.DefaultConfig",
         "dev-docker": "shhh.config.DockerConfig",
+        "heroku": "shhh.config.HerokuConfig",
         "production": "shhh.config.ProductionConfig",
     }
     app.config.from_object(
