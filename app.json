@@ -2,7 +2,6 @@
   "name": "Shhh",
   "description": "Keep secrets out of your emails, communicate using secure links with passphrase and expiration dates.",
   "repository": "https://github.com/smallwat3r/shhh",
-  "logo": "https://i.imgur.com/0MPGbQj.png",
   "keywords": ["secrets", "security", "password", "encryption", "expire", "protection"],
   "addons": [{
     "plan": "heroku-postgresql",

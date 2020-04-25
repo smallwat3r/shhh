@@ -119,10 +119,10 @@ flask run
 
 or using gunicorn:
 ```sh
-gunicorn -c gunicorn.conf.py wsgi:app --preload
+gunicorn -b :5000 -w 3 wsgi:app --preload
 ```
 
-You can now access Shhh on http://localhost:5000/  
+You can now access Shhh at http://localhost:5000  
 
 </details>
 
@@ -149,7 +149,7 @@ Once the container image has finished building and starting, you can
 access:  
 
 * Shhh at http://localhost:5000
-* Database records using Adminer via http://localhost:8080
+* Database records using Adminer at http://localhost:8080
 
 </details>
 
