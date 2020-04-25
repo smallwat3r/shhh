@@ -1,19 +1,15 @@
-/**
- * File  : main.css
- * Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
- * Date  : 29.12.2019
- */
-
 body {
-  font-family: 'Chivo', sans-serif;
+  font-family: "Chivo", sans-serif;
 }
 
 a {
   color: #fff;
 }
 
-input, textarea, select {
-  font-family: 'Chivo', sans-serif;
+input,
+textarea,
+select {
+  font-family: "Chivo", sans-serif;
 }
 
 .info {

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <!--
   Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
   Source code: https://github.com/smallwat3r/shhh
@@ -8,67 +7,78 @@
   Please feel free to contribute to the project!
 -->
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="passwords,secrets,password,secret,encrypt,secret sharing,password sharing,security,privacy,shhh">
-    <meta name="description" content="Shhh encrypt your secrets and generate a unique password protected link so you can share them securely in an email. The secrets will also be automatically deleted after an expiration date. No more passwords or sensitive data sent in plain text over emails!">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="passwords,secrets,password,secret,encrypt,secret sharing,password sharing,security,privacy,shhh"
+    />
+    <meta
+      name="description"
+      content="Shhh encrypt your secrets and generate a unique password protected link so you can share them securely in an email. The secrets will also be automatically deleted after an expiration date. No more passwords or sensitive data sent in plain text over emails!"
+    />
     <title>Shhh - Safely share your secrets and passwords.</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/lock.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/lock.png') }}" />
     <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Chivo&display=swap" rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link href="https://fonts.googleapis.com/css?family=Chivo&display=swap" rel="stylesheet" />
+  </head>
 
-<body>
+  <body>
     <section class="hero is-danger is-bold is-fullheight">
-        <div class="hero-body">
-            <div class="container has-text-centered">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <div class="column is-4 is-offset-4">
+            <a href="/">
+              <h1 class="title">
+                🔐 shhh
+              </h1>
+            </a>
+          </div>
+          <div class="column is-6 is-offset-3">
+            <p class="help">
+              No more passwords or sensitive data sent in plain text over emails! Send it with a secure link,
+              protected by a passphrase.
+            </p>
+          </div>
 
-                <div class="column is-4 is-offset-4">
-                    <a href="/">
-                        <h1 class="title">
-                            🔐 shhh
-                        </h1>
-                    </a>
-                </div>
-                <div class="column is-6 is-offset-3">
-                    <p class="help">
-                        No more passwords or sensitive data sent in plain text over emails! Send it with a secure link,
-                        protected by a passphrase.
-                    </p>
-                </div>
+          <div class="column is-6 is-offset-3">
 
-                <div class="column is-6 is-offset-3">
+            {% block container %}{% endblock %}
 
-                    {% block container %}{% endblock %}
-
-                    <hr />
-                    <div class="has-text-right">
-                        <p class="help has-text-justified">
-                            Your secrets are stored using advanced encryption and are only available for a limited amount of time.
-                            Shhh doesn't store your passphrases. They are only used to encrypt your secrets. Encryption method used:
-                            Fernet with password, random salt value and strong iteration count (100 000).
-                        </p>
-                        <p class="help has-text-justified">
-                            The project, built in Python (Flask) is open-source and available on Github, so feel free to contribute, star,
-                            fork, spread love! There is everything you need to host this app on your own private / local server if you
-                            want even more security / privacy.
-                        </p>
-                        <p class="help"><a target="_blank" href="https://github.com/smallwat3r/shhh"><span class="feather" data-feather="github"></span> source code</a></p>
-                        <p class="help">&copy; Matthieu Petiteau 2020</p>
-                    </div>
-                </div>
+            <hr />
+            <div class="has-text-right">
+              <p class="help has-text-justified">
+                Your secrets are stored using advanced encryption and are only available for a limited amount
+                of time. Shhh doesn't store your passphrases. They are only used to encrypt your secrets.
+                Encryption method used: Fernet with password, random salt value and strong iteration count
+                (100 000).
+              </p>
+              <p class="help has-text-justified">
+                The project, built in Python (Flask) is open-source and available on Github, so feel free to
+                contribute, star, fork, spread love! There is everything you need to host this app on your own
+                private / local server if you want even more security / privacy.
+              </p>
+              <p class="help">
+                <a target="_blank" href="https://github.com/smallwat3r/shhh"
+                  ><span class="feather" data-feather="github"></span> source code</a
+                >
+              </p>
+              <p class="help">&copy; Matthieu Petiteau 2020</p>
             </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-    <script>feather.replace();</script>
+    <script>
+      feather.replace();
+    </script>
 
     {% block js %}{% endblock %}
 
-</body>
-
+  </body>
 </html>

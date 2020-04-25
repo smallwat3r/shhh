@@ -8,7 +8,6 @@
 .vscode/
 __pycache__/
 
+env/
 venv/
-
-local.sh
-flask.sh
+run-local.sh

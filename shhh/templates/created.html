@@ -2,24 +2,24 @@
 
 {% block container %}
 
-    <div class="field has-addons">
-        <div class="control is-expanded">
-          <input class="input" type="text" id="link" value="{{ link }}" readonly>
-        </div>
-        <div class="control">
-            <button id="copy" class="button is-warning">copy</button>
-        </div>
-    </div>
-    <p class="info">
-        Send this link along with the passphrase to your recipient.
-        this link will expire on <b>{{ expires_on }}.</b> also note that as soon
-        as someone decrypt the message, <b>it will be deleted forever 🔥</b>
-    </p>
+<div class="field has-addons">
+  <div class="control is-expanded">
+    <input class="input" type="text" id="link" value="{{ link }}" readonly />
+  </div>
+  <div class="control">
+    <button id="copy" class="button is-warning">copy</button>
+  </div>
+</div>
+<p class="info">
+  Send this link along with the passphrase to your recipient. this link will expire on
+  <b>{{ expires_on }}.</b> also note that as soon as someone decrypt the message,
+  <b>it will be deleted forever 🔥</b>
+</p>
 
 {% endblock %}
 
 {% block js %}
 
-    <script src="{{ url_for('static', filename='js/created.js') }}"></script>
+<script src="{{ url_for('static', filename='js/created.js') }}"></script>
 
 {% endblock %}

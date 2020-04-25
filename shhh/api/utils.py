@@ -1,9 +1,8 @@
 import re
 import secrets
 
+from shhh.extensions import db
 from shhh.models import Slugs
-
-from .. import db
 
 
 def passphrase_strength(passphrase):

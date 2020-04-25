@@ -8,13 +8,13 @@ from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from flask import request, current_app as app
+from flask import current_app as app
+from flask import request
 from marshmallow import Schema
 
 from shhh.api import utils
-from shhh.models import Slugs
-
-from .. import db
+from shhh.extensions import db
+from shhh.models import Entries
 
 
 @enum.unique
@@ -71,7 +71,7 @@ def read_secret(slug, passphrase):
     """Read a secret."""
     if not passphrase:
         return dict(status=Status.ERROR.value, msg="Please enter a passphrase.")
-    secret = db.session.query(Slugs).filter_by(slug_link=slug).first()
+    secret = db.session.query(Entries).filter_by(slug_link=slug).first()
     if not secret:
         app.logger.warning(
             f"{slug} tried to read but do not exists in database")
@@ -85,7 +85,7 @@ def read_secret(slug, passphrase):
                     msg="Sorry the passphrase is not valid.")
 
     # Automatically delete message from the database.
-    db.session.query(Slugs).filter_by(slug_link=slug).delete()
+    db.session.query(Entries).filter_by(slug_link=slug).delete()
     db.session.commit()
 
     app.logger.info(f"{slug} was decrypted and deleted")
@@ -124,10 +124,10 @@ def create_secret(passphrase, secret, expire):
 
     slug = utils.generate_unique_slug()
     db.session.add(
-        Slugs(slug_link=slug,
-              encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
-              date_created=now,
-              date_expires=expiration_date))
+        Entries(slug_link=slug,
+                encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
+                date_created=now,
+                date_expires=expiration_date))
     db.session.commit()
 
     app.logger.info(f"{slug} created and expires on {expiration_date}")

@@ -1,39 +1,48 @@
-from flask import (render_template,
-                   request,
-                   send_from_directory,
-                   redirect,
-                   url_for,
-                   current_app as app)
+from flask import current_app as app
+from flask import redirect
+from flask import render_template as rt
+from flask import request, send_from_directory, url_for
 
 
 @app.route("/")
 def create():
-    """Create secret."""
-    return render_template("create.html")
+    """View to create a secret."""
+    return rt("create.html")
 
 
 @app.route("/c")
+@need(("link", "expires_on", ))
 def created():
-    """Secret created."""
-    link, expires_on = request.args.get("link"), request.args.get("expires_on")
-    if link and expires_on:
-        return render_template("created.html", link=link, expires_on=expires_on)
-    return redirect(url_for("create"))
+    """View to see the link for the created secret."""
+    return rt("created.html", link=link, expires_on=expires_on)
 
 
 @app.route("/r/<slug>")
 def read(slug):
-    """Read secret."""
-    return render_template("read.html", slug=slug)
+    """View to read a secret."""
+    return rt("read.html", slug=slug)
 
 
 @app.errorhandler(404)
 def not_found(error):
-    """404 not found."""
-    return render_template("404.html", error=error)
+    """404 handler."""
+    return rt("404.html", error=error)
 
 
 @app.route("/robots.txt")
 def robots():
-    """Robots.txt"""
+    """Robots handler."""
     return send_from_directory(app.static_folder, request.path[1:])
+
+
+def need(params):
+    """Needed params to access page."""
+    def inner(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            for param in params:
+                if not request.args.get(param):
+                    return redirect(url_for("create"))
+            return f(*args, **kwargs)
+        return wrapper
+    return inner

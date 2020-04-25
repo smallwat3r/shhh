@@ -9,55 +9,22 @@ services:
   db:
     image: postgres:12.2-alpine
     env_file:
-      - ./dockerenv/env.dev-postgres
+      - ./dockerenv/env.dev
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres:/data/postgres
     ports:
       - 5432:5432
 
-  redis:
-    image: redis:6.0-rc-alpine
-    command: redis-server --requirepass redis123
-    volumes:
-      - redis:/data
-    ports:
-      - 6379:6379
-
   app:
     build: .
-    command: gunicorn -c gunicorn.conf.py wsgi:app
+    command: gunicorn -c gunicorn.conf.py wsgi:app --preload
     depends_on:
       - db
     env_file:
-      - ./dockerenv/env.dev-shhh
+      - ./dockerenv/env.dev
     ports:
       - 5000:5000
-
-  celeryworker:
-    build: .
-    command: >
-      celery -A shhh.tasks.tasks worker
-      --loglevel=INFO
-      --pidfile=/var/run/celery/celeryworker-shhh.pid
-    env_file:
-      - ./dockerenv/env.dev-shhh
-
-  celerybeat:
-    build: .
-    command: >
-      celery -A shhh.tasks.tasks beat
-      --loglevel=INFO
-      --pidfile=/var/run/celery/celerybeat-shhh.pid
-      --schedule=/var/run/celery/celerybeat-schedule
-    env_file:
-      - ./dockerenv/env.dev-shhh
-
-  flower:
-    image: mher/flower
-    command: flower --broker=redis://:redis123@redis:6379 --port=8888
-    ports:
-      - 8888:8888
 
   adminer:
     image: adminer
@@ -68,4 +35,3 @@ services:
 
 volumes:
   postgres:
-  redis:

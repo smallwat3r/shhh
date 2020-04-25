@@ -1,0 +1,17 @@
+*.DS_Store
+*.log
+*.db
+*.rdb
+*.pid
+
+.gitignore
+Makefile
+README.md
+
+__pycache__/
+app.egg-info/
+postgres/
+dockerenv/
+env/
+venv/
+.git/

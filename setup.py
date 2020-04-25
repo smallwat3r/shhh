@@ -7,11 +7,10 @@ setuptools.setup(
     requirements=[
         "flask",
         "psycopg2",
-        "celery",
+        "Flask-APScheduler",
         "requests",
         "flask_restful",
         "flask_sqlalchemy",
-        "redis",
         "webargs",
         "cryptography"
     ])
