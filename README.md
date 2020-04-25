@@ -45,19 +45,21 @@ a Go client to interact with Shhh API via command line.
 
 ## What's the stack?
 
+### Core application
 * **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, used as
 our Python backend web-framework.  
 * **[Postgres](https://www.postgresql.org/)** used to store only: 
 the unique links, the encrypted messages, the creation and expiration
 dates.  
 * **[Bulma](https://bulma.io/)**, the CSS framework.  
-* **[Adminer](https://www.adminer.org/)**, check database records.  
 
+### Tools
+* **[Adminer](https://www.adminer.org/)**, check database records.  
 
 ## What are the dependencies?
 
-You can find the list of the Python packages 
-[here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt)  
+You can find the list of the Python dependencies 
+[here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt).  
 
 ## How to launch Shhh?
 
