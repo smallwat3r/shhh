@@ -36,12 +36,12 @@ def create_app(env=environ.get("FLASK_ENV")):
         configurations.get(env, "shhh.config.ProductionConfig"))
 
     db.init_app(app)
-    scheduler.init_app(app)
+    # scheduler.init_app(app)
 
     with app.app_context():
         register_blueprints(app)
         db.create_all()
-        scheduler.start()
+        # scheduler.start()
 
         from shhh import views
 
