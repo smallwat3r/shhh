@@ -21,6 +21,8 @@ def create_app(env=environ.get("FLASK_ENV")):
         format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
                 "[%(name)s]> %(message)s"),
         datefmt="%a, %d %b %Y %H:%M:%S")
+
+    # Disable werkzeug logging under WARNING.
     logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
     app = Flask(__name__)
@@ -29,19 +31,18 @@ def create_app(env=environ.get("FLASK_ENV")):
     configurations = {
         "dev-local": "shhh.config.DefaultConfig",
         "dev-docker": "shhh.config.DockerConfig",
-        "heroku": "shhh.config.HerokuConfig",
         "production": "shhh.config.ProductionConfig",
     }
     app.config.from_object(
         configurations.get(env, "shhh.config.ProductionConfig"))
 
     db.init_app(app)
-    # scheduler.init_app(app)
+    scheduler.init_app(app)
 
     with app.app_context():
         register_blueprints(app)
         db.create_all()
-        # scheduler.start()
+        scheduler.start()
 
         from shhh import views
 
