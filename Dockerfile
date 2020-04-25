@@ -7,12 +7,10 @@ RUN apk update && \
     ln -sf /usr/bin/pip3 usr/bin/pip && \
     pip install --upgrade pip
 
-RUN mkdir -p /var/log/celery/ /var/run/celery/ /var/log/shhh/
+RUN mkdir -p /var/run/celery/
 RUN addgroup app && \
     adduser --disabled-password --gecos "" --ingroup app app && \
-    chown app:app /var/run/celery/ && \
-    chown app:app /var/log/celery/ && \
-    chown app:app /var/log/shhh/
+    chown app:app /var/run/celery/
 
 USER app
 
@@ -20,8 +18,8 @@ ENV PATH="/home/app/.local/bin:${PATH}"
 WORKDIR app/
 
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN pip install --user -r requirements.txt && \
+    pip install --user .
 
 COPY shhh shhh
-
-ENV FLASK_APP=shhh
+ENV FLASK_APP=wsgi.py

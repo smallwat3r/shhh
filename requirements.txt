@@ -1,5 +1,6 @@
 amqp==2.5.2
 aniso8601==8.0.0
+anyjson==0.3.3
 billiard==3.6.3.0
 celery==4.4.2
 certifi==2020.4.5.1
@@ -10,10 +11,12 @@ cryptography==2.9.2
 Flask==1.1.2
 Flask-RESTful==0.3.8
 Flask-SQLAlchemy==2.4.1
+gunicorn==20.0.4
 idna==2.9
 itsdangerous==1.1.0
 Jinja2==2.11.2
 kombu==4.6.8
+kombu-fernet-serializers==0.0.5
 MarkupSafe==1.1.1
 marshmallow==3.5.1
 psycopg2==2.8.5

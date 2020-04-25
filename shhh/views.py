@@ -1,7 +1,9 @@
-from flask import (
-    render_template, request, send_from_directory, redirect, url_for,
-    current_app as app
-)
+from flask import (render_template,
+                   request,
+                   send_from_directory,
+                   redirect,
+                   url_for,
+                   current_app as app)
 
 
 @app.route("/")

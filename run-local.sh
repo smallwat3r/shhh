@@ -7,6 +7,6 @@ export POSTGRE_PASS=hello
 export REDIS_PASS=redis123
 
 export FLASK_ENV=dev-docker
-export FLASK_APP=run.py
+export FLASK_APP=wsgi.py
 
 flask run
