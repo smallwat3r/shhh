@@ -67,7 +67,7 @@ These methods are for development purpose only. For production /
 public use you might want to use a more secure configuration.
 
 <details>
-<summary>Launch it natively</summary>
+<summary><b>Launch it natively</b></summary>
 
 #### Postgres  
 
@@ -127,7 +127,7 @@ You can now access Shhh on http://localhost:5000/
 </details>
 
 <details>
-<summary>Launch it with docker-compose (recommended)</summary>
+<summary><b>Launch it with docker-compose (recommended)</b></summary>
 
 #### docker-compose  
 
