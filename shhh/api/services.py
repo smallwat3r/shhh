@@ -143,7 +143,7 @@ def create_secret(passphrase, secret, expire):
             details=(
                 "Please enter a passphrase. "
                 "It needs minimun 5 characters, 1 number and 1 uppercase."))
-    if not utils.passphrase_strength(passphrase):
+    if not passphrase_strength(passphrase):
         return dict(
             status=Status.ERROR.value,
             details=(
@@ -158,7 +158,7 @@ def create_secret(passphrase, secret, expire):
     expiration_date = datetime.strptime(
         now, "%Y-%m-%d %H:%M:%S") + timedelta(days=expire)
 
-    slug = utils.generate_unique_slug()
+    slug = generate_unique_slug()
     db.session.add(
         Entries(slug_link=slug,
                 encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
