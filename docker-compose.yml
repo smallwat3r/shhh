@@ -1,7 +1,7 @@
 # Describes the docker-compose configuration for development environments.
 # These settings are not secure and are not intended for production use.
 # Please override this configuration when configuring a production instance.
-# This config launch Flask / Postgres / Redis / Celery
+# This config launch Flask (gunicorn) / Postgres / Adminer
 
 version: '3.2'
 
