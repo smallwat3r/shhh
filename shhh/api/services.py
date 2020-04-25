@@ -85,7 +85,7 @@ def generate_unique_slug():
 
     """
     slug = secrets.token_urlsafe(15)
-    if not db.session.query(Slugs).filter_by(slug_link=slug).first():
+    if not db.session.query(Entries).filter_by(slug_link=slug).first():
         return slug
     return generate_unique_slug()
 
