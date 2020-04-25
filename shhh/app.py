@@ -1,10 +1,10 @@
 import logging
-from os import environ
+import os
+
+from flask import Flask
 
 from cryptography.fernet import Fernet
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
 from shhh.api import api
 from shhh.extensions import db, scheduler
 
@@ -14,7 +14,7 @@ def register_blueprints(app):
     app.register_blueprint(api)
 
 
-def create_app(env=environ.get("FLASK_ENV")):
+def create_app(env=os.environ.get("FLASK_ENV")):
     """Application factory."""
     logging.basicConfig(
         level=logging.INFO,
