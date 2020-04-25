@@ -95,7 +95,7 @@ pip install .
 Stay in the virtual environment created.  
 
 You then need to set up a few environment variables. These will be 
-used to configure Flask, as well as the app's connection to the 
+used to configure Flask, as well as the application connection to the 
 database.  
 
 ```sh
@@ -104,16 +104,20 @@ export FLASK_ENV=dev-local
 export FLASK_DEBUG=1
 
 export POSTGRES_HOST=localhost
+export POSTGRES_DB=shhh
 export POSTGRES_USER=<username>
 export POSTGRES_PASSWORD=<password>
 export POSTGRES_PORT=<port>
-export POSTGRES_DB=shhh
 ```
 
 You can now launch Shhh with:
 ```sh
-flask run  # native flask
-gunicorn -c gunicorn.conf.py wsgi:app --preload  # gunicorn
+flask run
+```
+
+or using gunicorn:
+```sh
+gunicorn -c gunicorn.conf.py wsgi:app --preload
 ```
 
 You can now access Shhh on http://localhost:5000/  

@@ -26,10 +26,9 @@ class DefaultConfig:
     # SqlAlchemy
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = (f"postgresql+psycopg2://"
-                               f"{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-                               f"@{POSTGRES_HOST}:{POSTGRES_PORT}"
-                               f"/{POSTGRES_DB}")
+    SQLALCHEMY_DATABASE_URI = (
+        f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
 
 
 class DockerConfig(DefaultConfig):
