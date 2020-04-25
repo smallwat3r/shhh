@@ -1,5 +1,6 @@
 import enum
 import html
+import re
 import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime, timedelta, timezone
@@ -15,16 +16,6 @@ from marshmallow import Schema
 from shhh.api import utils
 from shhh.extensions import db
 from shhh.models import Entries
-
-
-@enum.unique
-class Status(enum.Enum):
-    """API statuses."""
-
-    CREATED = "created"
-    SUCCESS = "success"
-    EXPIRED = "expired"
-    ERROR = "error"
 
 
 class Secret:
@@ -67,8 +58,47 @@ class Secret:
         return Fernet(key).decrypt(message).decode("utf-8")
 
 
+@enum.unique
+class Status(enum.Enum):
+    """API body response statuses."""
+
+    CREATED = "created"
+    SUCCESS = "success"
+    EXPIRED = "expired"
+    ERROR = "error"
+
+
+def passphrase_strength(passphrase):
+    """Check the passphrase strength.
+
+    Minimum 8 characters containing at least one number and one uppercase.
+
+    """
+    return (len(passphrase) >= 8 and re.search("[0-9]", passphrase) is not None
+            and re.search("[A-Z]", passphrase) is not None)
+
+
+def generate_unique_slug():
+    """Generates a unique slug link.
+
+    This function will loop recursively on itself to make sure the slug
+    generated is unique.
+
+    """
+    slug = secrets.token_urlsafe(15)
+    if not db.session.query(Slugs).filter_by(slug_link=slug).first():
+        return slug
+    return generate_unique_slug()
+
+
 def read_secret(slug, passphrase):
-    """Read a secret."""
+    """Read a secret.
+
+    Args:
+        slug (str): Unique slug link to access the secret.
+        passphrase (str): Passphrase needed to decrypt the secret.
+
+    """
     if not passphrase:
         return dict(status=Status.ERROR.value, msg="Please enter a passphrase.")
     secret = db.session.query(Entries).filter_by(slug_link=slug).first()
@@ -93,7 +123,14 @@ def read_secret(slug, passphrase):
 
 
 def create_secret(passphrase, secret, expire):
-    """Create a secret."""
+    """Create a secret.
+
+    Args:
+        passphrase (str): Passphrase needed to encrypt the secret.
+        secret (str): Secret to encrypt.
+        expire (int): Number of days the secret will be stored.
+
+    """
     if not secret or secret == "":
         return dict(status=Status.ERROR.value,
                     details="You need to enter a secret to encrypt.")

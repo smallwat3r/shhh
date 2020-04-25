@@ -10,10 +10,12 @@ from shhh.extensions import db, scheduler
 
 
 def register_blueprints(app):
+    """Register application blueprints."""
     app.register_blueprint(api)
 
 
 def create_app(env=environ.get("FLASK_ENV")):
+    """Application factory."""
     app = Flask(__name__)
 
     configurations = {
@@ -28,6 +30,7 @@ def create_app(env=environ.get("FLASK_ENV")):
     scheduler.init_app(app)
 
     with app.app_context():
+
         logging.basicConfig(
             level=logging.INFO,
             format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
