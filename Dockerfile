@@ -20,4 +20,4 @@ COPY . .
 RUN pip install --user .
 
 ENV FLASK_APP=wsgi.py
-CMD gunicorn -c gunicorn.conf.py wsgi:entrypoint --preload
+CMD gunicorn -b :5000 -w 3 wsgi:app --preload
