@@ -13,7 +13,6 @@ from flask import current_app as app
 from flask import request
 from marshmallow import Schema
 
-from shhh.api import utils
 from shhh.extensions import db
 from shhh.models import Entries
 
