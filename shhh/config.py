@@ -1,4 +1,4 @@
-from os import environ
+import os
 
 from shhh.scheduler import delete_expired_links
 
@@ -17,11 +17,11 @@ class DefaultConfig:
     }]
 
     # Postgres connection.
-    POSTGRES_HOST = environ.get("POSTGRES_HOST", "localhost")
-    POSTGRES_USER = environ.get("POSTGRES_USER")
-    POSTGRES_PASSWORD = environ.get("POSTGRES_PASSWORD")
-    POSTGRES_PORT = environ.get("POSTGRES_PORT", 5432)
-    POSTGRES_DB = environ.get("POSTGRES_DB", "shhh")
+    POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
+    POSTGRES_USER = os.environ.get("POSTGRES_USER")
+    POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+    POSTGRES_PORT = os.environ.get("POSTGRES_PORT", 5432)
+    POSTGRES_DB = os.environ.get("POSTGRES_DB", "shhh")
 
     # SqlAlchemy
     SQLALCHEMY_ECHO = True
