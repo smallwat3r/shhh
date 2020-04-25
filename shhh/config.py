@@ -17,11 +17,11 @@ class DefaultConfig:
     }]
 
     # Postgres connection.
-    POSTGRES_HOST = environ.get("POSTGRES_HOST")
+    POSTGRES_HOST = environ.get("POSTGRES_HOST", "localhost")
     POSTGRES_USER = environ.get("POSTGRES_USER")
     POSTGRES_PASSWORD = environ.get("POSTGRES_PASSWORD")
     POSTGRES_PORT = environ.get("POSTGRES_PORT", 5432)
-    POSTGRES_DB = environ.get("POSTGRES_DB")
+    POSTGRES_DB = environ.get("POSTGRES_DB", "shhh")
 
     # SqlAlchemy
     SQLALCHEMY_ECHO = True
@@ -35,6 +35,15 @@ class DefaultConfig:
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""
 
+    SQLALCHEMY_ECHO = False
+
+
+class HerokuConfig(DefaultConfig):
+    """Heroku configuration (heroku)."""
+
+    DEBUG = False
+
+    SQLALCHEMY_DATABASE_URI = os.environ("DATABASE_URL")
     SQLALCHEMY_ECHO = False
 
 
