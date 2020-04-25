@@ -1,1 +1,1 @@
-from .models import Slugs
+from .models import Entries
