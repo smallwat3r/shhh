@@ -1,7 +1,7 @@
-from flask import render_template, request, send_from_directory
+from functools import wraps
 
-from . import app
-from .utils.decorators import mandatory
+from flask import current_app as app
+from flask import render_template, request, send_from_directory, redirect, url_for
 
 
 @app.route("/")
@@ -11,14 +11,12 @@ def create():
 
 
 @app.route("/c")
-@mandatory(("link", "expires_on"))
 def created():
     """Secret created."""
-    context = {
-        "link": request.args.get("link"),
-        "expires_on": request.args.get("expires_on")
-    }
-    return render_template("created.html", **context)
+    link, expires_on = request.args.get("link"), request.args.get("expires_on")
+    if link and expires_on:
+        return render_template("created.html", link=link, expires_on=expires_on)
+    return redirect(url_for("create"))
 
 
 @app.route("/r/<slug>")
@@ -30,7 +28,7 @@ def read(slug):
 @app.errorhandler(404)
 def not_found(error):
     """404 not found."""
-    return render_template("404.html", e=error)
+    return render_template("404.html", error=error)
 
 
 @app.route("/robots.txt")

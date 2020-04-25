@@ -1,5 +1,4 @@
-import os
-
+from os import environ
 from . import ROOT_PATH
 
 
@@ -7,27 +6,32 @@ class DefaultConfig:
     """Default config values (dev-local)."""
 
     DEBUG = True
-    DB_CREDENTIALS = {
-        "host": os.getenv("HOST_MYSQL"),
-        "user": os.getenv("USER_MYSQL"),
-        "password": os.getenv("PASS_MYSQL"),
-        "db": os.getenv("DB_MYSQL")
-    }
+
+    POSTGRE_HOST = environ.get("POSTGRE_HOST")
+    POSTGRE_USER = environ.get("POSTGRE_USER")
+    POSTGRE_PASS = environ.get("POSTGRE_PASS")
+    POSTGRE_PORT = environ.get("POSTGRE_PORT", 5432)
+    POSTGRE_DB = environ.get("POSTGRE_DB")
+
+    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = (f"postgresql+psycopg2://"
+                               f"{POSTGRE_USER}:{POSTGRE_PASS}"
+                               f"@{POSTGRE_HOST}:{POSTGRE_PORT}"
+                               f"/{POSTGRE_DB}")
 
     CELERY_BROKER_URL = "redis://localhost:6379"
     CELERY_RESULT_BACKEND = "redis://localhost:6379"
-
-    LOG_FILE = f"{ROOT_PATH}/logs/shhh.log"
 
 
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""
 
-    REDIS_PASS = os.getenv("REDIS_PASS")
+    REDIS_PASS = environ.get("REDIS_PASS")
     CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
     CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
 
-    LOG_FILE = "/var/log/shhh/shhh.log"
+    SQLALCHEMY_ECHO = False
 
 
 class ProductionConfig(DefaultConfig):
@@ -36,8 +40,8 @@ class ProductionConfig(DefaultConfig):
 
     DEBUG = False
 
-    REDIS_PASS = os.getenv("REDIS_PASS")
+    REDIS_PASS = environ.get("REDIS_PASS")
     CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
     CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
 
-    LOG_FILE = "/var/log/shhh/shhh.log"
+    SQLALCHEMY_ECHO = False

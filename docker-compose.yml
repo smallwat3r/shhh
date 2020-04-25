@@ -11,55 +11,55 @@ services:
     env_file:
       - ./dockerenv/env.dev-mysql
     volumes:
-      - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
+      # - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
       - mysql_data:/var/lib/mysql
     ports:
       - 3306:3306
 
-  redis:
-    image: redis:6.0-rc-alpine
-    command: redis-server --requirepass redis123
-    volumes:
-      - redis:/data
-    ports:
-      - 6379:6379
+  # redis:
+  #   image: redis:6.0-rc-alpine
+  #   command: redis-server --requirepass redis123
+  #   volumes:
+  #     - redis:/data
+  #   ports:
+  #     - 6379:6379
 
-  app:
-    build: .
-    command: python -m flask run --host="0.0.0.0" --port="5000"
-    depends_on:
-      - db
-    env_file:
-      - ./dockerenv/env.dev-shhh
-    ports:
-      - 5000:5000
+  # app:
+  #   build: .
+  #   command: python -m flask run --host="0.0.0.0" --port="5000"
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - ./dockerenv/env.dev-shhh
+  #   ports:
+  #     - 5000:5000
 
-  celeryworker:
-    build: .
-    command: >
-      celery -A shhh.tasks.tasks worker
-      --loglevel=INFO
-      --logfile=/var/log/celery/celeryworker-shhh.log
-      --pidfile=/var/run/celery/celeryworker-shhh.pid
-    env_file:
-      - ./dockerenv/env.dev-shhh
+  # celeryworker:
+  #   build: .
+  #   command: >
+  #     celery -A shhh.tasks.tasks worker
+  #     --loglevel=INFO
+  #     --logfile=/var/log/celery/celeryworker-shhh.log
+  #     --pidfile=/var/run/celery/celeryworker-shhh.pid
+  #   env_file:
+  #     - ./dockerenv/env.dev-shhh
 
-  celerybeat:
-    build: .
-    command: >
-      celery -A shhh.tasks.tasks beat
-      --loglevel=INFO
-      --logfile=/var/log/celery/celerybeat-shhh.log
-      --pidfile=/var/run/celery/celerybeat-shhh.pid
-      --schedule=/var/run/celery/celerybeat-schedule
-    env_file:
-      - ./dockerenv/env.dev-shhh
+  # celerybeat:
+  #   build: .
+  #   command: >
+  #     celery -A shhh.tasks.tasks beat
+  #     --loglevel=INFO
+  #     --logfile=/var/log/celery/celerybeat-shhh.log
+  #     --pidfile=/var/run/celery/celerybeat-shhh.pid
+  #     --schedule=/var/run/celery/celerybeat-schedule
+  #   env_file:
+  #     - ./dockerenv/env.dev-shhh
 
-  flower:
-    image: mher/flower
-    command: flower --broker=redis://:redis123@redis:6379 --port=8888
-    ports:
-      - 8888:8888
+  # flower:
+  #   image: mher/flower
+  #   command: flower --broker=redis://:redis123@redis:6379 --port=8888
+  #   ports:
+  #     - 8888:8888
 
   adminer:
     image: adminer
@@ -70,4 +70,4 @@ services:
 
 volumes:
   mysql_data:
-  redis:
+  # redis:

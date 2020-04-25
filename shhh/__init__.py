@@ -1,33 +1,45 @@
-import os
 import logging
+from os import path
 
 from celery import Celery
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
-app = Flask(__name__)
+ROOT_PATH = path.dirname(path.abspath(__file__))
+db = SQLAlchemy()
 
-configurations = {
-    "dev-local": "shhh.config.DefaultConfig",
-    "dev-docker": "shhh.config.DockerConfig",
-    "production": "shhh.config.ProductionConfig",
-}
-app.config.from_object(configurations[os.getenv("FLASK_ENV")])
 
-celery = Celery(app.name,
-                broker=app.config["CELERY_BROKER_URL"],
-                backend=app.config["CELERY_RESULT_BACKEND"])
+def create_app(env):
+    app = Flask(__name__)
 
-logging.basicConfig(filename=app.config["LOG_FILE"],
-                    level=logging.INFO,
-                    format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
-                            "[%(name)s]> %(message)s"),
-                    datefmt="%a, %d %b %Y %H:%M:%S")
+    configurations = {
+        "dev-local": "shhh.config.DefaultConfig",
+        "dev-docker": "shhh.config.DockerConfig",
+        "production": "shhh.config.ProductionConfig",
+    }
+    app.config.from_object(
+        configurations.get(env, "shhh.config.ProductionConfig"))
 
-logging.getLogger("werkzeug").setLevel(logging.WARNING)
-logger = logging.getLogger("shhh")
+    db.init_app(app)
 
-from .api import _api
-app.register_blueprint(_api)
+    with app.app_context():
+        celery = Celery(app.name,
+                        broker=app.config["CELERY_BROKER_URL"],
+                        backend=app.config["CELERY_RESULT_BACKEND"])
 
-import shhh.views
+        logging.basicConfig(
+            level=logging.INFO,
+            format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
+                    "[%(name)s]> %(message)s"),
+            datefmt="%a, %d %b %Y %H:%M:%S")
+
+        logging.getLogger("werkzeug").setLevel(logging.WARNING)
+        logger = logging.getLogger("shhh")
+
+        from .api import api
+        app.register_blueprint(api)
+
+        from . import views
+
+        db.create_all()
+        return app
