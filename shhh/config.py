@@ -31,6 +31,7 @@ class DefaultConfig:
                                f"@{POSTGRES_HOST}:{POSTGRES_PORT}"
                                f"/{POSTGRES_DB}")
 
+    # SQLALCHEMY_DATABASE_URI = (f"postgresql+psycopg2://"
 
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""

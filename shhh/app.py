@@ -16,8 +16,16 @@ def register_blueprints(app):
 
 def create_app(env=environ.get("FLASK_ENV")):
     """Application factory."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
+                "[%(name)s]> %(message)s"),
+        datefmt="%a, %d %b %Y %H:%M:%S")
+    logging.getLogger("werkzeug").setLevel(logging.WARNING)
+
     app = Flask(__name__)
 
+    app.logger.info(f"Loading env {env}")
     configurations = {
         "dev-local": "shhh.config.DefaultConfig",
         "dev-docker": "shhh.config.DockerConfig",
@@ -31,14 +39,6 @@ def create_app(env=environ.get("FLASK_ENV")):
     scheduler.init_app(app)
 
     with app.app_context():
-
-        logging.basicConfig(
-            level=logging.INFO,
-            format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
-                    "[%(name)s]> %(message)s"),
-            datefmt="%a, %d %b %Y %H:%M:%S")
-        logging.getLogger("werkzeug").setLevel(logging.WARNING)
-
         register_blueprints(app)
         db.create_all()
         scheduler.start()
