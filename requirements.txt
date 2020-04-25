@@ -27,3 +27,4 @@ tzlocal==2.0.0
 urllib3==1.25.9
 webargs==6.0.0
 Werkzeug==1.0.1
+-e .
