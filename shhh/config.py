@@ -38,7 +38,7 @@ class DockerConfig(DefaultConfig):
 
 
 class HerokuConfig(DefaultConfig):
-    """Heroku configuration (production)."""
+    """Heroku configuration (heroku)."""
 
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
