@@ -10,7 +10,7 @@ def qs_to_args(f):
     """Querystring to Args.
 
     Decorator function to parse mandatory parameters in function args from
-    querystring. Check the number of parameters and the names.
+    querystring. Check that the query keys are matching the args.
 
     """
 
