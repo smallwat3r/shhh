@@ -1,4 +1,4 @@
-from functools import wraps
+import inspect
 
 from flask import current_app as app
 from flask import redirect
@@ -6,17 +6,20 @@ from flask import render_template as rt
 from flask import request, send_from_directory, url_for
 
 
-def need(params):
-    """Needed params to access page."""
-    def inner(f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            for param in params:
-                if not request.args.get(param):
-                    return redirect(url_for("create"))
-            return f(*args, **kwargs)
-        return wrapper
-    return inner
+def qs_to_args(f):
+    """Querystring to Args.
+
+    Decorator function to parse mandatory parameters in function args from
+    querystring. Check the number of parameters and the names.
+
+    """
+
+    def wrapper(*args, **kwargs):
+        if sorted(inspect.getargspec(f).args) != sorted(request.args.keys()):
+            return redirect(url_for("create"))
+        return f(**request.args)
+
+    return wrapper
 
 
 @app.route("/")
@@ -26,12 +29,10 @@ def create():
 
 
 @app.route("/c")
-@need(("link", "expires_on", ))
-def created():
+@qs_to_args
+def created(link, expires_on):
     """View to see the link for the created secret."""
-    return rt("created.html",
-              link=request.args.get("link"),
-              expires_on=request.args.get("expires_on"))
+    return rt("created.html", **locals())
 
 
 @app.route("/r/<slug>")
