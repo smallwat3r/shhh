@@ -1,54 +1,50 @@
+import enum
 import functools
 
 from flask import Blueprint
 from flask_restful import Api, Resource
 from marshmallow import Schema, fields
-from webargs.flaskparser import abort, parser, use_kwargs
+from webargs.flaskparser import use_kwargs
 
+from shhh.api import validators
 from shhh.api.services import create_secret, read_secret
 
 api = Blueprint("api", __name__)
 endpoint = Api(api, prefix="/api")
 
-body = functools.partial(use_kwargs, location="json")
+json = functools.partial(use_kwargs, location="json")
 query = functools.partial(use_kwargs, location="query")
 
 
 class CreateParams(Schema):
     """/api/c API parameters."""
 
-    passphrase = fields.Str(required=True)
-    secret = fields.Str(required=True)
-    days = fields.Int()
+    passphrase = fields.Str(required=True,
+                            validate=(validators.passphrase,
+                                      validators.strength))
+    secret = fields.Str(required=True, validate=validators.secret)
+    days = fields.Int(validate=validators.days)
 
 
-class ReadParams(Schema):
-    """/api/r API parameters."""
-
-    slug = fields.Str(required=True)
-    passphrase = fields.Str(required=True)
-
-
-@parser.error_handler
-def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
-    """Handle request parsing errors."""
-    abort(error_status_code, errors=err.messages)
-
-
-# /api/c
 class Create(Resource):
-    """Create secret API."""
+    """/api/c Create secret API."""
 
-    @body(CreateParams())
+    @json(CreateParams())
     def post(self, passphrase, secret, days):
         """Post request handler."""
         response = create_secret(passphrase, secret, days)
         return {"response": response}
 
 
-# /api/r
+class ReadParams(Schema):
+    """/api/r API parameters."""
+
+    slug = fields.Str(required=True, validate=validators.slug)
+    passphrase = fields.Str(required=True, validate=validators.passphrase)
+
+
 class Read(Resource):
-    """Read secret API."""
+    """/api/r Read secret API."""
 
     @query(ReadParams())
     def get(self, slug, passphrase):

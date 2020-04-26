@@ -1,6 +1,5 @@
 import enum
 import html
-import re
 import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime, timedelta, timezone
@@ -14,6 +13,7 @@ from flask import request
 
 from shhh.extensions import db
 from shhh.models import Entries
+from shhh.api.validators import Status
 
 
 class Secret:
@@ -56,27 +56,7 @@ class Secret:
         return Fernet(key).decrypt(message).decode("utf-8")
 
 
-@enum.unique
-class Status(enum.Enum):
-    """API body response statuses."""
-
-    CREATED = "created"
-    SUCCESS = "success"
-    EXPIRED = "expired"
-    ERROR = "error"
-
-
-def passphrase_strength(passphrase):
-    """Check the passphrase strength.
-
-    Minimum 8 characters containing at least one number and one uppercase.
-
-    """
-    return (len(passphrase) >= 8 and re.search("[0-9]", passphrase) is not None
-            and re.search("[A-Z]", passphrase) is not None)
-
-
-def generate_unique_slug():
+def _generate_unique_slug():
     """Generates a unique slug link.
 
     This function will loop recursively on itself to make sure the slug
@@ -86,7 +66,7 @@ def generate_unique_slug():
     slug = secrets.token_urlsafe(15)
     if not db.session.query(Entries).filter_by(slug_link=slug).first():
         return slug
-    return generate_unique_slug()
+    return _generate_unique_slug()
 
 
 def read_secret(slug, passphrase):
@@ -97,8 +77,6 @@ def read_secret(slug, passphrase):
         passphrase (str): Passphrase needed to decrypt the secret.
 
     """
-    if not passphrase:
-        return dict(status=Status.ERROR.value, msg="Please enter a passphrase.")
     secret = db.session.query(Entries).filter_by(slug_link=slug).first()
     if not secret:
         app.logger.warning(
@@ -109,7 +87,7 @@ def read_secret(slug, passphrase):
         msg = Secret(secret.encrypted_text, passphrase).decrypt()
     except InvalidToken:
         app.logger.warning(f"{slug} wrong passphrase used")
-        return dict(status=Status.ERROR.value,
+        return dict(status=Status.INVALID.value,
                     msg="Sorry the passphrase is not valid.")
 
     # Automatically delete message from the database.
@@ -129,35 +107,11 @@ def create_secret(passphrase, secret, expire):
         expire (int): Number of days the secret will be stored.
 
     """
-    if not secret or secret == "":
-        return dict(status=Status.ERROR.value,
-                    details="You need to enter a secret to encrypt.")
-    if len(secret) > 150:
-        return dict(
-            status=Status.ERROR.value,
-            details="Your secret needs to have less than 150 characters.")
-    if not passphrase:
-        return dict(
-            status=Status.ERROR.value,
-            details=(
-                "Please enter a passphrase. "
-                "It needs minimun 8 characters, 1 number and 1 uppercase."))
-    if not passphrase_strength(passphrase):
-        return dict(
-            status=Status.ERROR.value,
-            details=(
-                "The passphrase you used is too weak. "
-                "It needs minimun 8 characters, 1 number and 1 uppercase."))
-    if expire > 7:
-        return dict(
-            status=Status.ERROR.value,
-            details="The maximum number of days to keep the secret alive is 7.")
-
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     expiration_date = datetime.strptime(
         now, "%Y-%m-%d %H:%M:%S") + timedelta(days=expire)
 
-    slug = generate_unique_slug()
+    slug = _generate_unique_slug()
     db.session.add(
         Entries(slug_link=slug,
                 encrypted_text=Secret(secret.encode(), passphrase).encrypt(),

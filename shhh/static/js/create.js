@@ -6,8 +6,8 @@ gId("inputSecret").onkeyup = function () {
 
 gId("createBtn").addEventListener("click", (_) => {
   const inputSecret = gId("inputSecret").value,
-        passPhrase = gId("passPhrase").value,
-        expiresValue = gId("expiresValue").value;
+    passPhrase = gId("passPhrase").value,
+    expiresValue = gId("expiresValue").value;
 
   fetch("/api/c", {
     method: "POST",
@@ -29,11 +29,16 @@ gId("createBtn").addEventListener("click", (_) => {
       switch (data.response.status) {
         case "created":
           window.location.href = `/c?link=${data.response.link}&expires_on=${data.response.expires_on}`;
-          break;
+          return;
         case "error":
           gId("response").className = "notification is-danger";
-          gId("msg").textContent = data.response.details;
-          break;
+          gId("msg").setAttribute("style", "white-space: pre;");
+          let msg = "";
+          for (const [key, value] of Object.entries(data.response.details.json)) {
+            msg += `${value}\n`;
+          }
+          gId("msg").textContent = msg;
+          return;
       }
     });
 });
