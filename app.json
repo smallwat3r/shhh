@@ -1,6 +1,6 @@
 {
   "name": "Shhh",
-  "description": "Keep secrets out of your emails, communicate using secure links with passphrase and expiration dates.",
+  "description": "Keep secrets out of your emails or chat logs, share them using secure links with passphrase and expiration dates.",
   "repository": "https://github.com/smallwat3r/shhh",
   "keywords": ["secrets", "security", "password", "encryption", "expire", "protection"],
   "addons": [{
