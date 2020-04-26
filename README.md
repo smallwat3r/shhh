@@ -3,21 +3,19 @@
 
 ## What is it?
 
-**Shhh** is a tiny Flask app to write encrypted secrets and share 
-them with people using a secure link.  
-
-You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif).  
+**Shhh** is a tiny Flask app to create encrypted secrets and share 
+them securely with people. The goal of this application is to get rid
+of plain text sensitive information into emails or chat logs.  
 
 Shhh is deployed at [shhh-encrypt.com](https://shhh-encrypt.com), but
-**the goal of this app is for organizations and people to deploy it 
-on their own personal / private server** for even better security.  
-
-You can find in this repo everything you need to host the app 
-yourself.  
+**it's better for organizations and people to deploy it on their own
+personal / private server** for even better security. You can find
+in this repo everything you need to host the app yourself.  
 
 Or you can deploy it in one-click to Heroku using the below button.
 It will generate a fully configured private instance immediately 
 (using your own server and Postgres database).  
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-started)
 
 
