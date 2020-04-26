@@ -1,0 +1,22 @@
+{
+  "name": "Shhh",
+  "description": "Keep secrets out of your emails, communicate using secure links with passphrase and expiration dates.",
+  "repository": "https://github.com/smallwat3r/shhh",
+  "keywords": ["secrets", "security", "password", "encryption", "expire", "protection"],
+  "addons": [{
+    "plan": "heroku-postgresql",
+    "options": {
+      "version": "12"
+    }
+  }],
+  "env": {
+    "WEB_CONCURRENCY": {
+      "description": "The number of processes to run.",
+      "value": "3"
+    },
+    "FLASK_ENV": {
+      "description": "Application environment.",
+      "value": "heroku"
+    }
+  }
+}

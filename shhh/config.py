@@ -1,43 +1,51 @@
 import os
 
-from . import ROOT_PATH
+from shhh.scheduler import delete_expired_links
 
 
 class DefaultConfig:
     """Default config values (dev-local)."""
 
     DEBUG = True
-    DB_CREDENTIALS = {
-        "host": os.getenv("HOST_MYSQL"),
-        "user": os.getenv("USER_MYSQL"),
-        "password": os.getenv("PASS_MYSQL"),
-        "db": os.getenv("DB_MYSQL")
-    }
 
-    CELERY_BROKER_URL = "redis://localhost:6379"
-    CELERY_RESULT_BACKEND = "redis://localhost:6379"
+    # Scheduled jobs.
+    JOBS = [{
+        "id": "delete_expired_links",
+        "func": delete_expired_links,
+        "trigger": "interval",
+        "seconds": 60
+    }]
 
-    LOG_FILE = f"{ROOT_PATH}/logs/shhh.log"
+    # Postgres connection.
+    POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
+    POSTGRES_USER = os.environ.get("POSTGRES_USER")
+    POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+    POSTGRES_PORT = os.environ.get("POSTGRES_PORT", 5432)
+    POSTGRES_DB = os.environ.get("POSTGRES_DB", "shhh")
+
+    # SqlAlchemy
+    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = (
+        f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
 
 
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""
 
-    REDIS_PASS = os.getenv("REDIS_PASS")
-    CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
-    CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
+    SQLALCHEMY_ECHO = False
 
-    LOG_FILE = "/var/log/shhh/shhh.log"
+
+class HerokuConfig(DefaultConfig):
+    """Heroku configuration (production)."""
+
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
 
 class ProductionConfig(DefaultConfig):
     """Production configuration (production)."""
-    # Note that this app is not yet designed to run in production
 
     DEBUG = False
-
-    REDIS_PASS = os.getenv("REDIS_PASS")
-    CELERY_BROKER_URL = f"redis://:{REDIS_PASS}@redis:6379"
-    CELERY_RESULT_BACKEND = f"redis://:{REDIS_PASS}@redis:6379"
-
-    LOG_FILE = "/var/log/shhh/shhh.log"
+    SQLALCHEMY_ECHO = False

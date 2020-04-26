@@ -1,2 +1,0 @@
-gevent==1.4.0
-gunicorn==19.9.0

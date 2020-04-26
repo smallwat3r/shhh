@@ -1,56 +1,61 @@
-from flask_restful import Resource, marshal, reqparse
+import functools
 
-from .enums import ApiCreateArgs, ApiReadArgs
-from .config import FIELDS_CREATE, FIELDS_READ, HELP_READ, HELP_CREATE
-from .secret.create import create_secret
-from .secret.read import read_secret
+from flask import Blueprint
+
+from flask_restful import Api, Resource
+from marshmallow import Schema, fields
+from shhh.api.services import create_secret, read_secret
+from webargs.flaskparser import abort, parser, use_kwargs
+
+api = Blueprint("api", __name__)
+endpoint = Api(api, prefix="/api")
+
+body = functools.partial(use_kwargs, location="json")
+query = functools.partial(use_kwargs, location="query")
 
 
+class CreateParams(Schema):
+    """/api/c API parameters."""
+
+    passphrase = fields.Str(required=True)
+    secret = fields.Str(required=True)
+    days = fields.Int()
+
+
+class ReadParams(Schema):
+    """/api/r API parameters."""
+
+    slug = fields.Str(required=True)
+    passphrase = fields.Str(required=True)
+
+
+@parser.error_handler
+def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
+    """Handle request parsing errors."""
+    abort(error_status_code, errors=err.messages)
+
+
+# /api/c
 class Create(Resource):
     """Create secret API."""
 
-    def __init__(self):
-        self.parser = reqparse.RequestParser(bundle_errors=True)
-        self.parser.add_argument(ApiCreateArgs.SECRET.value,
-                                 type=str,
-                                 required=True,
-                                 help=HELP_CREATE["secret"])
-        self.parser.add_argument(ApiCreateArgs.PASSPHRASE.value,
-                                 type=str,
-                                 required=True,
-                                 help=HELP_CREATE["passphrase"])
-        self.parser.add_argument(ApiCreateArgs.DAYS.value,
-                                 type=int,
-                                 required=True,
-                                 help=HELP_CREATE["days"])
-        super().__init__()
-
-    def post(self):
-        """Process POST request to create secret."""
-        args = self.parser.parse_args()
-        response = create_secret(args["passphrase"],
-                                 args["secret"],
-                                 args["days"])
-        return {"response": marshal(response, FIELDS_CREATE)}
+    @body(CreateParams())
+    def post(self, passphrase, secret, days):
+        """Post request handler."""
+        response = create_secret(passphrase, secret, days)
+        return {"response": response}
 
 
+# /api/r
 class Read(Resource):
     """Read secret API."""
 
-    def __init__(self):
-        self.parser = reqparse.RequestParser(bundle_errors=True)
-        self.parser.add_argument(ApiReadArgs.SLUG.value,
-                                 type=str,
-                                 required=True,
-                                 help=HELP_READ["slug"])
-        self.parser.add_argument(ApiReadArgs.PASSPHRASE.value,
-                                 type=str,
-                                 required=True,
-                                 help=HELP_READ["passphrase"])
-        super().__init__()
+    @query(ReadParams())
+    def get(self, slug, passphrase):
+        """Get request handler."""
+        response = read_secret(slug, passphrase)
+        return {"response": response}
 
-    def get(self):
-        """Process GET request to read secret."""
-        args = self.parser.parse_args()
-        response = read_secret(args["slug"], args["passphrase"])
-        return {"response": marshal(response, FIELDS_READ)}
+
+endpoint.add_resource(Create, "/c")
+endpoint.add_resource(Read, "/r")

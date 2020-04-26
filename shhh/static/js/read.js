@@ -1,40 +1,37 @@
-/**
- * @file  : read.js
- * @author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
- * Date   : 14.01.2020
- */
+const gId = (id) => document.getElementById(id);
 
-document.getElementById('decryptBtn').addEventListener('click', _ => {
-    const slug_id = document.getElementById('slugId').value;
-    const passphrase = document.getElementById('passPhrase').value;
-    if (passphrase) {
-        fetch(`/api/r?slug=${slug_id}&passphrase=${passphrase}`, {
-                method: 'GET',
-                cache: 'no-store'
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                switch (data.response.status) {
-                    case 'error':
-                        document.getElementById('response').className = 'notification is-danger';
-                        break;
-                    case 'expired':
-                        document.getElementById('response').className = 'notification is-warning';
-                        document.getElementById('passPhrase').value = '';
-                        document.getElementById('passPhrase').disabled = true;
-                        document.getElementById('decryptBtn').disabled = true;
-                        break;
-                    case 'success':
-                        document.getElementById('response').className = 'notification is-success';
-                        document.getElementById('passPhrase').value = '';
-                        document.getElementById('passPhrase').disabled = true;
-                        document.getElementById('decryptBtn').disabled = true;
-                        document.getElementById('msg').setAttribute('style', 'white-space: pre;');
-                        break;
-                }
-                document.getElementById('msg').innerHTML = data.response.msg;
-            });
-    }
+gId("decryptBtn").addEventListener("click", (_) => {
+  const slug_id = gId("slugId").value,
+        passphrase = gId("passPhrase").value;
+
+  if (passphrase) {
+    fetch(`/api/r?slug=${slug_id}&passphrase=${passphrase}`, {
+      method: "GET",
+      cache: "no-store",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        switch (data.response.status) {
+          case "error":
+            gId("response").className = "notification is-danger";
+            break;
+          case "expired":
+            gId("response").className = "notification is-warning";
+            gId("passPhrase").value = "";
+            gId("passPhrase").disabled = true;
+            gId("decryptBtn").disabled = true;
+            break;
+          case "success":
+            gId("response").className = "notification is-success";
+            gId("passPhrase").value = "";
+            gId("passPhrase").disabled = true;
+            gId("decryptBtn").disabled = true;
+            gId("msg").setAttribute("style", "white-space: pre;");
+            break;
+        }
+        gId("msg").innerHTML = data.response.msg;
+      });
+  }
 });

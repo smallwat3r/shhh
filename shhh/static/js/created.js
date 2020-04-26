@@ -1,14 +1,10 @@
-/**
- * @file  : created.js
- * @author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
- * Date   : 14.01.2020
- */
+const gId = (id) => document.getElementById(id);
 
-const copy = document.getElementById('copy');
-copy.addEventListener('click', _ => {
-    const link = document.getElementById('link');
-    link.select();
-    link.setSelectionRange(0, 99999); /* mobile */
-    document.execCommand('copy');
-    copy.textContent = 'Copied ✅';
+const copy = gId("copy");
+copy.addEventListener("click", (_) => {
+  const link = gId("link");
+  link.select();
+  link.setSelectionRange(0, 99999); /* mobile */
+  document.execCommand("copy");
+  copy.textContent = "Copied ✅";
 });

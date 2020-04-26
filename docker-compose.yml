@@ -1,65 +1,29 @@
 # Describes the docker-compose configuration for development environments.
 # These settings are not secure and are not intended for production use.
 # Please override this configuration when configuring a production instance.
-# This config launch Flask / MySQL / Redis / Celery
+# This config launch Flask (gunicorn) / Postgres / Adminer
 
 version: '3.2'
 
 services:
   db:
-    image: mysql/mysql-server:5.7
+    image: postgres:12.2-alpine
     env_file:
-      - ./dockerenv/env.dev-mysql
+      - ./dockerenv/env.dev
     volumes:
-      - ./mysql/initialize.sql:/docker-entrypoint-initdb.d/initialize.sql
-      - mysql_data:/var/lib/mysql
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres:/data/postgres
     ports:
-      - 3306:3306
-
-  redis:
-    image: redis:6.0-rc-alpine
-    command: redis-server --requirepass redis123
-    volumes:
-      - redis:/data
-    ports:
-      - 6379:6379
+      - 5432:5432
 
   app:
     build: .
-    command: python -m flask run --host="0.0.0.0" --port="5000"
     depends_on:
       - db
     env_file:
-      - ./dockerenv/env.dev-shhh
+      - ./dockerenv/env.dev
     ports:
       - 5000:5000
-
-  celeryworker:
-    build: .
-    command: >
-      celery -A shhh.tasks.tasks worker
-      --loglevel=INFO
-      --logfile=/var/log/celery/celeryworker-shhh.log
-      --pidfile=/var/run/celery/celeryworker-shhh.pid
-    env_file:
-      - ./dockerenv/env.dev-shhh
-
-  celerybeat:
-    build: .
-    command: >
-      celery -A shhh.tasks.tasks beat
-      --loglevel=INFO
-      --logfile=/var/log/celery/celerybeat-shhh.log
-      --pidfile=/var/run/celery/celerybeat-shhh.pid
-      --schedule=/var/run/celery/celerybeat-schedule
-    env_file:
-      - ./dockerenv/env.dev-shhh
-
-  flower:
-    image: mher/flower
-    command: flower --broker=redis://:redis123@redis:6379 --port=8888
-    ports:
-      - 8888:8888
 
   adminer:
     image: adminer
@@ -69,5 +33,4 @@ services:
       - 8080:8080
 
 volumes:
-  mysql_data:
-  redis:
+  postgres:
