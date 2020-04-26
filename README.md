@@ -13,8 +13,8 @@ personal / private server** for even better security. You can find
 in this repo everything you need to host the app yourself.  
 
 Or you can **one-click deploy to Heroku** using the below button.
-It will generate a fully configured private instance immediately 
-(using your own server and Postgres database, for free).  
+It will generate a fully configured private instance of Shhh 
+immediately (using your own server and Postgres database, for free).  
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-started)
 
