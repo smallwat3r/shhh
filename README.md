@@ -16,8 +16,7 @@ Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
 immediately (using your own server and Postgres database, for free).  
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://github.com/smallwat3r/shhh)
-
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/smallwat3r/shhh)
 
 ## How does it work?
 
