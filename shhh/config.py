@@ -8,7 +8,8 @@ class DefaultConfig:
 
     DEBUG = True
 
-    # Scheduled jobs.
+    # Scheduled jobs. Delete expired database records every
+    # 60 seconds.
     JOBS = [{
         "id": "delete_expired_links",
         "func": delete_expired_links,
@@ -41,6 +42,7 @@ class HerokuConfig(DefaultConfig):
     """Heroku configuration (heroku)."""
 
     DEBUG = False
+    SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
 
