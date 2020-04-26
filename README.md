@@ -1,5 +1,6 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
 
+
 ## What is it?
 
 **Shhh** is a tiny Flask app to write encrypted secrets and share 
@@ -7,11 +8,18 @@ them with people using a secure link.
 
 You can see a demo of Shhh running [here](https://i.imgur.com/XcuhA0o.gif).  
 
-Shhh is live at [shhh-encrypt.com](https://shhh-encrypt.com), but as
-you can't trust everyone with your data, **the goal of this app is 
-for organizations or people to run it on their own personal / private
-server for more security**. You can find in this repo everything you 
-need to host the app.  
+Shhh is deployed at [shhh-encrypt.com](https://shhh-encrypt.com), but
+**the goal of this app is for organizations and people to deploy it 
+on their own personal / private server** for even better security.  
+
+You can find in this repo everything you need to host the app 
+yourself.  
+
+Or you can deploy it in one-click to Heroku using the below button.
+It will generate a fully configured private instance immediately 
+(using your own server and Postgres database).  
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-started)
+
 
 ## How does it work?
 
@@ -37,11 +45,13 @@ the secret you're sharing. Instead, explain this in your email, and
 copy paste the Shhh link with the passphrase so the user can retrieve
 it._  
 
+
 ## Is there an API?
 
 Yes, you can find some info [here](https://github.com/smallwat3r/shhh/tree/master/shhh/api).  
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
 a Go client to interact with Shhh API via command line.  
+
 
 ## What's the stack?
 
@@ -53,15 +63,18 @@ the unique links, the encrypted messages, the creation and expiration
 dates.  
 * **[Bulma](https://bulma.io/)**, the CSS framework.  
 
+
 ### Tools
 * **[Adminer](https://www.adminer.org/)**, check database records.  
+
 
 ## What are the dependencies?
 
 You can find the list of the Python dependencies 
 [here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt).  
 
-## How to launch Shhh?
+
+## How to launch Shhh locally?
 
 These methods are for development purpose only. For production / 
 public use you might want to use a more secure configuration.
