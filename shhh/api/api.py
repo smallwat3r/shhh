@@ -1,11 +1,11 @@
 import functools
 
 from flask import Blueprint
-
 from flask_restful import Api, Resource
 from marshmallow import Schema, fields
-from shhh.api.services import create_secret, read_secret
 from webargs.flaskparser import abort, parser, use_kwargs
+
+from shhh.api.services import create_secret, read_secret
 
 api = Blueprint("api", __name__)
 endpoint = Api(api, prefix="/api")

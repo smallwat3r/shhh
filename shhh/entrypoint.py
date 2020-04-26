@@ -1,10 +1,10 @@
 import logging
 import os
 
-from flask import Flask
-
 from cryptography.fernet import Fernet
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+
 from shhh.api import api
 from shhh.extensions import db, scheduler
 
