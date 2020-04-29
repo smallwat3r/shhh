@@ -1,23 +1,26 @@
-FROM alpine:latest
+FROM python:3.8.2-alpine3.11
 
-RUN apk update && \
-    apk add build-base python3 python3-dev libffi-dev libressl-dev postgresql-dev && \
-    ln -sf /usr/bin/python3 /usr/bin/python && \
-    ln -sf /usr/bin/pip3 usr/bin/pip && \
-    pip install --upgrade pip
+RUN apk update \
+    && apk add --no-cache \
+        gcc \
+        libffi-dev \
+        musl-dev \
+        postgresql-dev
 
-RUN addgroup app && \
-    adduser --disabled-password --gecos "" --ingroup app app
+RUN addgroup -g 12001 app \
+    && adduser -u 12001 --disabled-password --gecos "" --ingroup app app
 
 USER app
+WORKDIR /opt/shhh
+
 ENV PATH="/home/app/.local/bin:${PATH}"
 
 COPY requirements.txt .
-RUN pip install --user -r requirements.txt
+RUN pip install --no-cache-dir --user -r requirements.txt \
+  && find /home/app/.local \
+     \( -type d -a -name test -o -name tests \) \
+     -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+     -exec rm -rf '{}' +
 
-WORKDIR app
 COPY . .
-RUN pip install --user .
-
-ENV FLASK_APP=wsgi.py
 CMD gunicorn -b :5000 -w 3 wsgi:app --preload
