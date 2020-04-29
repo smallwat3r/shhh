@@ -18,7 +18,7 @@ Create a secret
 curl -X POST \
     -H "Content-Type: application/json" \
     -d '{"secret": "This is secret.", "passphrase": "Passw123", "days": 3}' \
-    https://shhh-encrypt.com/api/c
+    https://<domain>/api/c
 
 # outputs
 {
@@ -26,7 +26,7 @@ curl -X POST \
         "status": "created",
         "details": "Secret successfully created.",
         "slug": "VC16EgYLsXTuECsX9fTZ",
-        "link": "http://shhh-encrypt.com/r/VC16EgYLsXTuECsX9fTZ",
+        "link": "<domain>/r/VC16EgYLsXTuECsX9fTZ",
         "expires_on": "2020-03-17 at 16:44 UTC"
     }
 }
@@ -35,7 +35,7 @@ curl -X POST \
 Read a secret  
 ```sh
 curl -X GET \
-    https://shhh-encrypt.com/api/r?slug=VC16EgYLsXTuECsX9fTZ&passphrase=Passw123
+    https://<domain>/api/r?slug=VC16EgYLsXTuECsX9fTZ&passphrase=Passw123
 
 # outputs
 {
