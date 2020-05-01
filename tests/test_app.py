@@ -51,12 +51,14 @@ class TestApplication(unittest.TestCase):
 
     def test_scheduler(self):
         jobs = self.scheduler.get_jobs()
+        # Test named scheduled task.
         self.assertEqual(jobs[0].name, "delete_expired_links")
 
+        # Test task will run before next minute.
         scheduled = jobs[0].next_run_time.strftime("%Y-%m-%d %H:%M:%S")
-        now = (datetime.now() +
-               timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
-        self.assertTrue(scheduled <= now)
+        next_minute = (datetime.now() +
+                       timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+        self.assertTrue(scheduled <= next_minute)
 
     def test_views(self):
         with self.client as c:
