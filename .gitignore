@@ -5,6 +5,7 @@
 *.rdb
 *.pid
 
+.coverage
 .vscode/
 __pycache__/
 
