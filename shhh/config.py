@@ -32,6 +32,18 @@ class DefaultConfig:
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
 
 
+class TestConfig(DefaultConfig):
+    """Testing configuration."""
+
+    DEBUG = False
+    JOBS = None
+    TESTING = True
+    SQLALCHEMY_ECHO = False
+    SQLALCHEMY_DATABASE_URI = (
+        "sqlite:///"
+        f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}")
+
+
 class DockerConfig(DefaultConfig):
     """Docker development configuration (dev-docker)."""
 

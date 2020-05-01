@@ -1,4 +1,15 @@
+from datetime import datetime
+
 from shhh.extensions import db
+
+
+class _DateTime(db.TypeDecorator):
+    impl = db.DateTime
+
+    def process_bind_param(self, value, dialect):
+        if isinstance(value, str):
+            return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
+        return value
 
 
 class Entries(db.Model):
@@ -8,8 +19,8 @@ class Entries(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     encrypted_text = db.Column(db.LargeBinary)
-    date_created = db.Column(db.DateTime)
-    date_expires = db.Column(db.DateTime, nullable=True)
+    date_created = db.Column(_DateTime)
+    date_expires = db.Column(_DateTime, nullable=True)
     slug_link = db.Column(db.String(20), unique=True, nullable=False)
 
     def __repr__(self):

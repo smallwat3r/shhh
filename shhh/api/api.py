@@ -30,7 +30,7 @@ class Create(Resource):
     """/api/c Create secret API."""
 
     @json(CreateParams())
-    def post(self, passphrase, secret, days):
+    def post(self, passphrase, secret, days=3):
         """Post request handler."""
         response = create_secret(passphrase, secret, days)
         return {"response": response}

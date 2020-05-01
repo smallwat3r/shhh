@@ -6,3 +6,7 @@ dc-start:
 .PHONY: dc-stop
 dc-stop:
 	@docker-compose -f docker-compose.yml stop;
+
+.PHONY: tests
+tests:
+	./run-tests.sh

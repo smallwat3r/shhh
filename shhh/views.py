@@ -15,7 +15,9 @@ def qs_to_args(f):
     """
 
     def wrapper(*args, **kwargs):
-        if sorted(inspect.getargspec(f).args) != sorted(request.args.keys()):
+
+        if sorted(inspect.getfullargspec(f).args) != sorted(
+                request.args.keys()):
             return redirect(url_for("create"))
         return f(**request.args)
 
@@ -44,7 +46,7 @@ def read(slug):
 @app.errorhandler(404)
 def not_found(error):
     """404 handler."""
-    return rt("404.html", error=error)
+    return rt("404.html", error=error), 404
 
 
 @app.route("/robots.txt")

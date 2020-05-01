@@ -30,6 +30,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     app.logger.info(f"Loading env {env}")
     configurations = {
         "dev-local": "shhh.config.DefaultConfig",
+        "testing": "shhh.config.TestConfig",
         "dev-docker": "shhh.config.DockerConfig",
         "heroku": "shhh.config.HerokuConfig",
         "production": "shhh.config.ProductionConfig",
