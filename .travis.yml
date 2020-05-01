@@ -1,8 +1,8 @@
 language: python
+env:
+  - TRAVIS=travis
 python:
   - "3.8.2"
-install:
-  - pip install codecov
 script:
   - ./run-tests.sh
 after_success:

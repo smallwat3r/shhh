@@ -14,4 +14,5 @@ _init_env() {
 }
 
 [[ $VIRTUAL_ENV == "" ]] && _init_env
+[[ ! -z $TRAVIS ]] && pip install codecov
 python -m unittest discover -s "./tests" -p 'test_*.py' -v
