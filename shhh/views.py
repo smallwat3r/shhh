@@ -13,7 +13,6 @@ def qs_to_args(f):
     querystring. Check that the query keys are matching the args.
 
     """
-
     def wrapper(*args, **kwargs):
 
         if sorted(inspect.getfullargspec(f).args) != sorted(
