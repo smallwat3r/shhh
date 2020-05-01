@@ -14,5 +14,9 @@ _init_env() {
 }
 
 [[ $VIRTUAL_ENV == "" ]] && _init_env
-[[ ! -z $TRAVIS ]] && pip install codecov
-python -m unittest discover -s "./tests" -p 'test_*.py' -v
+if [[ -z $TRAVIS ]]; then
+  python -m unittest discover -s "./tests" -p 'test_*.py' -v
+else
+  pip install codecov
+  coverage run -m unittest discover
+fi
