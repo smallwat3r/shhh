@@ -9,7 +9,7 @@
 them securely with people. The goal of this application is to get rid
 of plain text sensitive information into emails or chat logs.  
 
-Shhh is deployed at [shhh-encrypt.com](https://shhh-encrypt.herokuapp.com/), but
+Shhh is deployed [here](https://shhh-encrypt.herokuapp.com/), but
 **it's better for organisations and people to deploy it on their own
 personal / private server** for even better security. You can find
 in this repo everything you need to host the app yourself.  
@@ -167,6 +167,13 @@ access:
 * Database records using Adminer at http://localhost:8080
 
 </details>
+
+## Run the tests
+
+You can run the tests using:  
+```sh
+make tests
+```
 
 ## Credits
 
