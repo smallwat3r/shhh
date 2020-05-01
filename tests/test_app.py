@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from types import SimpleNamespace
 
 from shhh.entrypoint import create_app
-from shhh.extensions import db
+from shhh.extensions import db, scheduler
 from shhh.models import Entries
 
 
@@ -32,6 +32,8 @@ class TestApplication(unittest.TestCase):
         cls.db = db
         cls.db.app = cls.app
         cls.db.create_all()
+        cls.scheduler = scheduler
+        cls.scheduler.app = cls.app
 
     @classmethod
     def tearDownClass(cls):
@@ -46,6 +48,15 @@ class TestApplication(unittest.TestCase):
     def tearDown(self):
         self.db.session.rollback()
         self.app_context.pop()
+
+    def test_scheduler(self):
+        jobs = self.scheduler.get_jobs()
+        self.assertEqual(jobs[0].name, "delete_expired_links")
+
+        scheduled = jobs[0].next_run_time.strftime("%Y-%m-%d %H:%M:%S")
+        now = (datetime.now() +
+               timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+        self.assertTrue(scheduled <= now)
 
     def test_views(self):
         with self.client as c:

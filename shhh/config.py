@@ -36,7 +36,6 @@ class TestConfig(DefaultConfig):
     """Testing configuration."""
 
     DEBUG = False
-    JOBS = None
     TESTING = True
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = (
