@@ -1,6 +1,4 @@
 language: python
-env:
-  - TRAVIS=travis
 python:
   - "3.8.2"
 script:
