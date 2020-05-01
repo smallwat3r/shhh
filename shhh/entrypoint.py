@@ -25,6 +25,10 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     # Disable werkzeug logging under WARNING.
     logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
+    if env == "testing":
+        logging.getLogger("shhh").setLevel(logging.ERROR)
+        logging.getLogger("apscheduler").setLevel(logging.ERROR)
+
     app = Flask(__name__)
 
     app.logger.info(f"Loading env {env}")

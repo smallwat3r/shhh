@@ -7,6 +7,7 @@ from types import SimpleNamespace
 from shhh.entrypoint import create_app
 from shhh.extensions import db, scheduler
 from shhh.models import Entries
+from shhh.scheduler import tasks
 
 
 class Parse(SimpleNamespace):
@@ -17,11 +18,6 @@ class Parse(SimpleNamespace):
         for k, v in dictionary.items():
             self.__setattr__(k, Parse(v)) if isinstance(
                 v, dict) else self.__setattr__(k, v)
-
-
-def clean_db(db):
-    for table in reversed(db.metadata.sorted_tables):
-        db.session.execute(table.delete())
 
 
 class TestApplication(unittest.TestCase):
@@ -43,13 +39,14 @@ class TestApplication(unittest.TestCase):
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()
-        clean_db(self.db)
+        for table in reversed(self.db.metadata.sorted_tables):
+            self.db.session.execute(table.delete())
 
     def tearDown(self):
         self.db.session.rollback()
         self.app_context.pop()
 
-    def test_scheduler(self):
+    def test_scheduler_setup(self):
         jobs = self.scheduler.get_jobs()
         # Test named scheduled task.
         self.assertEqual(jobs[0].name, "delete_expired_links")
@@ -60,11 +57,43 @@ class TestApplication(unittest.TestCase):
                        timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
         self.assertTrue(scheduled <= next_minute)
 
+    def test_scheduler_job(self):
+        # Temporarily pause the scheduler.
+        self.scheduler.pause_job("delete_expired_links")
+
+        # Add a dummy secret in database with an expired expiry date.
+        slug = "z6HNg2dCcvvaOXli1z3x"
+        encrypted_text = (b"nKir73XhgyXxjwYyCG-QHQABhqCAAAAAAF6rPvPYX7OYFZRTzy"
+                          b"PdIwvdo2SFwAN0VXrfosL54nGHr0MN1YtyoNjx4t5Y6058lFvDH"
+                          b"zsnv_Q1KaGFL6adJgLLVreOZ9kt5HpwnEe_Lod5Or85Ig==")
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        expired_date = datetime.strptime(
+            now, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
+        db.session.add(
+            Entries(slug_link=slug,
+                    encrypted_text=encrypted_text,
+                    date_created=now,
+                    date_expires=expired_date))
+        db.session.commit()
+
+        # Run scheduler task.
+        tasks.delete_expired_links()
+        # Check that the secret has been deleted from the database.
+        link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
+        self.assertIsNone(link)
+
+        # Resume the scheduler.
+        self.scheduler.resume_job("delete_expired_links")
+
     def test_views(self):
         with self.client as c:
             # 200
             self.assertEqual(c.get("/").status_code, 200)
-            self.assertEqual(c.get("/robots.txt").status_code, 200)
+
+            r = c.get("/robots.txt")
+            r.close()  # avoids Unclosed file warning.
+            self.assertEqual(r.status_code, 200)
+
             self.assertEqual(c.get("/r/fK6YTEVO2bvOln7pHOFi").status_code, 200)
             # yapf: disable
             self.assertEqual(
@@ -85,172 +114,165 @@ class TestApplication(unittest.TestCase):
     def test_api_post_missing_all(self):
         with self.client as c:
             response = json.loads(c.post("/api/c").get_data())
-            r = Parse(response)
 
-            # Test response request status and error details.
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.secret, list)
-            self.assertIsInstance(r.response.details.json.passphrase, list)
+        # Test response request status and error details.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.secret, list)
+        self.assertIsInstance(r.response.details.json.passphrase, list)
 
     def test_api_post_too_much_days(self):
+        payload = {
+            "secret": "secret message",
+            "passphrase": "SuperSecret123",
+            "days": 12
+        }
         with self.client as c:
-            payload = {
-                "secret": "secret message",
-                "passphrase": "SuperSecret123",
-                "days": 12
-            }
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            # Test response request status and error details.
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.days, list)
+        # Test response request status and error details.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.days, list)
 
     def test_api_post_wrong_formats(self):
+        payload = {"secret": 1, "passphrase": 1, "days": "not an integer"}
         with self.client as c:
-            payload = {"secret": 1, "passphrase": 1, "days": "not an integer"}
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            # Test response request status and error details.
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.days, list)
-            self.assertIsInstance(r.response.details.json.passphrase, list)
-            self.assertIsInstance(r.response.details.json.secret, list)
+        # Test response request status and error details.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.days, list)
+        self.assertIsInstance(r.response.details.json.passphrase, list)
+        self.assertIsInstance(r.response.details.json.secret, list)
 
     def test_api_post_missing_passphrase(self):
+        payload = {"secret": "secret message"}
         with self.client as c:
-            payload = {"secret": "secret message"}
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            # Test response request status and error details.
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.passphrase, list)
+        # Test response request status and error details.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.passphrase, list)
 
     def test_api_post_missing_secret(self):
+        payload = {"passphrase": "SuperPassword123"}
         with self.client as c:
-            payload = {"passphrase": "SuperPassword123"}
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            # Test response request status and error details.
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.secret, list)
+        # Test response request status and error details.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.secret, list)
 
     def test_api_post_weak_passphrase(self):
+        # Weak passphrase.
+        payload = {"secret": "secret message", "passphrase": "weak"}
         with self.client as c:
-            # Weak passphrase.
-            payload = {"secret": "secret message", "passphrase": "weak"}
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.passphrase, list)
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.passphrase, list)
 
-            # Long but all lowercase and no numbers.
-            payload = {
-                "secret": "secret message",
-                "passphrase": "weak_but_long_passphrase"
-            }
+        # Long but all lowercase and no numbers.
+        payload = {
+            "secret": "secret message",
+            "passphrase": "weak_but_long_passphrase"
+        }
+        with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.passphrase, list)
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.passphrase, list)
 
-            # Uppercase, lowercase, numbers, but too short.
-            payload = {"secret": "secret message", "passphrase": "88AsA"}
+        # Uppercase, lowercase, numbers, but too short.
+        payload = {"secret": "secret message", "passphrase": "88AsA"}
+        with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.passphrase, list)
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.passphrase, list)
 
-            # Long with numbers, but no uppercase.
-            payload = {
-                "secret": "secret message",
-                "passphrase": "long_with_number_123"
-            }
+        # Long with numbers, but no uppercase.
+        payload = {
+            "secret": "secret message", "passphrase": "long_with_number_123"
+        }
+        with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            self.assertEqual(r.response.status, "error")
-            self.assertIsInstance(r.response.details.json.passphrase, list)
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.passphrase, list)
 
     def test_api_post_created(self):
+        payload = {
+            "secret": "secret message", "passphrase": "PhduiGUI12d", "days": 3
+        }
         with self.client as c:
-            payload = {
-                "secret": "secret message",
-                "passphrase": "PhduiGUI12d",
-                "days": 3
-            }
             response = json.loads(c.post("/api/c", json=payload).get_data())
-            r = Parse(response)
 
-            # Test secret has been created and expiricy date is correct.
-            self.assertEqual(r.response.status, "created")
-            self.assertEqual(
-                r.response.expires_on.split(" ")[0],
-                (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"))
+        r = Parse(response)
 
-            # Test all fields in the response are correct.
-            for field in ("status", "details", "slug", "link", "expires_on"):
-                self.assertIn(field, r.response.__dict__.keys())
+        # Test secret has been created and expiricy date is correct.
+        self.assertEqual(r.response.status, "created")
+        self.assertEqual(
+            r.response.expires_on.split(" ")[0],
+            (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"))
 
-            # Test the slug link has been saved in the database.
-            slug = r.response.slug
-            link = self.db.session.query(Entries).filter_by(
-                slug_link=slug).first()
-            self.assertEqual(link.slug_link, slug)
+        # Test all fields in the response are correct.
+        for field in ("status", "details", "slug", "link", "expires_on"):
+            self.assertIn(field, r.response.__dict__.keys())
+
+        # Test the slug link has been saved in the database.
+        slug = r.response.slug
+        link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
+        self.assertEqual(link.slug_link, slug)
 
     def test_api_get_wrong_passphrase(self):
+        payload = {"secret": "secret message", "passphrase": "UGIUduigui12d"}
         with self.client as c:
-            payload = {
-                "secret": "secret message", "passphrase": "UGIUduigui12d"
-            }
             post = json.loads(c.post("/api/c", json=payload).get_data())
-            p = Parse(post)
-
             response = json.loads(
-                c.get(f"/api/r?slug={p.response.slug}&passphrase=wrong")
-                .get_data())
+                c.get(f"/api/r?slug={post['response']['slug']}&passphrase=wrong"
+                      ).get_data())
 
-            r = Parse(response)
-            # Test passphrase is invalid.
-            self.assertEqual(r.response.status, "invalid")
+        # Test passphrase is invalid.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "invalid")
 
     def test_api_get_wrong_slug(self):
         with self.client as c:
             response = json.loads(
                 c.get("/api/r?slug=hello&passphrase=wrong").get_data())
-            r = Parse(response)
 
-            # Test slug don't exists.
-            self.assertEqual(r.response.status, "expired")
+        # Test slug doesn't exists.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "expired")
 
     def test_api_get_decrypt_secret(self):
-        with self.client as c:
-            message, passphrase = "secret message", "dieh32u0hoHBI"
-            payload = {"secret": message, "passphrase": passphrase}
-            post = json.loads(c.post("/api/c", json=payload).get_data())
-            p = Parse(post)
-            slug = p.response.slug
+        message, passphrase = "secret message", "dieh32u0hoHBI"
+        payload = {"secret": message, "passphrase": passphrase}
 
+        with self.client as c:
+            post = json.loads(c.post("/api/c", json=payload).get_data())
+            slug = post["response"]["slug"]
             response = json.loads(
                 c.get(f"/api/r?slug={slug}&passphrase={passphrase}").get_data())
-            r = Parse(response)
 
-            # Test if status of the request is correct.
-            self.assertEqual(r.response.status, "success")
+        r = Parse(response)
+        # Test if status of the request is correct.
+        self.assertEqual(r.response.status, "success")
+        # Test if message has been decrypted correctly.
+        self.assertEqual(r.response.msg, message)
 
-            # Test if message has been decrypted correctly.
-            self.assertEqual(r.response.msg, message)
-
-            # Test if secret has been deleted in database.
-            link = self.db.session.query(Entries).filter_by(
-                slug_link=slug).first()
-            self.assertIsNone(link)
+        # Test if secret has been deleted in database.
+        link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
+        self.assertIsNone(link)
 
 
 if __name__ == "__main__":
