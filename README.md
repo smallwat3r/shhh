@@ -1,5 +1,6 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
 
+[![Build Status](https://travis-ci.com/smallwat3r/shhh.svg?branch=master)](https://travis-ci.com/smallwat3r/shhh)
 
 ## What is it?
 
