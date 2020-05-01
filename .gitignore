@@ -1,14 +1,13 @@
-*.DS_Store
-
-*.log
 *.db
-*.rdb
+*.DS_Store
+*.log
 *.pid
+*.rdb
 
 .coverage
+run-local.sh
+
 .vscode/
 __pycache__/
-
 env/
 venv/
-run-local.sh

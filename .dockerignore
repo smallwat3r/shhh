@@ -1,28 +1,27 @@
+*.db
 *.DS_Store
 *.log
-*.db
-*.rdb
 *.pid
+*.rdb
 
 .coveragerc
 .gitignore
 .travis.yml
-Makefile
+app.json
 docker-compose.yml
 Dockerfile
-README.md
+Makefile
 Procfile
-app.json
+README.md
 run-local.sh
 run-tests.sh
-Makefile
 runtime.txt
 
-tests/
+.git/
 __pycache__/
 app.egg-info/
-postgres/
 dockerenv/
 env/
+postgres/
+tests/
 venv/
-.git/
