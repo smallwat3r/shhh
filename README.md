@@ -1,6 +1,7 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
 
 [![Build Status](https://travis-ci.com/smallwat3r/shhh.svg?branch=master)](https://travis-ci.com/smallwat3r/shhh)
+[![codecov](https://codecov.io/gh/smallwat3r/shhh/branch/master/graph/badge.svg)](https://codecov.io/gh/smallwat3r/shhh)
 
 ## What is it?
 
