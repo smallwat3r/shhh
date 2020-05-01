@@ -1,0 +1,5 @@
+language: python
+python:
+  - "3.8.2"
+script:
+  - ./run-tests.sh
