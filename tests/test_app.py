@@ -2,7 +2,6 @@ import json
 import os
 import unittest
 from datetime import datetime, timedelta
-from unittest import mock
 
 from shhh.entrypoint import create_app
 from shhh.extensions import db
