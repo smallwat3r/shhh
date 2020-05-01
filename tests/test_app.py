@@ -34,6 +34,7 @@ class TestApplication(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.db.drop_all()
+        cls.scheduler.shutdown(wait=False)
 
     def setUp(self):
         self.client = self.app.test_client()
