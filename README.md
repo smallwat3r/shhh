@@ -48,6 +48,7 @@ the secret you're sharing. Instead, explain this in your email, and
 copy paste the Shhh link with the passphrase so the user can retrieve
 it._  
 
+![Shhh flows](https://imgur.com/a/vrw5ArJ.png)
 
 ## Is there an API?
 
