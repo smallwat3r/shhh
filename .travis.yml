@@ -1,7 +1,9 @@
 language: python
 python:
   - "3.8.2"
+before_script:
+  - pip install -r test-requirements.txt
 script:
-  - make tests
+  - ./bin/run-tests
 after_success:
   - codecov
