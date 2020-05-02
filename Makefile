@@ -25,7 +25,7 @@ test-env:
 	./bin/test-deps
 
 tests: env test-env
-	./run-tests
+	./bin/run-tests
 
 lint: env test-env
 	pylint --rcfile=.pylintrc shhh
