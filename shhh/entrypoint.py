@@ -1,9 +1,7 @@
 import logging
 import os
 
-from cryptography.fernet import Fernet
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 
 from shhh.api import api
 from shhh.extensions import db, scheduler
@@ -31,7 +29,6 @@ def create_app(env=os.environ.get("FLASK_ENV")):
 
     app = Flask(__name__)
 
-    app.logger.info(f"Loading env {env}")
     configurations = {
         "dev-local": "shhh.config.DefaultConfig",
         "testing": "shhh.config.TestConfig",
@@ -50,6 +47,6 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         db.create_all()
         scheduler.start()
 
-        from shhh import views
+        from shhh import views  # pylint: disable=unused-import
 
     return app

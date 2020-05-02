@@ -1,13 +1,13 @@
-import enum
 import functools
 
-from flask import Blueprint
-from flask_restful import Api, Resource
 from marshmallow import Schema, fields
-from webargs.flaskparser import use_kwargs
 
 from shhh.api import validators
 from shhh.api.services import create_secret, read_secret
+
+from flask import Blueprint
+from flask_restful import Api, Resource
+from webargs.flaskparser import use_kwargs
 
 api = Blueprint("api", __name__)
 endpoint = Api(api, prefix="/api")
@@ -20,17 +20,17 @@ class CreateParams(Schema):
     """/api/c API parameters."""
 
     passphrase = fields.Str(required=True,
-                            validate=(validators.passphrase,
-                                      validators.strength))
-    secret = fields.Str(required=True, validate=validators.secret)
-    days = fields.Int(validate=validators.days)
+                            validate=(validators.validate_passphrase,
+                                      validators.validate_strength))
+    secret = fields.Str(required=True, validate=validators.validate_secret)
+    days = fields.Int(validate=validators.validate_days)
 
 
 class Create(Resource):
     """/api/c Create secret API."""
 
     @json(CreateParams())
-    def post(self, passphrase, secret, days=3):
+    def post(self, passphrase, secret, days=3): # pylint: disable=no-self-use
         """Post request handler."""
         response = create_secret(passphrase, secret, days)
         return {"response": response}
@@ -39,15 +39,16 @@ class Create(Resource):
 class ReadParams(Schema):
     """/api/r API parameters."""
 
-    slug = fields.Str(required=True, validate=validators.slug)
-    passphrase = fields.Str(required=True, validate=validators.passphrase)
+    slug = fields.Str(required=True, validate=validators.validate_slug)
+    passphrase = fields.Str(required=True,
+                            validate=validators.validate_passphrase)
 
 
 class Read(Resource):
     """/api/r Read secret API."""
 
     @query(ReadParams())
-    def get(self, slug, passphrase):
+    def get(self, slug, passphrase): # pylint: disable=no-self-use
         """Get request handler."""
         response = read_secret(slug, passphrase)
         return {"response": response}

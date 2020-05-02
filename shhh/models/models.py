@@ -6,7 +6,7 @@ from shhh.extensions import db
 class _DateTime(db.TypeDecorator):
     impl = db.DateTime
 
-    def process_bind_param(self, value, dialect):
+    def process_bind_param(self, value, dialect): # pylint: disable=unused-argument, no-self-use
         if isinstance(value, str):
             return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
         return value

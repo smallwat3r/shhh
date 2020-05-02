@@ -1,12 +1,11 @@
 import enum
 import re
 
-import requests
+from shhh.api import utils
+
 from flask import current_app as app
 from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser
-
-from shhh.api import utils
 
 
 @enum.unique
@@ -21,13 +20,13 @@ class Status(enum.Enum):
 
 
 @parser.error_handler
-def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
+def handle_parsing_error(err, req, schema, *, error_status_code, error_headers): # pylint: disable=unused-argument
     """Handle request parsing errors."""
     abort(error_status_code,
           response=dict(details=err.messages, status=Status.ERROR.value))
 
 
-def strength(passphrase):
+def validate_strength(passphrase):
     """Passphrase strength validation handler.
 
     Minimum 8 characters containing at least one number and one uppercase.
@@ -54,7 +53,7 @@ def strength(passphrase):
             "(haveibeenpwned.com), please chose another one.")
 
 
-def secret(secret):
+def validate_secret(secret):
     """Secret validation handler."""
     if not secret:
         raise ValidationError("Missing a secret to encrypt.")
@@ -63,13 +62,13 @@ def secret(secret):
             "The secret needs to have less than 150 characters.")
 
 
-def passphrase(passphrase):
+def validate_passphrase(passphrase):
     """Passphrase validation handler."""
     if not passphrase:
         raise ValidationError("Missing a passphrase.")
 
 
-def days(days):
+def validate_days(days):
     """Expiration validation handler."""
     if days == 0:
         raise ValidationError(
@@ -79,7 +78,7 @@ def days(days):
             "The maximum number of days to keep the secret alive is 7.")
 
 
-def slug(slug):
+def validate_slug(slug):
     """Link validation handler."""
     if not slug:
         raise ValidationError("Missing a secret link.")

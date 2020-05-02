@@ -13,6 +13,7 @@ def qs_to_args(f):
     querystring. Check that the query keys are matching the args.
 
     """
+
     def wrapper(*args, **kwargs):
 
         if sorted(inspect.getfullargspec(f).args) != sorted(
@@ -33,7 +34,7 @@ def create():
 @qs_to_args
 def created(link, expires_on):
     """View to see the link for the created secret."""
-    return rt("created.html", **locals())
+    return rt("created.html", link=link, expires_on=expires_on)
 
 
 @app.route("/r/<slug>")
