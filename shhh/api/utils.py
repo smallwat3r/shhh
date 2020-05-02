@@ -4,7 +4,7 @@ import requests
 
 
 def pwned_password(passphrase):
-    """Check passphrase with Tory's Hunt haveibeenpwned API.
+    """Check passphrase with Troy's Hunt haveibeenpwned API.
 
     Query the API to check if the passphrase has already been pwned in the
     past. If it has, returns the first match from generator, else returns
