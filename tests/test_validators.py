@@ -30,7 +30,7 @@ class TestValidators(unittest.TestCase):
             slug(None)
             slug("")
 
-    @mock.patch('shhh.api.utils.pwned_password')
+    @mock.patch("shhh.api.utils.pwned_password")
     def test_strength(self, mock_pwned):
         with self.assertRaises(ValidationError):
             strength("weak")
