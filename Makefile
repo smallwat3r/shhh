@@ -25,10 +25,10 @@ test-env:
 	./bin/test-deps
 
 tests: env test-env
-	./bin/run-tests
+	./run-tests
 
 lint: env test-env
 	pylint --rcfile=.pylintrc shhh
 
 travis-tests:
-	./bin/run-tests
+	./run-tests
