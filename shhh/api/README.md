@@ -10,6 +10,9 @@ Notes:
 and 1 uppercase.  
 * Max number of days to keep a secret alive is 7.  
 * Max number of characters for the secret is 150.  
+* This will query the **haveibeenpwned** API from Troy's Hunt to
+check if the passphrase has already been hacked, forcing the user
+to chose a secure one.  
 
 **Example using CURL**  
 
