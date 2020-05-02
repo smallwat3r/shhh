@@ -45,6 +45,7 @@ class TestApplication(unittest.TestCase):
         self.app_context.push()
         for table in reversed(self.db.metadata.sorted_tables):
             self.db.session.execute(table.delete())
+        # Mock responses from haveibeenpwned.
         responses.add(
             responses.GET,
             re.compile(
@@ -126,6 +127,7 @@ class TestApplication(unittest.TestCase):
             self.assertEqual(c.get("/r").status_code, 404)
             self.assertEqual(c.get("/donotexists").status_code, 404)
 
+    @responses.activate
     def test_api_post_missing_all(self):
         with self.client as c:
             response = json.loads(c.post("/api/c").get_data())
@@ -136,6 +138,7 @@ class TestApplication(unittest.TestCase):
         self.assertIsInstance(r.response.details.json.secret, list)
         self.assertIsInstance(r.response.details.json.passphrase, list)
 
+    @responses.activate
     def test_api_post_too_much_days(self):
         payload = {
             "secret": "secret message",
@@ -150,6 +153,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.status, "error")
         self.assertIsInstance(r.response.details.json.days, list)
 
+    @responses.activate
     def test_api_post_wrong_formats(self):
         payload = {"secret": 1, "passphrase": 1, "days": "not an integer"}
         with self.client as c:
@@ -162,6 +166,8 @@ class TestApplication(unittest.TestCase):
         self.assertIsInstance(r.response.details.json.passphrase, list)
         self.assertIsInstance(r.response.details.json.secret, list)
 
+
+    @responses.activate
     def test_api_post_missing_passphrase(self):
         payload = {"secret": "secret message"}
         with self.client as c:
@@ -194,6 +200,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.status, "error")
         self.assertIsInstance(r.response.details.json.secret, list)
 
+    @responses.activate
     def test_api_post_weak_passphrase(self):
         # Weak passphrase.
         payload = {"secret": "secret message", "passphrase": "weak"}
@@ -236,6 +243,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.status, "error")
         self.assertIsInstance(r.response.details.json.passphrase, list)
 
+    @responses.activate
     def test_api_post_created(self):
         payload = {
             "secret": "secret message", "passphrase": "PhduiGUI12d", "days": 3
@@ -260,6 +268,7 @@ class TestApplication(unittest.TestCase):
         link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
         self.assertEqual(link.slug_link, slug)
 
+    @responses.activate
     def test_api_get_wrong_passphrase(self):
         payload = {"secret": "secret message", "passphrase": "UGIUduigui12d"}
         with self.client as c:
@@ -281,6 +290,7 @@ class TestApplication(unittest.TestCase):
         r = Parse(response)
         self.assertEqual(r.response.status, "expired")
 
+    @responses.activate
     def test_api_get_decrypt_secret(self):
         message, passphrase = "secret message", "dieh32u0hoHBI"
         payload = {"secret": message, "passphrase": passphrase}
