@@ -4,6 +4,6 @@ python:
 before_script:
   - pip install -r test-requirements.txt
 script:
-  - make travis-tests
+  - ./bin/run-tests
 after_success:
   - codecov
