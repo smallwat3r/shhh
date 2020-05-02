@@ -1,8 +1,11 @@
 import json
 import os
 import unittest
+import re
 from datetime import datetime, timedelta
 from types import SimpleNamespace
+
+import responses
 
 from shhh.entrypoint import create_app
 from shhh.extensions import db, scheduler
@@ -42,6 +45,17 @@ class TestApplication(unittest.TestCase):
         self.app_context.push()
         for table in reversed(self.db.metadata.sorted_tables):
             self.db.session.execute(table.delete())
+        responses.add(
+            responses.GET,
+            re.compile(
+                r"^(https:\/\/api\.pwnedpasswords\.com\/range\/836BA).*"),
+            body=("BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
+                  "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"))
+        responses.add(
+            responses.GET,
+            re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/)(?!.*836BA).*"),
+            body=("BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
+                  "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"))
 
     def tearDown(self):
         self.db.session.rollback()
@@ -92,7 +106,7 @@ class TestApplication(unittest.TestCase):
             self.assertEqual(c.get("/").status_code, 200)
 
             r = c.get("/robots.txt")
-            r.close()  # avoids Unclosed file warning.
+            r.close() # avoids Unclosed file warning.
             self.assertEqual(r.status_code, 200)
 
             self.assertEqual(c.get("/r/fK6YTEVO2bvOln7pHOFi").status_code, 200)
@@ -158,8 +172,20 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.status, "error")
         self.assertIsInstance(r.response.details.json.passphrase, list)
 
+    @responses.activate
     def test_api_post_missing_secret(self):
         payload = {"passphrase": "SuperPassword123"}
+        with self.client as c:
+            response = json.loads(c.post("/api/c", json=payload).get_data())
+
+        # Test response request status and error details.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
+        self.assertIsInstance(r.response.details.json.secret, list)
+
+    @responses.activate
+    def test_api_post_passphrase_pwned(self):
+        payload = {"passphrase": "Hello123"}
         with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
 

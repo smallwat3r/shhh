@@ -1,8 +1,12 @@
 import enum
 import re
 
+import requests
+from flask import current_app as app
 from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser
+
+from shhh.api import utils
 
 
 @enum.unique
@@ -27,6 +31,8 @@ def strength(passphrase):
     """Passphrase strength validation handler.
 
     Minimum 8 characters containing at least one number and one uppercase.
+    Query haveibeenpwned.com/passwords to check if the passphrase as already
+    been pwned.
 
     """
     if passphrase:
@@ -35,6 +41,20 @@ def strength(passphrase):
             raise ValidationError(
                 "Passphrase too weak. Minimun 8 characters, including "
                 "1 number and 1 uppercase.")
+
+    try:
+        times_pwned = utils.pwned_password(passphrase)
+    except requests.ConnectionError as err:
+        app.logger.error(err)
+        times_pwned = None  # don't break as can do without
+    except Exception as err:
+        app.logger.error(err)
+        times_pwned = None  # don't break as can do without
+
+    if times_pwned:
+        raise ValidationError(
+            f"This password has been pwned {times_pwned} times "
+            "(haveibeenpwned.com), please chose another one.")
 
 
 def secret(secret):
