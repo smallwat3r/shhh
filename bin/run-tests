@@ -8,5 +8,5 @@ if [[ -z $TRAVIS ]]; then
 else
   # Travis will automatically post report to Codecov.
   pip install codecov
-  coverage run -m unittest discover -s './tests' - 'test_*.py' -v
+  coverage run -m unittest discover
 fi
