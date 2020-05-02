@@ -180,6 +180,11 @@ Run Pylint report using:
 make lint
 ```
 
+Run Bandit report using:  
+```sh
+make secure
+```
+
 ## Credits
 
 #### Existing cool apps that gave me the idea to develop my own version using Python and Flask

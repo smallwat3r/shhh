@@ -10,11 +10,22 @@ def pwned_password(passphrase):
     past. If it has, returns the number of times it has been pwned, else
     returns False.
 
-    """
-    hasher = hashlib.sha1()
-    hasher.update(passphrase.encode("utf-8"))
-    digest = hasher.hexdigest().upper()
+    Notes:
+        (source haveibeenpwned.com)
 
+        (...) implements a k-Anonymity model that allows a password to be
+        searched for by partial hash. This allows the first 5 characters of a
+        SHA-1 password hash (not case-sensitive) to be passed to the API.
+
+        When a password hash with the same first 5 characters is found in the
+        Pwned Passwords repository, the API will respond with an HTTP 200 and
+        include the suffix of every hash beginning with the specified prefix,
+        followed by a count of how many times it appears in the data set. The
+        API consumer can then search the results of the response for the
+        presence of their source hash.
+
+    """
+    digest = hashlib.sha1(passphrase.encode("utf-8")).hexdigest.upper() # nosec
     endpoint = "https://api.pwnedpasswords.com/range"
     r = requests.get(f"{endpoint}/{digest[:5]}", timeout=5)
     r.raise_for_status()

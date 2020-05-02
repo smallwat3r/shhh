@@ -29,3 +29,6 @@ tests: env test-env
 
 lint: env test-env
 	pylint --rcfile=.pylintrc shhh
+
+secure: env test-env
+	bandit -r shhh
