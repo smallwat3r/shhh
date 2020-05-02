@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -e
 
 _init_env() {
@@ -12,11 +11,4 @@ _init_env() {
       pip install -r requirements.txt >/dev/null 2>&1
     }
 }
-
 [[ $VIRTUAL_ENV == "" ]] && _init_env
-if [[ -z $TRAVIS ]]; then
-  python -m unittest discover -s "./tests" -p 'test_*.py' -v
-else
-  pip install codecov
-  coverage run -m unittest discover
-fi

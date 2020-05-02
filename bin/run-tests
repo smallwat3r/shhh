@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -e
+
+if [[ -z $TRAVIS ]]; then
+  # Local testing.
+  source env/bin/activate
+  python -m unittest discover -s "./tests" -p 'test_*.py' -v
+else
+  # Travis will automatically post report to Codecov.
+  pip install codecov
+  coverage run -m unittest discover -s './tests' - 'test_*.py' -v
+fi

@@ -1,3 +1,4 @@
+# pylint: disable=unused-argument, no-self-use, missing-function-docstring
 from datetime import datetime
 
 from shhh.extensions import db
@@ -6,7 +7,7 @@ from shhh.extensions import db
 class _DateTime(db.TypeDecorator):
     impl = db.DateTime
 
-    def process_bind_param(self, value, dialect): # pylint: disable=unused-argument, no-self-use
+    def process_bind_param(self, value, dialect):
         if isinstance(value, str):
             return datetime.strptime(value, "%Y-%m-%d %H:%M:%S")
         return value

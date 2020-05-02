@@ -1,0 +1,3 @@
+[MESSAGES CONTROL]
+disable=missing-module-docstring,invalid-name,too-few-public-methods,import-error,import-outside-toplevel
+ignored-argument-names=arg|args|kw|kwargs

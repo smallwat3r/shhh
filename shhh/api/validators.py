@@ -1,10 +1,9 @@
 import enum
 import re
 
-from shhh.api import utils
-
 from flask import current_app as app
 from marshmallow import ValidationError
+from shhh.api import utils
 from webargs.flaskparser import abort, parser
 
 
@@ -43,9 +42,9 @@ def validate_strength(passphrase):
 
     try:
         times_pwned = utils.pwned_password(passphrase)
-    except Exception as err:
+    except Exception as err: # pylint: disable=broad-except
         app.logger.error(err)
-        times_pwned = None # don't break if service isn't reachable.
+        times_pwned = None   # don't break if service isn't reachable.
 
     if times_pwned:
         raise ValidationError(

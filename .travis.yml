@@ -2,6 +2,6 @@ language: python
 python:
   - "3.8.2"
 script:
-  - ./run-tests.sh
+  - make tests
 after_success:
   - codecov

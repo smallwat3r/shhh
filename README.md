@@ -175,6 +175,11 @@ You can run the tests using:
 make tests
 ```
 
+Run Pylint report using:  
+```sh
+make lint
+```
+
 ## Credits
 
 #### Existing cool apps that gave me the idea to develop my own version using Python and Flask

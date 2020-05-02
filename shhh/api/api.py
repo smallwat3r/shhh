@@ -1,12 +1,13 @@
+# pylint: disable=no-self-use
 import functools
 
 from marshmallow import Schema, fields
+from flask import Blueprint
+from flask_restful import Api, Resource
 
 from shhh.api import validators
 from shhh.api.services import create_secret, read_secret
 
-from flask import Blueprint
-from flask_restful import Api, Resource
 from webargs.flaskparser import use_kwargs
 
 api = Blueprint("api", __name__)
@@ -30,7 +31,7 @@ class Create(Resource):
     """/api/c Create secret API."""
 
     @json(CreateParams())
-    def post(self, passphrase, secret, days=3): # pylint: disable=no-self-use
+    def post(self, passphrase, secret, days=3):
         """Post request handler."""
         response = create_secret(passphrase, secret, days)
         return {"response": response}
@@ -48,7 +49,7 @@ class Read(Resource):
     """/api/r Read secret API."""
 
     @query(ReadParams())
-    def get(self, slug, passphrase): # pylint: disable=no-self-use
+    def get(self, slug, passphrase):
         """Get request handler."""
         response = read_secret(slug, passphrase)
         return {"response": response}
