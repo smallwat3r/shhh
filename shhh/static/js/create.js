@@ -32,10 +32,9 @@ gId("createBtn").addEventListener("click", (_) => {
           return;
         case "error":
           gId("response").className = "notification is-danger";
-          gId("msg").setAttribute("style", "white-space: pre;");
           let msg = "";
           for (const [key, value] of Object.entries(data.response.details.json)) {
-            msg += `${value}\n`;
+            msg += `${value} `;
           }
           gId("msg").textContent = msg;
           return;
