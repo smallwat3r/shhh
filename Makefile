@@ -1,4 +1,4 @@
-.PHONY: help dc-start dc-stop env test-env tests lint
+.PHONY: help dc-start dc-stop env test-env tests lint travis-tests
 
 .DEFAULT: help
 help:
@@ -29,3 +29,6 @@ tests: env test-env
 
 lint: env test-env
 	pylint --rcfile=.pylintrc shhh
+
+travis-tests:
+	./bin/run-tests
