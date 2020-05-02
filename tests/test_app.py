@@ -166,7 +166,6 @@ class TestApplication(unittest.TestCase):
         self.assertIsInstance(r.response.details.json.passphrase, list)
         self.assertIsInstance(r.response.details.json.secret, list)
 
-
     @responses.activate
     def test_api_post_missing_passphrase(self):
         payload = {"secret": "secret message"}
@@ -199,6 +198,21 @@ class TestApplication(unittest.TestCase):
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
         self.assertIsInstance(r.response.details.json.secret, list)
+
+    def test_api_post_haveibeenpwned_not_reachable(self):
+        payload = {"secret": "secret message", "passphrase": "Hello123"}
+        with self.client as c:
+            with responses.RequestsMock() as rsps:
+                rsps.add(
+                    responses.GET,
+                    re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/).*"),
+                    body=Exception)
+                response = json.loads(c.post("/api/c", json=payload).get_data())
+
+        # haveibeenpwned wasn't reachable, but secret still created if it has
+        # all mandatory requirements.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "created")
 
     @responses.activate
     def test_api_post_weak_passphrase(self):

@@ -44,12 +44,9 @@ def strength(passphrase):
 
     try:
         times_pwned = utils.pwned_password(passphrase)
-    except requests.ConnectionError as err:
-        app.logger.error(err)
-        times_pwned = None  # don't break as can do without
     except Exception as err:
         app.logger.error(err)
-        times_pwned = None  # don't break as can do without
+        times_pwned = None # don't break if service isn't reachable.
 
     if times_pwned:
         raise ValidationError(
@@ -74,6 +71,9 @@ def passphrase(passphrase):
 
 def days(days):
     """Expiration validation handler."""
+    if days == 0:
+        raise ValidationError(
+            "The minimum number of days to keep the secret alive is 1.")
     if days > 7:
         raise ValidationError(
             "The maximum number of days to keep the secret alive is 7.")

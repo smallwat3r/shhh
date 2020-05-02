@@ -26,8 +26,8 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
     if env == "testing":
-        logging.getLogger("shhh").setLevel(logging.ERROR)
-        logging.getLogger("apscheduler").setLevel(logging.ERROR)
+        logging.getLogger("shhh").setLevel(logging.CRITICAL)
+        logging.getLogger("apscheduler").setLevel(logging.CRITICAL)
 
     app = Flask(__name__)
 
