@@ -10,6 +10,8 @@ help:
 	@echo "  Run tests"
 	@echo "make lint"
 	@echo "  Run pylint"
+	@echo "make secure"
+	@echo "  Run bandit"
 
 dc-start:
 	@docker-compose -f docker-compose.yml stop;
