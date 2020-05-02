@@ -27,7 +27,9 @@ def pwned_password(passphrase):
     """
     # See nosec exclusion explanation in function docstring, we are cropping
     # the hash to use a k-Anonymity model to retrieve the pwned passwords.
-    digest = hashlib.sha1(passphrase.encode("utf-8")).hexdigest.upper() # nosec
+    hasher = hashlib.sha1() # nosec
+    hasher.update(passphrase.encode("utf-8"))
+    digest = hasher.hexdigest().upper()
 
     endpoint = "https://api.pwnedpasswords.com/range"
     r = requests.get(f"{endpoint}/{digest[:5]}", timeout=5)
