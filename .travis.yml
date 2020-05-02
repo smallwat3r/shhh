@@ -1,6 +1,8 @@
 language: python
 python:
   - "3.8.2"
+before_install:
+  - sudo apt install make
 script:
   - make tests
 after_success:
