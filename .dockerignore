@@ -4,8 +4,10 @@
 *.pid
 *.rdb
 
+.coverage
 .coveragerc
 .gitignore
+.pylintrc
 .travis.yml
 app.json
 docker-compose.yml
@@ -14,12 +16,12 @@ Makefile
 Procfile
 README.md
 run-local.sh
-run-tests.sh
 runtime.txt
 
 .git/
 __pycache__/
 app.egg-info/
+bin/
 dockerenv/
 env/
 postgres/
