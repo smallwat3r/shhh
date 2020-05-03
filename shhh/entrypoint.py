@@ -2,9 +2,21 @@ import logging
 import os
 
 from flask import Flask
+from flask_assets import Bundle
 
 from shhh.api import api
-from shhh.extensions import db, scheduler
+from shhh.extensions import assets, db, scheduler
+
+
+def compile_assets(assets):
+    """Configure and build asset bundles."""
+    js_assets = ("create", "created", "read")
+    for asset in js_assets:
+        bundle = Bundle(f"src/js/{asset}.js",
+                        filters="jsmin",
+                        output=f"dist/js/{asset}.min.js")
+        assets.register(asset, bundle)
+        bundle.build()
 
 
 def register_blueprints(app):
@@ -39,6 +51,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     app.config.from_object(
         configurations.get(env, "shhh.config.ProductionConfig"))
 
+    assets.init_app(app)
     db.init_app(app)
     scheduler.init_app(app)
 
@@ -47,6 +60,10 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         db.create_all()
         scheduler.start()
 
-        from shhh import views  # pylint: disable=unused-import
+        assets.manifest = False
+        assets.cache = False
+        compile_assets(assets)
+
+        from shhh import views # pylint: disable=unused-import
 
     return app

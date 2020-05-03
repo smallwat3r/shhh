@@ -3,6 +3,7 @@
 *.log
 *.pid
 *.rdb
+*.min.js
 
 .coverage
 run-local.sh

@@ -3,9 +3,7 @@
 {% block container %}
 
 <form method="post">
-  <h2 class="subtitle">
-    Create
-  </h2>
+  <h2 class="subtitle">Create</h2>
   <p class="help has-text-left">Write your secret</p>
   <div class="field">
     <p class="control">
@@ -62,6 +60,6 @@
 
 {% block js %}
 
-<script src="{{ url_for('static', filename='js/create.js') }}"></script>
+<script src="{{ url_for('static', filename='dist/js/create.min.js') }}"></script>
 
 {% endblock %}
