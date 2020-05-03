@@ -64,6 +64,6 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         assets.cache = False
         compile_assets(assets)
 
-        from shhh import views # pylint: disable=unused-import
+        from shhh import views  # pylint: disable=unused-import
 
     return app

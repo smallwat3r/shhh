@@ -19,7 +19,7 @@ class Status(enum.Enum):
 
 
 @parser.error_handler
-def handle_parsing_error(err, req, schema, *, error_status_code, error_headers): # pylint: disable=unused-argument
+def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):  # pylint: disable=unused-argument
     """Handle request parsing errors."""
     abort(error_status_code,
           response=dict(details=err.messages, status=Status.ERROR.value))
@@ -42,9 +42,9 @@ def validate_strength(passphrase):
 
     try:
         times_pwned = utils.pwned_password(passphrase)
-    except Exception as err: # pylint: disable=broad-except
+    except Exception as err:  # pylint: disable=broad-except
         app.logger.error(err)
-        times_pwned = None   # don't break if service isn't reachable.
+        times_pwned = None  # don't break if service isn't reachable.
 
     if times_pwned:
         raise ValidationError(

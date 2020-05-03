@@ -27,7 +27,7 @@ def pwned_password(passphrase):
     """
     # See nosec exclusion explanation in function docstring, we are cropping
     # the hash to use a k-Anonymity model to retrieve the pwned passwords.
-    hasher = hashlib.sha1() # nosec
+    hasher = hashlib.sha1()  # nosec
     hasher.update(passphrase.encode("utf-8"))
     digest = hasher.hexdigest().upper()
 
