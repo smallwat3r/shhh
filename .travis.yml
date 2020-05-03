@@ -5,7 +5,9 @@ before_script:
   - pip install -r test-requirements.txt
 script:
   - ./bin/run-tests
-  - pylint --rcfile=.pylintrc shhh
+  - pylint shhh \
+      --disable=missing-module-docstring,invalid-name,too-few-public-methods,import-error,import-outside-toplevel \
+      --ignored-argument-names="arg|args|kw|kwargs"
   - bandit -r shhh
 after_success:
   - codecov
