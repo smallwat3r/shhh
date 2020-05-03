@@ -1,5 +1,7 @@
 {
   "name": "shhh",
+  "description": "shhh",
+  "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
     "bulma": "^0.8.2",
@@ -7,7 +9,7 @@
     "typeface-chivo": "^0.0.72"
   },
   "engines": {
-    "node": "13.13.x",
-    "yarn": "1.22.x"
+    "node": "13.13.0",
+    "yarn": "1.22.4"
   }
 }
