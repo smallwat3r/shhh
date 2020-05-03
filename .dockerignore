@@ -18,6 +18,7 @@ Procfile
 README.md
 run-local.sh
 runtime.txt
+yarn.lock
 
 .git/
 __pycache__/

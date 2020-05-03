@@ -7,6 +7,7 @@
 
 .coverage
 run-local.sh
+yarn.lock
 
 .vscode/
 __pycache__/
