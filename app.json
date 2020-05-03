@@ -18,5 +18,12 @@
       "description": "Application environment.",
       "value": "heroku"
     }
-  }
+  },
+  "buildpacks": [{
+      "url": "https://github.com/heroku/nodejs-yarn-buildpack"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ]
 }
