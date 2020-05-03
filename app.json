@@ -20,10 +20,10 @@
     }
   },
   "buildpacks": [{
-      "url": "https://github.com/heroku/nodejs-yarn-buildpack"
+      "url": "heroku/python"
     },
     {
-      "url": "heroku/python"
+      "url": "heroku/nodejs"
     }
   ]
 }
