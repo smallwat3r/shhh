@@ -5,11 +5,5 @@
     "bulma": "^0.8.2",
     "feather-icons": "^4.28.0",
     "typeface-chivo": "^0.0.72"
-  },
-  "engines": {
-    "yarn": "1.22.4"
-  },
-  "scripts": {
-    "build": "yarn install --modules-folder ./shhh/static/vendor"
   }
 }
