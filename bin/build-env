@@ -11,4 +11,4 @@ _init_env() {
       pip install -r requirements.txt >/dev/null 2>&1
     }
 }
-[[ $VIRTUAL_ENV == '' ]] && _init_env
+[[ $VIRTUAL_ENV == '' ]] && _init_env || exit 0
