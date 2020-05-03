@@ -6,8 +6,8 @@ gId("inputSecret").onkeyup = function () {
 
 gId("createBtn").addEventListener("click", (_) => {
   const inputSecret = gId("inputSecret").value,
-    passPhrase = gId("passPhrase").value,
-    expiresValue = gId("expiresValue").value;
+        passPhrase = gId("passPhrase").value,
+        expiresValue = gId("expiresValue").value;
 
   fetch("/api/c", {
     method: "POST",
@@ -22,9 +22,7 @@ gId("createBtn").addEventListener("click", (_) => {
     }),
     cache: "no-store",
   })
-    .then((response) => {
-      return response.json();
-    })
+    .then((response) => { return response.json(); })
     .then((data) => {
       switch (data.response.status) {
         case "created":

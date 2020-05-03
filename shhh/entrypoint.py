@@ -8,14 +8,14 @@ from shhh.api import api
 from shhh.extensions import assets, db, scheduler
 
 
-def compile_assets(assets):
+def compile_assets(app_assets):
     """Configure and build asset bundles."""
     js_assets = ("create", "created", "read")
-    for asset in js_assets:
-        bundle = Bundle(f"src/js/{asset}.js",
+    for code in js_assets:
+        bundle = Bundle(f"src/js/{code}.js",
                         filters="jsmin",
-                        output=f"dist/js/{asset}.min.js")
-        assets.register(asset, bundle)
+                        output=f"dist/js/{code}.min.js")
+        app_assets.register(code, bundle)
         bundle.build()
 
 
