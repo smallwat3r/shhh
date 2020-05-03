@@ -5,7 +5,8 @@ RUN apk update \
     gcc \
     libffi-dev \
     musl-dev \
-    postgresql-dev
+    postgresql-dev \
+    yarn
 
 WORKDIR /opt/shhh
 
@@ -24,4 +25,6 @@ RUN pip install --no-cache-dir --user -r requirements.txt \
     -exec rm -rf '{}' +
 
 COPY --chown=app:app . .
+
+RUN yarn install --modules-folder=shhh/static/vendor
 CMD gunicorn -b :5000 -w 3 wsgi:app --preload
