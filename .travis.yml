@@ -5,5 +5,7 @@ before_script:
   - pip install -r test-requirements.txt
 script:
   - ./bin/run-tests
+  - pylint --rcfile=.pylintrc shhh
+  - bandit -r shhh
 after_success:
   - codecov
