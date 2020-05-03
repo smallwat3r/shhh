@@ -7,11 +7,12 @@ RUN apk update \
     musl-dev \
     postgresql-dev
 
+WORKDIR /opt/shhh
+
 RUN addgroup -g 12001 app \
   && adduser -u 12001 --disabled-password --gecos "" --ingroup app app
 
 USER app
-WORKDIR /opt/shhh
 
 ENV PATH="/home/app/.local/bin:${PATH}"
 
@@ -22,5 +23,5 @@ RUN pip install --no-cache-dir --user -r requirements.txt \
     -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
     -exec rm -rf '{}' +
 
-COPY . .
+COPY --chown=app:app . .
 CMD gunicorn -b :5000 -w 3 wsgi:app --preload

@@ -1,6 +1,7 @@
 *.db
 *.DS_Store
 *.log
+*.min.js
 *.pid
 *.rdb
 
