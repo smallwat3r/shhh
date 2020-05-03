@@ -8,5 +8,8 @@
   },
   "engines": {
     "yarn": "1.22.4"
+  },
+  "scripts": {
+    "build": "yarn install --modules-folder ./shhh/static/vendor"
   }
 }
