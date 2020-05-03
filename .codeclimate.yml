@@ -1,0 +1,16 @@
+version: "2"
+checks:
+  argument-count:
+    enabled: false
+plugins:
+  bandit:
+    enabled: true
+  pep8:
+    enabled: true
+  pylint:
+    enabled: true
+exclude_patterns:
+  - "tests/"
+  - "bin/"
+  - "dockerenv/"
+  - "postgres/"

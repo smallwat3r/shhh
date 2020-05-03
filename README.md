@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.com/smallwat3r/shhh.svg?branch=master)](https://travis-ci.com/smallwat3r/shhh)
 [![codecov](https://codecov.io/gh/smallwat3r/shhh/branch/master/graph/badge.svg)](https://codecov.io/gh/smallwat3r/shhh)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability)](https://codeclimate.com/github/smallwat3r/shhh/maintainability)
+[![Known Vulnerabilities](https://snyk.io/test/github/smallwat3r/shhh/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/smallwat3r/shhh?targetFile=requirements.txt)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
 
 ## What is it?
