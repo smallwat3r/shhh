@@ -26,5 +26,6 @@ bin/
 dockerenv/
 env/
 postgres/
+shhh/static/vendor/
 tests/
 venv/

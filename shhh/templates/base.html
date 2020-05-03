@@ -21,9 +21,8 @@
     />
     <title>Shhh - Safely share your secrets and passwords.</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/lock.png') }}" />
-    <link rel="stylesheet" href="https://unpkg.com/bulma@0.8.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bulma/css/bulma.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
-    <link href="https://fonts.googleapis.com/css?family=Chivo&display=swap" rel="stylesheet" />
   </head>
 
   <body>
@@ -73,7 +72,7 @@
       </div>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="{{ url_for('static', filename='vendor/feather-icons/dist/feather.min.js') }}"></script>
     <script>feather.replace();</script>
 
     {% block js %}{% endblock %}

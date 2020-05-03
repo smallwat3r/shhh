@@ -1,0 +1,9 @@
+{
+  "name": "shhh",
+  "license": "MIT",
+  "dependencies": {
+    "bulma": "^0.8.2",
+    "feather-icons": "^4.28.0",
+    "typeface-chivo": "^0.0.72"
+  }
+}

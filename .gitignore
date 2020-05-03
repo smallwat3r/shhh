@@ -11,4 +11,5 @@ run-local.sh
 .vscode/
 __pycache__/
 env/
+shhh/static/vendor/
 venv/

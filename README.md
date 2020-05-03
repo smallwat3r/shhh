@@ -75,6 +75,8 @@ dates.
 You can find the list of the Python dependencies 
 [here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt).  
 
+You can find the list of the frontend dependencies 
+[here](https://github.com/smallwat3r/shhh/blob/master/package.json).
 
 ## How to launch Shhh locally?
 
@@ -99,14 +101,20 @@ CREATE DATABASE IF NOT EXISTS shhh;
 git clone https://github.com/smallwat3r/shhh.git && cd shhh
 ```
 
-We recommend that you create a virtual environment for this project, 
-so you can install the required dependencies.  
+We recommend that you create a Python virtual environment for this 
+project, so you can install the required dependencies.  
 
 ```sh
 python -m venv env 
 source env/bin/activate
 pip install -r requirements.txt
-pip install .
+pip install -r test-requirements.txt  # optional
+```
+
+Install the frontend dependencies:
+```sh
+# need yarn (brew install yarn) or (sudo apt install yarn)
+yarn install
 ```
 
 Stay in the virtual environment created.  
@@ -126,6 +134,7 @@ export POSTGRES_USER=<username>
 export POSTGRES_PASSWORD=<password>
 export POSTGRES_PORT=<port>
 ```
+
 
 You can now launch Shhh with:
 ```sh
