@@ -10,6 +10,10 @@ plugins:
   pylint:
     enabled: true
 exclude_patterns:
+  - "**/.*"
+  - "*.txt"
+  - "*.json"
+  - "Procfile"
   - "tests/"
   - "bin/"
   - "dockerenv/"
