@@ -85,17 +85,16 @@ class TestApplication(unittest.TestCase):
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         expired_date = datetime.strptime(
             now, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
-        db.session.add(
-            Entries(slug_link=slug,
-                    encrypted_text=encrypted_text,
-                    date_created=now,
-                    date_expires=expired_date))
-        db.session.commit()
+
+        Entries.create(slug_link=slug,
+                       encrypted_text=encrypted_text,
+                       date_created=now,
+                       date_expires=expired_date)
 
         # Run scheduler task.
         tasks.delete_expired_links()
         # Check that the secret has been deleted from the database.
-        link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
+        link = Entries.query.filter_by(slug_link=slug).first()
         self.assertIsNone(link)
 
         # Resume the scheduler.
@@ -107,7 +106,7 @@ class TestApplication(unittest.TestCase):
             self.assertEqual(c.get("/").status_code, 200)
 
             r = c.get("/robots.txt")
-            r.close() # avoids Unclosed file warning.
+            r.close()  # avoids Unclosed file warning.
             self.assertEqual(r.status_code, 200)
 
             self.assertEqual(c.get("/r/fK6YTEVO2bvOln7pHOFi").status_code, 200)
@@ -279,7 +278,7 @@ class TestApplication(unittest.TestCase):
 
         # Test the slug link has been saved in the database.
         slug = r.response.slug
-        link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
+        link = Entries.query.filter_by(slug_link=slug).first()
         self.assertEqual(link.slug_link, slug)
 
     @responses.activate
@@ -322,7 +321,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.msg, message)
 
         # Test if secret has been deleted in database.
-        link = self.db.session.query(Entries).filter_by(slug_link=slug).first()
+        link = Entries.query.filter_by(slug_link=slug).first()
         self.assertIsNone(link)
 
 
