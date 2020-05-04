@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block container %}
-
 <form method="post">
   <h2 class="subtitle">Create</h2>
   <p class="help has-text-left">Write your secret</p>
@@ -52,11 +51,8 @@
 </form>
 <br />
 <div id="response"><span id="msg"></span></div>
-
 {% endblock %}
 
 {% block js %}
-
 <script src="{{ url_for('static', filename='dist/js/create.min.js') }}"></script>
-
 {% endblock %}

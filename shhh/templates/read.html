@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block container %}
-
 <h2 class="subtitle">Decrypt</h2>
 <div class="field is-grouped">
   <p class="control is-expanded">
@@ -25,11 +24,8 @@
 <br />
 <div id="response"><p id="msg"></p></div>
 <input id="slugId" type="hidden" value="{{ slug }}" />
-
 {% endblock %}
 
 {% block js %}
-
 <script src="{{ url_for('static', filename='dist/js/read.min.js') }}"></script>
-
 {% endblock %}

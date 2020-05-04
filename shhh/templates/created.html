@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block container %}
-
 <div class="field has-addons">
   <div class="control is-expanded">
     <input class="input" type="text" id="link" value="{{ link }}" readonly />
@@ -14,11 +13,8 @@
   <b>{{ expires_on }}.</b> also note that as soon as someone decrypt the message,
   <b>it will be deleted forever 🔥</b>
 </p>
-
 {% endblock %}
 
 {% block js %}
-
 <script src="{{ url_for('static', filename='dist/js/created.min.js') }}"></script>
-
 {% endblock %}
