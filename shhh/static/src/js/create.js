@@ -31,10 +31,10 @@ gId("createBtn").addEventListener("click", (_) => {
         case "error":
           gId("response").className = "notification is-danger";
           let msg = "";
-          for (const [key, value] of Object.entries(data.response.details.json)) {
-            msg += `${value} `;
-          }
-          gId("msg").textContent = msg;
+          Object.values(data.response.details.json).forEach(
+            (value) => (msg += value[0].replace(/.$/, " / "))
+          );
+          gId("msg").textContent = msg.substring(0, msg.length - 2);
           return;
       }
     });
