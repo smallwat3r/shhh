@@ -1,9 +1,10 @@
 *.db
 *.DS_Store
 *.log
+*.min.css
+*.min.js
 *.pid
 *.rdb
-*.min.js
 
 .coverage
 run-local.sh
