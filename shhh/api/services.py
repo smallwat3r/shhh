@@ -12,7 +12,6 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from shhh.extensions import db
 from shhh.models import Entries
 from shhh.api.validators import Status
 
@@ -65,7 +64,7 @@ def _generate_unique_slug():
 
     """
     slug = secrets.token_urlsafe(15)
-    if not db.session.query(Entries).filter_by(slug_link=slug).first():
+    if not Entries.query.filter_by(slug_link=slug).first():
         return slug
     return _generate_unique_slug()
 
@@ -78,7 +77,7 @@ def read_secret(slug, passphrase):
         passphrase (str): Passphrase needed to decrypt the secret.
 
     """
-    secret = db.session.query(Entries).filter_by(slug_link=slug).first()
+    secret = Entries.query.filter_by(slug_link=slug).first()
     if not secret:
         app.logger.warning(
             f"{slug} tried to read but do not exists in database")
@@ -92,8 +91,8 @@ def read_secret(slug, passphrase):
                     msg="Sorry the passphrase is not valid.")
 
     # Automatically delete message from the database.
-    db.session.query(Entries).filter_by(slug_link=slug).delete()
-    db.session.commit()
+    read = Entries.query.filter_by(slug_link=slug).first()
+    read.delete()
 
     app.logger.info(f"{slug} was decrypted and deleted")
     return dict(status=Status.SUCCESS.value, msg=html.escape(msg))
@@ -113,12 +112,10 @@ def create_secret(passphrase, secret, expire):
         now, "%Y-%m-%d %H:%M:%S") + timedelta(days=expire)
 
     slug = _generate_unique_slug()
-    db.session.add(
-        Entries(slug_link=slug,
-                encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
-                date_created=now,
-                date_expires=expiration_date))
-    db.session.commit()
+    Entries.create(slug_link=slug,
+                   encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
+                   date_created=now,
+                   date_expires=expiration_date)
 
     app.logger.info(f"{slug} created and expires on {expiration_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()

@@ -8,22 +8,6 @@ from shhh.api import api
 from shhh.extensions import assets, db, scheduler
 
 
-def compile_assets(app_assets):
-    """Configure and build asset bundles."""
-    js_assets = ("create", "created", "read")
-    for code in js_assets:
-        bundle = Bundle(f"src/js/{code}.js",
-                        filters="jsmin",
-                        output=f"dist/js/{code}.min.js")
-        app_assets.register(code, bundle)
-        bundle.build()
-
-
-def register_blueprints(app):
-    """Register application blueprints."""
-    app.register_blueprint(api)
-
-
 def create_app(env=os.environ.get("FLASK_ENV")):
     """Application factory."""
     logging.basicConfig(
@@ -51,12 +35,11 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     app.config.from_object(
         configurations.get(env, "shhh.config.ProductionConfig"))
 
-    assets.init_app(app)
-    db.init_app(app)
-    scheduler.init_app(app)
+    register_extensions(app)
 
     with app.app_context():
         register_blueprints(app)
+
         db.create_all()
         scheduler.start()
 
@@ -67,3 +50,26 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         from shhh import views  # pylint: disable=unused-import
 
     return app
+
+
+def register_blueprints(app):
+    """Register application blueprints."""
+    app.register_blueprint(api)
+
+
+def register_extensions(app):
+    """Register application extensions."""
+    assets.init_app(app)
+    db.init_app(app)
+    scheduler.init_app(app)
+
+
+def compile_assets(app_assets):
+    """Configure and build asset bundles."""
+    js_assets = ("create", "created", "read")
+    for code in js_assets:
+        bundle = Bundle(f"src/js/{code}.js",
+                        filters="jsmin",
+                        output=f"dist/js/{code}.min.js")
+        app_assets.register(code, bundle)
+        bundle.build()
