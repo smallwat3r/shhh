@@ -66,10 +66,17 @@ def register_extensions(app):
 
 def compile_assets(app_assets):
     """Configure and build asset bundles."""
-    js_assets = ("create", "created", "read")
+    js_assets = ("create", "created", "read", )
+    css_assets = ("styles", )
     for code in js_assets:
         bundle = Bundle(f"src/js/{code}.js",
                         filters="jsmin",
                         output=f"dist/js/{code}.min.js")
         app_assets.register(code, bundle)
+        bundle.build()
+    for style in css_assets:
+        bundle = Bundle(f"src/css/{style}.css",
+                        filters="cssmin",
+                        output=f"dist/css/{style}.min.css")
+        app_assets.register(style, bundle)
         bundle.build()

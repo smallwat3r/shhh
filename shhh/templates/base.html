@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<!--
+  <!--
   Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
   Source code: https://github.com/smallwat3r/shhh
 
@@ -22,7 +22,7 @@
     <title>Shhh - Safely share your secrets and passwords.</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/lock.png') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bulma/css/bulma.min.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/styles.min.css') }}" />
   </head>
 
   <body>
@@ -44,7 +44,6 @@
           </div>
 
           <div class="column is-6 is-offset-3">
-
             {% block container %}{% endblock %}
 
             <hr />
@@ -73,9 +72,10 @@
     </section>
 
     <script src="{{ url_for('static', filename='vendor/feather-icons/dist/feather.min.js') }}"></script>
-    <script>feather.replace();</script>
+    <script>
+      feather.replace();
+    </script>
 
     {% block js %}{% endblock %}
-
   </body>
 </html>
