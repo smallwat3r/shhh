@@ -1,10 +1,7 @@
 {% extends 'base.html' %}
-
 {% block container %}
 
-<h2 class="subtitle">
-  Decrypt
-</h2>
+<h2 class="subtitle">Decrypt</h2>
 <div class="field is-grouped">
   <p class="control is-expanded">
     <input
@@ -17,14 +14,13 @@
       required
     />
   </p>
-
   <p class="control">
     <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
   </p>
 </div>
 <p class="help">
-  As soon as the message is decrypted, <b>it will be deleted forever 🔥</b>, so make sure to save it in a
-  <b>secure</b> place before leaving this page if needed.
+  As soon as the message is decrypted, <b>it will be deleted forever 🔥</b>,
+  so make sure to save it in a <b>secure</b> place before leaving this page if needed.
 </p>
 <br />
 <div id="response"><p id="msg"></p></div>
