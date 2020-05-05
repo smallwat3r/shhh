@@ -55,7 +55,7 @@ Yes, you can find some doc [here](https://github.com/smallwat3r/shhh/tree/master
 
 
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
-a Go client to interact with Shhh API via command line.  
+a Go client to interact with the Shhh API from the terminal.  
 
 
 ## What's the stack?
