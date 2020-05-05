@@ -35,7 +35,7 @@ The secret will be **permanently removed** from the database as soon
 as one of these events happens:  
 
 * the expiration date has passed (max 7 days).  
-* the receiver has decrypted the message.  
+* or the receiver has decrypted the message.  
 
 The secrets are encrypted in order to make the data anonymous, 
 especially in the database, and the passphrases are not stored 
