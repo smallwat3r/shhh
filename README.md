@@ -76,9 +76,8 @@ dates.
 ## What are the dependencies?
 
 You can find the list of the Python dependencies 
-[here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt).  
-
-You can find the list of the frontend dependencies 
+[here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt), 
+and the list of the frontend dependencies 
 [here](https://github.com/smallwat3r/shhh/blob/master/package.json).
 
 ## How to launch Shhh locally?
