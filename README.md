@@ -39,7 +39,7 @@ as one of these events happens:
 
 The secrets are encrypted in order to make the data anonymous, 
 especially in the database, and the passphrases are not stored 
-anywhere  
+anywhere.  
 
 _Encryption method used: Fernet with password, random salt value and
 strong iteration count (100 000)._  
