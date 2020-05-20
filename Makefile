@@ -21,16 +21,16 @@ dc-stop:
 	@docker-compose -f docker-compose.yml stop;
 
 env:
-	./bin/build-env
+	@./bin/build-env
 
 test-env:
-	./bin/test-deps
+	@./bin/test-deps
 
 tests: env test-env
-	./bin/run-tests
+	@./bin/run-tests
 
 lint: env test-env
-	pylint --rcfile=.pylintrc shhh
+	@pylint --rcfile=.pylintrc shhh
 
 secure: env test-env
-	bandit -r shhh
+	@bandit -r shhh
