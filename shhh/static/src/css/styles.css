@@ -1,15 +1,21 @@
 @font-face {
-  font-family: "Chivo";
-  src: url("/static/vendor/typeface-chivo/files/chivo-latin-400.woff");
+  font-family: "Hack";
+  src: url("/static/vendor/hack-font/build/web/fonts/hack-regular.woff");
 }
 body {
-  font-family: "Chivo", sans-serif;
+  font-family: "Hack", monospace;
 }
 input,
 textarea,
 select {
-  font-family: "Chivo", sans-serif;
+  font-family: "Hack", monospace;
+}
+textarea::placeholder {
+  font-size: 15px;
 }
 a {
   color: #fff;
+}
+a:hover {
+  color: #a4eb34;
 }
