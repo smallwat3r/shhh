@@ -7,7 +7,7 @@ version: '3.2'
 
 services:
   db:
-    image: postgres:12.2-alpine
+    image: postgres:12.3-alpine
     env_file:
       - ./dockerenv/env.dev
     volumes:
