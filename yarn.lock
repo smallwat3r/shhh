@@ -25,7 +25,7 @@ feather-icons@^4.28.0:
     classnames "^2.2.5"
     core-js "^3.1.3"
 
-hack-font@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/hack-font/-/hack-font-3.3.0.tgz#be36ffe9cfc318c555aa04c8c26a48d0e53230d5"
-  integrity sha512-RohrcAr3UaKiIoxDlOytCjObcUAucfFc6V5fKu6gBrvmvTfIXeBqZwR0Q5kb9qpbluThJWt326LClLKIGiFyug==
+typeface-work-sans@^0.0.72:
+  version "0.0.72"
+  resolved "https://registry.yarnpkg.com/typeface-work-sans/-/typeface-work-sans-0.0.72.tgz#2b40abbda07e2cf6d9fbd9d334bb8c3014c80e32"
+  integrity sha512-hJa+mh217r4qlEq0zK0Aqn7chyDzJYziObsd9nokEd0lMBKbGNf/10VHS3AqeVKDye3evfTvZ11tmj5WizIJrA==
