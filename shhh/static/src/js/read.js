@@ -6,6 +6,9 @@ gId("decryptBtn").addEventListener("click", _ => {
   const slug_id = gId("slugId").value;
   const passphrase = gId("passPhrase").value;
 
+  gId("response").className = "";
+  gId("msg").textContent = "";
+
   // prettier-ignore
   fetch(`/api/r?slug=${slug_id}&passphrase=${passphrase}`, {
     method: "GET",
@@ -16,18 +19,18 @@ gId("decryptBtn").addEventListener("click", _ => {
       gId("msg").setAttribute("style", "white-space: pre;");
       switch (data.response.status) {
         case "error":
-          gId("response").className = "notification is-danger";
+          gId("response").className = "notification is-danger pop";
           gId("msg").textContent = error_parser(data.response.details.query);
           return;
         case "invalid":
-          gId("response").className = "notification is-danger";
+          gId("response").className = "notification is-danger pop ";
           gId("msg").innerHTML = data.response.msg;
           return;
         case "expired":
-          gId("response").className = "notification is-warning";
+          gId("response").className = "notification is-warning pop";
           break;
         case "success":
-          gId("response").className = "notification is-success";
+          gId("response").className = "notification is-success pop";
           break;
       }
       gId("passPhrase").value = "";

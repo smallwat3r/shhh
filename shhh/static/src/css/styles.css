@@ -2,6 +2,7 @@
   font-family: "Work Sans";
   src: url("/static/vendor/typeface-work-sans/files/work-sans-latin-400.woff");
 }
+
 body {
   font-family: "Work Sans", sans-serif;
   font-size: 14px;
@@ -20,6 +21,8 @@ a {
 a:hover {
   color: #a4eb34;
 }
+
+/* Icons */
 .feather {
   width: 15px;
   height: 15px;
@@ -28,4 +31,14 @@ a:hover {
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
+}
+
+/* Pop animation */
+.pop {
+  animation: pop 0.25s ease-in-out;
+}
+@keyframes pop {
+  50% {
+    transform: scale(1.25);
+  }
 }

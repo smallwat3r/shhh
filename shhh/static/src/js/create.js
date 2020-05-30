@@ -11,6 +11,9 @@ gId("createBtn").addEventListener("click", _ => {
   const passPhrase = gId("passPhrase").value;
   const expiresValue = gId("expiresValue").value;
 
+  gId("response").className = "";
+  gId("msg").textContent = "";
+
   // prettier-ignore
   fetch("/api/c", {
     method: "POST",
@@ -32,7 +35,7 @@ gId("createBtn").addEventListener("click", _ => {
           window.location.href = `/c?link=${data.response.link}&expires_on=${data.response.expires_on}`;
           return;
         case "error":
-          gId("response").className = "notification is-danger";
+          gId("response").className = "notification is-danger pop";
           gId("msg").textContent = error_parser(data.response.details.json);
           return;
       }
