@@ -1,3 +1,5 @@
+import error_parser from "./utils/error_parser.min.js";
+
 const gId = id => document.getElementById(id);
 
 gId("decryptBtn").addEventListener("click", _ => {
@@ -15,11 +17,7 @@ gId("decryptBtn").addEventListener("click", _ => {
       switch (data.response.status) {
         case "error":
           gId("response").className = "notification is-danger";
-          let msg = "";
-          Object.values(data.response.details.query).forEach(
-            (value) => (msg += value[0].replace(/.$/, " / "))
-          );
-          gId("msg").textContent = msg.substring(0, msg.length - 2);
+          gId("msg").textContent = error_parser(data.response.details.query);
           return;
         case "invalid":
           gId("response").className = "notification is-danger";

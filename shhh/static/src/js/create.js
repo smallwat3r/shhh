@@ -1,3 +1,5 @@
+import error_parser from "./utils/error_parser.min.js";
+
 const gId = id => document.getElementById(id);
 
 gId("inputSecret").onkeyup = function () {
@@ -31,11 +33,7 @@ gId("createBtn").addEventListener("click", _ => {
           return;
         case "error":
           gId("response").className = "notification is-danger";
-          let msg = "";
-          Object.values(data.response.details.json).forEach(
-            value => (msg += value[0].replace(/.$/, " / "))
-          );
-          gId("msg").textContent = msg.substring(0, msg.length - 2);
+          gId("msg").textContent = error_parser(data.response.details.json);
           return;
       }
     });
