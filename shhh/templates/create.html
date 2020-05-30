@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block container %}
 <form method="post">
-  <p class="help has-text-left">Write your secret</p>
+  <p class="has-text-left">Write your secret</p>
   <div class="field">
     <p class="control">
       <textarea
@@ -17,7 +17,7 @@
     </p>
     <p id="count" class="help has-text-right"></p>
   </div>
-  <p class="help has-text-left">Auto-destroy in</p>
+  <p class="has-text-left">Auto-destroy in</p>
   <div class="field">
     <div class="control">
       <div class="select">
@@ -30,7 +30,7 @@
       </div>
     </div>
   </div>
-  <p class="help has-text-left">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
+  <p class="has-text-left">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
   <div class="field is-grouped">
     <p class="control is-expanded">
       <input
@@ -49,7 +49,7 @@
   </div>
 </form>
 <br />
-<div id="response"><span id="msg"></span></div>
+<div id="response"><b><span id="msg"></span></b></div>
 {% endblock %}
 
 {% block js %}

@@ -17,12 +17,13 @@
     <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
   </p>
 </div>
-<p class="help">
-  As soon as the message is decrypted, <b>it will be deleted forever 🔥</b>,
+<p>
+  <span class="feather" data-feather="alert-triangle"></span>
+  As soon as the message is decrypted, <b>it will be deleted forever</b>,
   make sure to save it in a <b>secure</b> place before leaving this page.
 </p>
 <br />
-<div id="response"><p id="msg"></p></div>
+<div id="response"><b><span id="msg"></span></b></div>
 <input id="slugId" type="hidden" value="{{ slug }}" />
 {% endblock %}
 

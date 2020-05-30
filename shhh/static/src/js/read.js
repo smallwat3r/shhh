@@ -1,21 +1,25 @@
-const gId = (id) => document.getElementById(id);
+const gId = id => document.getElementById(id);
 
-gId("decryptBtn").addEventListener("click", (_) => {
-  const slug_id = gId("slugId").value,
-        passphrase = gId("passPhrase").value;
+gId("decryptBtn").addEventListener("click", _ => {
+  const slug_id = gId("slugId").value;
+  const passphrase = gId("passPhrase").value;
 
+  // prettier-ignore
   fetch(`/api/r?slug=${slug_id}&passphrase=${passphrase}`, {
     method: "GET",
     cache: "no-store",
   })
-    .then((response) => { return response.json(); })
-    .then((data) => {
+    .then(response => { return response.json() })
+    .then(data => {
       gId("msg").setAttribute("style", "white-space: pre;");
       switch (data.response.status) {
         case "error":
           gId("response").className = "notification is-danger";
-          // Passphrase is the only error that can happen.
-          gId("msg").textContent = data.response.details.query.passphrase[0];
+          let msg = "";
+          Object.values(data.response.details.query).forEach(
+            (value) => (msg += value[0].replace(/.$/, " / "))
+          );
+          gId("msg").textContent = msg.substring(0, msg.length - 2);
           return;
         case "invalid":
           gId("response").className = "notification is-danger";

@@ -1,21 +1,31 @@
 @font-face {
-  font-family: "Hack";
-  src: url("/static/vendor/hack-font/build/web/fonts/hack-regular.woff");
+  font-family: "Work Sans";
+  src: url("/static/vendor/typeface-work-sans/files/work-sans-latin-400.woff");
 }
 body {
-  font-family: "Hack", monospace;
+  font-family: "Work Sans", sans-serif;
+  font-size: 14px;
 }
 input,
 textarea,
 select {
-  font-family: "Hack", monospace;
+  font-family: "Work Sans", sans-serif;
 }
 textarea::placeholder {
-  font-size: 15px;
+  font-size: 14px;
 }
 a {
   color: #fff;
 }
 a:hover {
   color: #a4eb34;
+}
+.feather {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 }
