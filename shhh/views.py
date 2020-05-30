@@ -5,6 +5,8 @@ from flask import redirect
 from flask import render_template as rt
 from flask import request, send_from_directory, url_for
 
+from htmlmin.main import minify
+
 
 def qs_to_args(f):
     """Querystring to Args.
@@ -53,3 +55,11 @@ def not_found(error):
 def robots():
     """Robots handler."""
     return send_from_directory(app.static_folder, request.path[1:])
+
+
+@app.after_request
+def html_minify(response):
+    """Minimise html responses."""
+    if response.content_type == u"text/html; charset=utf-8":
+        response.set_data(minify(response.get_data(as_text=True)))
+    return response
