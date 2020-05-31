@@ -10,21 +10,33 @@ RUN apk update \
 
 WORKDIR /opt/shhh
 
-RUN addgroup -g 12001 app \
-  && adduser -u 12001 --disabled-password --gecos "" --ingroup app app
+ENV GROUP=app
+ENV USER=shhh
+ENV UID=12345
+ENV GID=23456
 
-USER app
+RUN addgroup --gid "$GID" "$GROUP" \
+  && adduser --uid "$UID" \
+    --disabled-password \
+    --gecos "" \
+    --ingroup "$GROUP" \
+    "$USER"
 
-ENV PATH="/home/app/.local/bin:${PATH}"
+USER "$USER"
+ENV PATH="/home/$USER/.local/bin:${PATH}"
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --user -r requirements.txt \
-  && find /home/app/.local \
+RUN pip install \
+    --no-cache-dir \
+    --no-warn-script-location \
+    --user \
+    -r requirements.txt \
+  && find "/home/$USER/.local" \
     \( -type d -a -name test -o -name tests \) \
     -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
     -exec rm -rf '{}' +
 
-COPY --chown=app:app . .
+COPY --chown=$USER:$GROUP . .
 
 RUN yarn install --modules-folder=shhh/static/vendor
 CMD gunicorn -b :5000 -w 3 wsgi:app --preload
