@@ -12,6 +12,7 @@
 .gitignore
 .pylintrc
 .travis.yml
+.whitesource
 app.json
 docker-compose.yml
 Dockerfile
