@@ -13,12 +13,11 @@ help:
 	@echo "make secure"
 	@echo "  Run bandit"
 
-dc-start:
-	@docker-compose -f docker-compose.yml stop;
-	@docker-compose -f docker-compose.yml up --build -d;
-
 dc-stop:
 	@docker-compose -f docker-compose.yml stop;
+
+dc-start: dc-stop
+	@docker-compose -f docker-compose.yml up --build -d;
 
 env:
 	@./bin/build-env
