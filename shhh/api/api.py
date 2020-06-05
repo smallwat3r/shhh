@@ -38,6 +38,7 @@ class CreateParams(Schema):
 
 class Create(Resource):
     """/api/c Create secret API."""
+
     @json(CreateParams())
     def post(self,
              passphrase: str,
@@ -61,6 +62,7 @@ class ReadParams(Schema):
 
 class Read(Resource):
     """/api/r Read secret API."""
+
     @query(ReadParams())
     def get(self, slug: str, passphrase: str) -> Tuple[Dict, int]:
         """Get request handler."""

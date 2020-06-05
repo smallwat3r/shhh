@@ -41,8 +41,7 @@ class TestConfig(DefaultConfig):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = (
         "sqlite:///"
-        f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
-    )
+        f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}")
 
 
 class DockerConfig(DefaultConfig):

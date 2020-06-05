@@ -140,5 +140,4 @@ def create_secret(passphrase: str,
         details="Secret successfully created.",
         slug=slug,
         link=f"{request.url_root}r/{slug}",
-        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}"
-    ), 201
+        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}"), 201
