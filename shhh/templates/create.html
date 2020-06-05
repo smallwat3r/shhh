@@ -3,7 +3,7 @@
 <form method="post">
   <p class="has-text-left">Write your secret</p>
   <div class="field">
-    <p class="control">
+    <div class="control">
       <textarea
         class="textarea"
         name="inputSecret"
@@ -14,25 +14,47 @@
         autocomplete="off"
         required
       ></textarea>
-    </p>
+    </div>
     <p id="count" class="help has-text-right"></p>
   </div>
-  <p class="has-text-left">Auto-destroy in</p>
-  <div class="field">
-    <div class="control">
-      <div class="select">
-        <select id="expiresValue" name="expiresValue">
-          <option value="1">1 day</option>
-          <option value="2">2 days</option>
-          <option value="3">3 days</option>
-          <option value="7">1 week</option>
-        </select>
+
+  <div class="columns is-mobile">
+    <div class="column">
+      <p class="has-text-left">Destroy in</p>
+      <div class="control has-icons-left">
+        <div class="select is-fullwidth">
+          <select id="expiresValue" name="expiresValue">
+            <option value="1">1 day</option>
+            <option value="2">2 days</option>
+            <option value="3">3 days</option>
+            <option value="7">1 week</option>
+          </select>
+        </div>
+        <div class="icon is-small is-left">
+          <span class="feather" data-feather="activity"></span>
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <p class="has-text-left">Destroy after</p>
+      <div class="control has-icons-left">
+        <div class="select is-fullwidth">
+          <select id="maxTries" name="maxTries">
+            <option value="3">3 tries</option>
+            <option value="5">5 tries</option>
+            <option value="10">10 tries</option>
+          </select>
+        </div>
+        <div class="icon is-small is-left">
+          <span class="feather" data-feather="crosshair"></span>
+        </div>
       </div>
     </div>
   </div>
+
   <p class="has-text-left">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
   <div class="field is-grouped">
-    <p class="control is-expanded">
+    <p class="control is-expanded has-icons-left">
       <input
         class="input"
         id="passPhrase"
@@ -42,10 +64,17 @@
         autocomplete="off"
         required
       />
+      <span class="icon is-small is-left">
+        <span class="feather" data-feather="key"></span>
+      </span>
     </p>
-    <p class="control">
+    <div class="control">
       <button type="button" class="button is-primary" id="createBtn">Go</button>
-    </p>
+    </div>
+  </div>
+  <div class="field has-text-left">
+    <input class="checkbox" id="haveibeenpwned" type="checkbox" checked="checked">
+    <label for="haveibeenpwned">(optional) validate passphrase using haveibeenpwned.com</label>
   </div>
 </form>
 <br />

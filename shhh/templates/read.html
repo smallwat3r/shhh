@@ -2,7 +2,7 @@
 {% block container %}
 <h2 class="subtitle">Decrypt</h2>
 <div class="field is-grouped">
-  <p class="control is-expanded">
+  <p class="control is-expanded has-icons-left">
     <input
       class="input"
       name="passPhrase"
@@ -12,6 +12,9 @@
       autocomplete="off"
       required
     />
+    <span class="icon is-small is-left">
+      <span class="feather" data-feather="key"></span>
+    </span>
   </p>
   <p class="control">
     <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
