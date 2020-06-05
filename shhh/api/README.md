@@ -7,28 +7,32 @@ client to interact with the Shhh API from the terminal.
 
 The API endpoints are `/api/c` (create) and `/api/r` (read).  
 
-**Paramaters**  
+### Parameters
 
-endpoint: `/api/c`  
-type: `POST`  
-format: `json`  
+**Create a secret**  
 
-parameter | type | mandatory | default | description | limitations
---- | --- | --- | --- | --- | ---
-secret | str | yes | - | secret to encrypt | 150 chars max.
-passphrase | str | yes | - | passphrase to open secret | min. 8 chars, 1 number, 1 uppercase
-days | int | no | 3 | number of days to keep the secret alive | min. 1, max. 7
-tries | int | no | 5 | number of tries to open secret before it gets deleted | min. 3, max. 10
-haveibeenpwned | bool | no | - | check passphrase against the **haveibeenpwned.com** API from Troy's Hunt before creating the secret | 
-
-endpoint: `/api/r`  
-type: `GET`  
-format: `querystring`  
+* endpoint: `/api/c`  
+* type: `POST`  
+* format: `json`  
 
 parameter | type | mandatory | default | description | limitations
 --- | --- | --- | --- | --- | ---
-slug | str | yes | - | slug id of the secret | 
-passphrase | str | yes | - | passphrase to open the secret | 
+secret | `str` | yes | - | Secret to encrypt | max. 150 chars
+passphrase | `str` | yes | - | Passphrase to open secret | min. 8 chars, 1 number, 1 uppercase
+days | `int` | no | 3 | Number of days to keep the secret alive | min. 1, max. 7
+tries | `int` | no | 5 | Number of tries to open secret before it gets deleted | min. 3, max. 10
+haveibeenpwned | `bool` | no | - | Check passphrase against the **haveibeenpwned.com** API from Troy's Hunt before creating the secret | -
+
+**read a secret**  
+
+* endpoint: `/api/r`  
+* type: `GET`  
+* format: `querystring`  
+
+parameter | type | mandatory | default | description 
+--- | --- | --- | --- | --- 
+slug | `str` | yes | - | Slug id of the secret
+passphrase | `str` | yes | - | Passphrase to open the secret
 
 **Example using CURL**  
 
