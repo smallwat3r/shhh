@@ -22,6 +22,7 @@ README.md
 run-local.sh
 runtime.txt
 
+.mypy_cache/
 .git/
 __pycache__/
 app.egg-info/
