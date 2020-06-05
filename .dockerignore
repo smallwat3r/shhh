@@ -26,6 +26,7 @@ runtime.txt
 __pycache__/
 app.egg-info/
 bin/
+doc/
 dockerenv/
 env/
 postgres/
