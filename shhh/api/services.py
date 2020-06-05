@@ -19,7 +19,7 @@ from shhh.api.validators import Status
 class Secret:
     """Secrets encryption / decryption management."""
 
-    __slots__ = ("secret", "passphrase", )
+    __slots__ = ("secret", "passphrase")
 
     def __init__(self, secret, passphrase):
         self.secret = secret
@@ -39,18 +39,14 @@ class Secret:
         salt = secrets.token_bytes(16)
         key = self.__derive_key(salt, iterations)
         return urlsafe_b64encode(
-            b"%b%b%b" % (salt,
-                         iterations.to_bytes(4, "big"),
+            b"%b%b%b" % (salt, iterations.to_bytes(4, "big"),
                          urlsafe_b64decode(Fernet(key).encrypt(self.secret))))
 
     def decrypt(self):
         """Decrypt secret."""
         decoded = urlsafe_b64decode(self.secret)
-        salt, iteration, message = (
-            decoded[:16],
-            decoded[16:20],
-            urlsafe_b64encode(decoded[20:])
-        )
+        salt, iteration, message = (decoded[:16], decoded[16:20],
+                                    urlsafe_b64encode(decoded[20:]))
         iterations = int.from_bytes(iteration, "big")
         key = self.__derive_key(salt, iterations)
         return Fernet(key).decrypt(message).decode("utf-8")
@@ -82,29 +78,43 @@ def read_secret(slug, passphrase):
         app.logger.warning(
             f"{slug} tried to read but do not exists in database")
         return dict(status=Status.EXPIRED.value,
-                    msg="Sorry the data has expired or has already been read.")
+                    msg=("Sorry, we can't find a secret, it has expired, "
+                         "been deleted or has already been read."))
+
     try:
         msg = Secret(secret.encrypted_text, passphrase).decrypt()
     except InvalidToken:
-        app.logger.warning(f"{slug} wrong passphrase used")
+        remaining = secret.tries - 1
+        if remaining == 0:
+            # Number of tries exceeded
+            app.logger.warning(f"{slug} tries to open secret exceeded")
+            secret.delete()
+            return dict(
+                status=Status.INVALID.value,
+                msg=("The passphrase is not valid. You've exceeded the "
+                     "number of tries and the secret has been deleted."))
+
+        secret.update(tries=remaining)
+        app.logger.warning(f"{slug} wrong passphrase used. "
+                           f"Number of tries remaining: {remaining}")
         return dict(status=Status.INVALID.value,
-                    msg="Sorry the passphrase is not valid.")
+                    msg=("Sorry the passphrase is not valid. "
+                         f"Number of tries remaining: {remaining}"))
 
-    # Automatically delete message from the database.
-    read = Entries.query.filter_by(slug_link=slug).first()
-    read.delete()
-
+    secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
     return dict(status=Status.SUCCESS.value, msg=html.escape(msg))
 
 
-def create_secret(passphrase, secret, expire):
+def create_secret(passphrase, secret, expire, tries, haveibeenpwned):
     """Create a secret.
 
     Args:
         passphrase (str): Passphrase needed to encrypt the secret.
         secret (str): Secret to encrypt.
         expire (int): Number of days the secret will be stored.
+        tries (int): Number of tries to read the secret before it gets deleted.
+        haveibeenpwned (bool): Passphrase has been checked with haveibeenpwned.
 
     """
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -113,9 +123,12 @@ def create_secret(passphrase, secret, expire):
 
     slug = _generate_unique_slug()
     Entries.create(slug_link=slug,
-                   encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
+                   encrypted_text=Secret(secret.encode(),
+                                         passphrase).encrypt(),
                    date_created=now,
-                   date_expires=expiration_date)
+                   date_expires=expiration_date,
+                   tries=tries,
+                   haveibeenpwned=haveibeenpwned)
 
     app.logger.info(f"{slug} created and expires on {expiration_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()
