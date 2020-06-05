@@ -1,0 +1,93 @@
+swagger: '2.0'
+info:
+  description: Keep secrets out of emails and chat logs, share them using secure links with passphrase and expiration dates.
+  version: 1.0.0
+  title: Shhh API documentation
+  contact:
+    email: mpetiteau.pro@gmail.com
+  license:
+    name: MIT
+    url: https://github.com/smallwat3r/shhh/blob/master/LICENSE
+
+externalDocs:
+  description: Source code repository
+  url: https://github.com/smallwat3r/shhh
+
+paths:
+  /api/c:
+    post:
+      tags:
+      - create
+      summary: Create a secret
+      operationId: createSecret
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: payload
+        description: Secret
+        schema:
+          $ref: '#/definitions/createSecret'
+      responses:
+        201:
+          description: secret created
+        422:
+          description: error in request paramaters
+  /api/r:
+    get:
+      tags:
+      - read
+      summary: Read a secret
+      operationId: readSecret
+      produces:
+      - application/json
+      parameters:
+        - in: query
+          type: string
+          name: slug
+          description: slug id of the secret
+        - in: query
+          name: passphrase
+          type: string
+          description: passphrase to decrypt the secret
+      responses:
+        200:
+          description: valid response
+        401:
+          description: passphrase not valid
+        404:
+          description: no secret not found
+        422:
+          description: error in request paramaters
+definitions:
+  createSecret:
+    type: object
+    required:
+    - secret
+    - passphrase
+    properties:
+      secret:
+        type: string
+        description: secret message to encrypt (max. 150 chars)
+        example: "This is a secret message"
+      passphrase:
+        type: string
+        description: passphrase to open the secret (min. 8 chars, 1 uppercase, 1 number)
+        example: "HuDgde723g8f"
+      days:
+        type: integer
+        default: 3
+        description: number of days to keep the secret alive (min. 1, max. 7)
+        example: 3
+      tries:
+        type: integer
+        default: 5
+        description: number of tries to open the secret before it gets deleted (min. 3, max. 10)
+        example: 5
+      haveibeenpwned:
+        type: boolean
+        default: false
+        description: run a check of the passphrase against haveibeenpwned.com API
+        example: true
