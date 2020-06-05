@@ -79,7 +79,7 @@ def read_secret(slug, passphrase):
             f"{slug} tried to read but do not exists in database")
         return dict(status=Status.EXPIRED.value,
                     msg=("Sorry, we can't find a secret, it has expired, "
-                         "been deleted or has already been read."))
+                         "been deleted or has already been read.")), 404
 
     try:
         msg = Secret(secret.encrypted_text, passphrase).decrypt()
@@ -92,18 +92,18 @@ def read_secret(slug, passphrase):
             return dict(
                 status=Status.INVALID.value,
                 msg=("The passphrase is not valid. You've exceeded the "
-                     "number of tries and the secret has been deleted."))
+                     "number of tries and the secret has been deleted.")), 401
 
         secret.update(tries=remaining)
         app.logger.warning(f"{slug} wrong passphrase used. "
-                           f"Number of tries remaining: {remaining}")
+                           f"Number of tries remaining: {remaining}"), 401
         return dict(status=Status.INVALID.value,
                     msg=("Sorry the passphrase is not valid. "
-                         f"Number of tries remaining: {remaining}"))
+                         f"Number of tries remaining: {remaining}")), 401
 
     secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
-    return dict(status=Status.SUCCESS.value, msg=html.escape(msg))
+    return dict(status=Status.SUCCESS.value, msg=html.escape(msg)), 200
 
 
 def create_secret(passphrase, secret, expire, tries, haveibeenpwned):
@@ -137,4 +137,4 @@ def create_secret(passphrase, secret, expire, tries, haveibeenpwned):
         details="Secret successfully created.",
         slug=slug,
         link=f"{request.url_root}r/{slug}",
-        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}")
+        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}"), 201

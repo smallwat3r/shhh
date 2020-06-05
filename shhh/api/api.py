@@ -40,9 +40,9 @@ class Create(Resource):
     @json(CreateParams())
     def post(self, passphrase, secret, days=3, tries=5, haveibeenpwned=False):
         """Post request handler."""
-        response = create_secret(passphrase, secret, days, tries,
-                                 haveibeenpwned)
-        return {"response": response}
+        response, code = create_secret(passphrase, secret, days, tries,
+                                       haveibeenpwned)
+        return {"response": response}, code
 
 
 class ReadParams(Schema):
@@ -58,8 +58,8 @@ class Read(Resource):
     @query(ReadParams())
     def get(self, slug, passphrase):
         """Get request handler."""
-        response = read_secret(slug, passphrase)
-        return {"response": response}
+        response, code = read_secret(slug, passphrase)
+        return {"response": response}, code
 
 
 endpoint.add_resource(Create, "/c")
