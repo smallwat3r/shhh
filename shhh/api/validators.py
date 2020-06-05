@@ -1,4 +1,3 @@
-# pylint: disable=unused-argument
 import enum
 import re
 
@@ -21,7 +20,7 @@ class Status(enum.Enum):
 
 
 @parser.error_handler
-def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
+def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):  # pylint: disable=unused-argument
     """Handle request parsing errors."""
     abort(422, response=dict(details=err.messages, status=Status.ERROR.value))
 
