@@ -1,4 +1,5 @@
 import inspect
+from typing import Tuple
 
 from flask import current_app as app
 from flask import redirect
@@ -15,6 +16,7 @@ def qs_to_args(f):
     querystring. Check that the query keys are matching the args.
 
     """
+
     def wrapper(*args, **kwargs):
 
         if sorted(inspect.getfullargspec(f).args) != sorted(
@@ -26,32 +28,32 @@ def qs_to_args(f):
 
 
 @app.route("/")
-def create():
+def create() -> str:
     """View to create a secret."""
     return rt("create.html")
 
 
 @app.route("/c")
 @qs_to_args
-def created(link, expires_on):
+def created(link: str, expires_on: str) -> str:
     """View to see the link for the created secret."""
     return rt("created.html", link=link, expires_on=expires_on)
 
 
 @app.route("/r/<slug>")
-def read(slug):
+def read(slug: str) -> str:
     """View to read a secret."""
     return rt("read.html", slug=slug)
 
 
 @app.errorhandler(404)
-def not_found(error):
+def not_found(error: str) -> Tuple[str, int]:
     """404 handler."""
     return rt("404.html", error=error), 404
 
 
 @app.route("/robots.txt")
-def robots():
+def robots() -> str:
     """Robots handler."""
     return send_from_directory(app.static_folder, request.path[1:])
 

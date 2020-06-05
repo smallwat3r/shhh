@@ -1,5 +1,6 @@
 # pylint: disable=no-self-use,too-many-arguments
 import functools
+from typing import Dict, Tuple
 
 from marshmallow import Schema, fields, validates_schema
 from flask import Blueprint
@@ -38,7 +39,12 @@ class CreateParams(Schema):
 class Create(Resource):
     """/api/c Create secret API."""
     @json(CreateParams())
-    def post(self, passphrase, secret, days=3, tries=5, haveibeenpwned=False):
+    def post(self,
+             passphrase: str,
+             secret: str,
+             days: int = 3,
+             tries: int = 5,
+             haveibeenpwned: bool = False) -> Tuple[Dict, int]:
         """Post request handler."""
         response, code = create_secret(passphrase, secret, days, tries,
                                        haveibeenpwned)
@@ -56,7 +62,7 @@ class ReadParams(Schema):
 class Read(Resource):
     """/api/r Read secret API."""
     @query(ReadParams())
-    def get(self, slug, passphrase):
+    def get(self, slug: str, passphrase: str) -> Tuple[Dict, int]:
         """Get request handler."""
         response, code = read_secret(slug, passphrase)
         return {"response": response}, code

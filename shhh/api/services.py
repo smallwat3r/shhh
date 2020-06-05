@@ -1,19 +1,18 @@
 import html
 import secrets
-
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime, timedelta, timezone
-
-from flask import current_app as app
-from flask import request
+from typing import Dict, Tuple
 
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from flask import current_app as app
+from flask import request
 
-from shhh.models import Entries
 from shhh.api.validators import Status
+from shhh.models import Entries
 
 
 class Secret:
@@ -21,11 +20,11 @@ class Secret:
 
     __slots__ = ("secret", "passphrase")
 
-    def __init__(self, secret, passphrase):
+    def __init__(self, secret: bytes, passphrase: str):
         self.secret = secret
         self.passphrase = passphrase
 
-    def __derive_key(self, salt, iterations):
+    def __derive_key(self, salt: bytes, iterations: int) -> bytes:
         """Derive a secret key from a given passphrase and salt."""
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(),
                          length=32,
@@ -34,7 +33,7 @@ class Secret:
                          backend=default_backend())
         return urlsafe_b64encode(kdf.derive(self.passphrase.encode()))
 
-    def encrypt(self, iterations=100_000):
+    def encrypt(self, iterations: int = 100_000) -> bytes:
         """Encrypt secret."""
         salt = secrets.token_bytes(16)
         key = self.__derive_key(salt, iterations)
@@ -42,7 +41,7 @@ class Secret:
             b"%b%b%b" % (salt, iterations.to_bytes(4, "big"),
                          urlsafe_b64decode(Fernet(key).encrypt(self.secret))))
 
-    def decrypt(self):
+    def decrypt(self) -> str:
         """Decrypt secret."""
         decoded = urlsafe_b64decode(self.secret)
         salt, iteration, message = (decoded[:16], decoded[16:20],
@@ -52,7 +51,7 @@ class Secret:
         return Fernet(key).decrypt(message).decode("utf-8")
 
 
-def _generate_unique_slug():
+def _generate_unique_slug() -> str:
     """Generates a unique slug link.
 
     This function will loop recursively on itself to make sure the slug
@@ -65,7 +64,7 @@ def _generate_unique_slug():
     return _generate_unique_slug()
 
 
-def read_secret(slug, passphrase):
+def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
     """Read a secret.
 
     Args:
@@ -106,7 +105,8 @@ def read_secret(slug, passphrase):
     return dict(status=Status.SUCCESS.value, msg=html.escape(msg)), 200
 
 
-def create_secret(passphrase, secret, expire, tries, haveibeenpwned):
+def create_secret(passphrase: str, secret: str, expire: int, tries: int,
+                  haveibeenpwned: bool) -> Tuple[Dict, int]:
     """Create a secret.
 
     Args:
@@ -137,4 +137,5 @@ def create_secret(passphrase, secret, expire, tries, haveibeenpwned):
         details="Secret successfully created.",
         slug=slug,
         link=f"{request.url_root}r/{slug}",
-        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}"), 201
+        expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}"
+    ), 201

@@ -178,21 +178,13 @@ access:
 
 </details>
 
-## Run the tests
+## Run the checks
 
-You can run the tests using:  
 ```sh
-make tests
-```
-
-Run Pylint report using:  
-```sh
-make lint
-```
-
-Run Bandit report using:  
-```sh
-make secure
+make tests   # run tests
+make lint    # run pylint report
+make secure  # run bandit report
+make mypy    # run mypy report
 ```
 
 ## Credits

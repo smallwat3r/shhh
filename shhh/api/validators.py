@@ -27,7 +27,7 @@ def handle_parsing_error(err, req, schema, *, error_status_code,
     abort(422, response=dict(details=err.messages, status=Status.ERROR.value))
 
 
-def validate_strength(passphrase):
+def validate_strength(passphrase: str) -> None:
     """Passphrase strength validation handler.
 
     Minimum 8 characters containing at least one number and one uppercase.
@@ -41,13 +41,13 @@ def validate_strength(passphrase):
                 "1 number and 1 uppercase.")
 
 
-def validate_haveibeenpwned(passphrase):
+def validate_haveibeenpwned(passphrase: str) -> None:
     """Validate passphrase against haveibeenpwned API."""
     try:
         times_pwned = utils.pwned_password(passphrase)
     except Exception as err:  # pylint: disable=broad-except
         app.logger.error(err)
-        times_pwned = None  # don't break if service isn't reachable.
+        times_pwned = False  # don't break if service isn't reachable.
 
     if times_pwned:
         raise ValidationError(
@@ -55,7 +55,7 @@ def validate_haveibeenpwned(passphrase):
             "(haveibeenpwned.com), please chose another one.")
 
 
-def validate_secret(secret):
+def validate_secret(secret: str) -> None:
     """Secret validation handler."""
     if not secret:
         raise ValidationError("Missing a secret to encrypt.")
@@ -64,13 +64,13 @@ def validate_secret(secret):
             "The secret needs to have less than 150 characters.")
 
 
-def validate_passphrase(passphrase):
+def validate_passphrase(passphrase: str) -> None:
     """Passphrase validation handler."""
     if not passphrase:
         raise ValidationError("Missing a passphrase.")
 
 
-def validate_days(days):
+def validate_days(days: int) -> None:
     """Expiration validation handler."""
     if days == 0:
         raise ValidationError(
@@ -80,7 +80,7 @@ def validate_days(days):
             "The maximum number of days to keep the secret alive is 7.")
 
 
-def validate_tries(tries):
+def validate_tries(tries: int) -> None:
     """Maximum tries validation handler."""
     if tries < 3:
         raise ValidationError(
@@ -90,7 +90,7 @@ def validate_tries(tries):
             "The maximum number of tries to decrypt the secret is 10.")
 
 
-def validate_slug(slug):
+def validate_slug(slug: str) -> None:
     """Link validation handler."""
     if not slug:
         raise ValidationError("Missing a secret link.")

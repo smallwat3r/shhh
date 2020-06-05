@@ -10,6 +10,8 @@ help:
 	@echo "  Run tests"
 	@echo "make lint"
 	@echo "  Run pylint"
+	@echo "make mypy"
+	@echo "  Run mypy"
 	@echo "make secure"
 	@echo "  Run bandit"
 
@@ -30,6 +32,9 @@ tests: env test-env
 
 lint: env test-env
 	@pylint --rcfile=.pylintrc shhh
+
+mypy: env test-env
+	@mypy --ignore-missing-imports shhh
 
 secure: env test-env
 	@bandit -r shhh

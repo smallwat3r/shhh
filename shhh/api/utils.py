@@ -1,9 +1,10 @@
 import hashlib
+from typing import Union
 
 import requests
 
 
-def pwned_password(passphrase):
+def pwned_password(passphrase: str) -> Union[int, bool]:
     """Check passphrase with Troy's Hunt haveibeenpwned API.
 
     Query the API to check if the passphrase has already been pwned in the

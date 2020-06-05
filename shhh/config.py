@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from shhh.scheduler import delete_expired_links
 
@@ -27,7 +28,7 @@ class DefaultConfig:
     # SqlAlchemy
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = (
+    SQLALCHEMY_DATABASE_URI: Optional[str] = (
         f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
 
