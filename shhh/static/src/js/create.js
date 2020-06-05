@@ -32,7 +32,7 @@ gId("createBtn").addEventListener("click", _ => {
       passphrase: passPhrase.value,
       days: parseInt(expiresValue.value),
       tries: parseInt(maxTries.value),
-      haveibeenpwned: haveibeenpwned.checked
+      haveibeenpwned: haveibeenpwned.checked,
     }),
     cache: "no-store",
   })

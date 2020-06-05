@@ -6,7 +6,6 @@ from flask_sqlalchemy import SQLAlchemy, Model
 
 class CRUDMixin(Model):
     """Add convenience methods for CRUD operations with SQLAlchemy."""
-
     @classmethod
     def create(cls, **kwargs):
         """Create a new record and save it the database."""

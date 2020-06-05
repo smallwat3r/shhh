@@ -34,8 +34,9 @@ in order to reveal the secret.
 The secret will be **permanently removed** from the database as soon 
 as one of these events happens:  
 
-* the expiration date has passed (max 7 days).  
-* or the receiver has decrypted the message.  
+* the expiration date has passed (max 7 days). 
+* the receiver has decrypted the message. 
+* or the amount of tries to open the secret has exceeded (max 10). 
 
 The secrets are encrypted in order to make the data anonymous, 
 especially in the database, and the passphrases are not stored 
@@ -46,13 +47,11 @@ strong iteration count (100 000)._
 
 _Tip: For added security, avoid telling in Shhh what is the use of
 the secret you're sharing. Instead, explain this in your email, and 
-copy paste the Shhh link with the passphrase so the user can retrieve
-it._  
+copy the Shhh link to it with the passphrase._  
 
 ## Is there an API?
 
 Yes, you can find some doc [here](https://github.com/smallwat3r/shhh/tree/master/shhh/api).  
-
 
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
 a Go client to interact with the Shhh API from the terminal.  

@@ -78,18 +78,30 @@ def read_secret(slug, passphrase):
         app.logger.warning(
             f"{slug} tried to read but do not exists in database")
         return dict(status=Status.EXPIRED.value,
-                    msg="Sorry the data has expired or has already been read.")
+                    msg=("Sorry, we can't find a secret, it has expired, "
+                         "been deleted or has already been read."))
+
     try:
         msg = Secret(secret.encrypted_text, passphrase).decrypt()
     except InvalidToken:
-        app.logger.warning(f"{slug} wrong passphrase used")
+        remaining = secret.tries - 1
+        if remaining == 0:
+            # Number of tries exceeded
+            app.logger.warning(f"{slug} tries to open secret exceeded")
+            secret.delete()
+            return dict(
+                status=Status.INVALID.value,
+                msg=("The passphrase is not valid. You've exceeded the "
+                     "number of tries and the secret has been deleted."))
+
+        secret.update(tries=remaining)
+        app.logger.warning(f"{slug} wrong passphrase used. "
+                           f"Number of tries remaining: {remaining}")
         return dict(status=Status.INVALID.value,
-                    msg="Sorry the passphrase is not valid.")
+                    msg=("Sorry the passphrase is not valid. "
+                         f"Number of tries remaining: {remaining}"))
 
-    # Automatically delete message from the database.
-    read = Entries.query.filter_by(slug_link=slug).first()
-    read.delete()
-
+    secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
     return dict(status=Status.SUCCESS.value, msg=html.escape(msg))
 

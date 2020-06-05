@@ -23,7 +23,7 @@ class Entries(db.Model):
     date_created = db.Column(_DateTime)
     date_expires = db.Column(_DateTime, nullable=True)
     slug_link = db.Column(db.String(20), unique=True, nullable=False)
-    tries = db.Column(db.Integer, default=3)
+    tries = db.Column(db.Integer, default=5)
     haveibeenpwned = db.Column(db.Boolean, default=False)
 
     def __repr__(self):

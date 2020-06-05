@@ -16,7 +16,6 @@ gId("decryptBtn").addEventListener("click", _ => {
   })
     .then(response => { return response.json() })
     .then(data => {
-      gId("msg").setAttribute("style", "white-space: pre;");
       switch (data.response.status) {
         case "error":
           gId("response").className = "notification is-danger pop";

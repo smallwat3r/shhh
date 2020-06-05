@@ -1,4 +1,4 @@
-# pylint: disable=no-self-use
+# pylint: disable=no-self-use,too-many-arguments
 import functools
 
 from marshmallow import Schema, fields, validates_schema
@@ -31,14 +31,14 @@ class CreateParams(Schema):
     @validates_schema
     def haveibeenpwned_checker(self, data, **kwargs):
         """Check the passphrase against haveibeenpwned if set to true."""
-        if data["haveibeenpwned"]:
+        if data.get("haveibeenpwned"):
             validators.validate_haveibeenpwned(data["passphrase"])
 
 
 class Create(Resource):
     """/api/c Create secret API."""
     @json(CreateParams())
-    def post(self, passphrase, secret, days=3, tries=5, haveibeenpwned=True):
+    def post(self, passphrase, secret, days=3, tries=5, haveibeenpwned=False):
         """Post request handler."""
         response = create_secret(passphrase, secret, days, tries,
                                  haveibeenpwned)
