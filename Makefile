@@ -1,4 +1,4 @@
-.PHONY: help dc-start dc-stop env test-env tests lint secure
+.PHONY: help dc-start dc-stop env test-env tests lint mypy secure
 
 .DEFAULT: help
 help:
