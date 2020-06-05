@@ -23,7 +23,7 @@ days | `int` | no | 3 | Number of days to keep the secret alive | min. 1, max. 7
 tries | `int` | no | 5 | Number of tries to open secret before it gets deleted | min. 3, max. 10
 haveibeenpwned | `bool` | no | false | Check passphrase against the **haveibeenpwned.com** API from Troy's Hunt before creating the secret | -
 
-**read a secret**  
+**Read a secret**  
 
 * endpoint: `/api/r`  
 * type: `GET`  
@@ -34,7 +34,8 @@ parameter | type | mandatory | default | description
 slug | `str` | yes | - | Slug id of the secret
 passphrase | `str` | yes | - | Passphrase to open the secret
 
-**Example using CURL**  
+
+### Example using CURL
 
 Create a secret  
 ```sh 
