@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
+
 {% block container %}
-<div class="field has-addons">
-  <div class="control is-expanded">
-    <input class="input" type="text" id="link" value="{{ link }}" readonly />
+  <div class="field has-addons">
+    <div class="control is-expanded">
+      <input class="input" type="text" id="link" value="{{ link }}" readonly />
+    </div>
+    <div class="control">
+      <button id="copy" class="button is-warning">copy</button>
+    </div>
   </div>
-  <div class="control">
-    <button id="copy" class="button is-warning">copy</button>
-  </div>
-</div>
-<p>
-  <span class="feather" data-feather="alert-triangle"></span>
-  Send this link <b>along with the passphrase</b> to your recipient. This link will expire on
-  <b>{{ expires_on }}.</b> Please bear in mind that as soon as the message gets decrypted,
-  <b>it will be deleted forever</b>.
-</p>
+  <p>
+    <span class="feather" data-feather="alert-triangle"></span>
+    Send this link <b>along with the passphrase</b> to your recipient. This link will expire on
+    <b>{{ expires_on }}.</b> Please bear in mind that as soon as the message gets decrypted,
+    <b>it will be deleted forever</b>.
+  </p>
 {% endblock %}
 
 {% block js %}
-<script src="{{ url_for('static', filename='dist/js/created.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='dist/js/created.min.js') }}"></script>
 {% endblock %}
