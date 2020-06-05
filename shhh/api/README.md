@@ -14,7 +14,7 @@ and 1 uppercase.
 * Max number of characters for the secret is 150.  
 * Min number of tries to open the secret is 3 and max is 10.  
 * This will query the **haveibeenpwned** API from Troy's Hunt if 
-haveibeenpwned is set to `true` to check if the passphrase has 
+`haveibeenpwned` is set to `true` to check if the passphrase has 
 already been hacked, forcing the user to chose a secure one.  
 
 **Example using CURL**  
