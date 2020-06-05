@@ -6,7 +6,7 @@ from flask import current_app as app
 from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser
 
-from shhh.api import utils
+from shhh.api import services
 
 
 @enum.unique
@@ -44,7 +44,7 @@ def validate_strength(passphrase: str) -> None:
 def validate_haveibeenpwned(passphrase: str) -> None:
     """Validate passphrase against haveibeenpwned API."""
     try:
-        times_pwned = utils.pwned_password(passphrase)
+        times_pwned = services.pwned_password(passphrase)
     except Exception as err:  # pylint: disable=broad-except
         app.logger.error(err)
         times_pwned = False  # don't break if service isn't reachable.
