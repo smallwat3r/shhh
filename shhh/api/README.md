@@ -21,7 +21,7 @@ secret | `str` | yes | - | Secret to encrypt | max. 150 chars
 passphrase | `str` | yes | - | Passphrase to open secret | min. 8 chars, 1 number, 1 uppercase
 days | `int` | no | 3 | Number of days to keep the secret alive | min. 1, max. 7
 tries | `int` | no | 5 | Number of tries to open secret before it gets deleted | min. 3, max. 10
-haveibeenpwned | `bool` | no | - | Check passphrase against the **haveibeenpwned.com** API from Troy's Hunt before creating the secret | -
+haveibeenpwned | `bool` | no | false | Check passphrase against the **haveibeenpwned.com** API from Troy's Hunt before creating the secret | -
 
 **read a secret**  
 
