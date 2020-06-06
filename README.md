@@ -107,13 +107,13 @@ CREATE DATABASE IF NOT EXISTS shhh;
 git clone https://github.com/smallwat3r/shhh.git && cd shhh
 ```
 
-You will need to set up a few environment variables. These will be 
-used to configure Flask, as well as the application connection to the 
+You will need to set up a few environment variables. We use them to 
+configure Flask, as well as the application connection to the 
 database.  
 
 Rename the file `/envs/local.dev.template` to `/envs/local.dev` and 
-fill in the missing values inside (these are the environment 
-variables to access your local Postgres database).  
+fill in the missing values inside it (these are the values needed to 
+connect to your local Postgres database).  
 
 Once done, from the root of the repository, run the below command to
 launch the flask application  
