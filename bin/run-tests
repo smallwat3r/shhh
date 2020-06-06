@@ -3,7 +3,11 @@ set -e
 
 if [[ -z $TRAVIS ]]; then
   # Local testing.
-  source env/bin/activate 2>/dev/null || ./bin/build-env; ./bin/test-deps; source env/bin/activate;
+  source env/bin/activate 2>/dev/null || {
+    ./bin/build-env
+    ./bin/test-deps
+    source env/bin/activate
+  }
   python -m unittest discover -s './tests' -p 'test_*.py' -v
 else
   # Travis will automatically post report to Codecov.
