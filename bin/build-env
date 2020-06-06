@@ -10,4 +10,7 @@ _init_env() {
     pip install -r requirements.txt >/dev/null 2>&1
   }
 }
-[[ $VIRTUAL_ENV == '' ]] && _init_env || exit 0
+
+if [[ -z $TRAVIS ]]; then
+  [[ $VIRTUAL_ENV == '' ]] && _init_env || exit 0
+fi

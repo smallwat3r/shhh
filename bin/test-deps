@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-source env/bin/activate
+if [[ -z $TRAVIS ]]; then
+  source env/bin/activate
+fi
+
 pip install -r test-requirements.txt >/dev/null 2>&1

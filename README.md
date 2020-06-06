@@ -185,6 +185,8 @@ make tests   # run tests
 make lint    # run pylint report
 make secure  # run bandit report
 make mypy    # run mypy report
+
+make checks  # run all checks
 ```
 
 ## Credits

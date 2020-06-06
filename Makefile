@@ -1,4 +1,4 @@
-.PHONY: help dc-start dc-stop env test-env tests lint mypy secure
+.PHONY: help dc-start dc-stop env test-env tests lint mypy secure checks
 
 .DEFAULT: help
 help:
@@ -38,3 +38,5 @@ mypy: env test-env
 
 secure: env test-env
 	@bandit -r shhh
+
+checks: tests lint mypy secure
