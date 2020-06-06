@@ -14,6 +14,8 @@ help:
 	@echo "  Run mypy"
 	@echo "make secure"
 	@echo "  Run bandit"
+	@echo "make checks"
+	@echo "  Run all checks"
 
 dc-stop:
 	@docker-compose -f docker-compose.yml stop;
