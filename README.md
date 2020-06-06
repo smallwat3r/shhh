@@ -133,23 +133,19 @@ export POSTGRES_DB=<database>
 export POSTGRES_USER=<username>
 export POSTGRES_PASSWORD=<password>
 export POSTGRES_PORT=<port>
-```
 
-You can now launch Shhh with:
-```sh
+# Launch the app
 flask run
-
-# or using gunicorn
-gunicorn -b :5000 -w 3 wsgi:app --preload
 ```
 
-You can now access Shhh at http://localhost:5000  
+You can now access the app at http://localhost:5000  
 
+**Note**: To make developing locally easier, and to avoid having to 
+re-set the env variables every time, you can fill in values the local
+env template at `envs/local.dev.template` and rename the file to 
+`envs/local.dev`  
 
-For easier local development you can also fill in values the env 
-template at `envs/local.dev.template` and rename it `envs/local.dev`.  
-
-And use the command below to launch a local flask server:  
+Then, run the command below to launch a local flask server
 ```
 make local
 ```
