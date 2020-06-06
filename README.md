@@ -81,8 +81,8 @@ and the list of the frontend dependencies
 
 ## How to launch Shhh locally?
 
-These methods are for development purpose only. For production / 
-public use you might want to use a more secure configuration.
+These instructions are for development purpose only. For production 
+use you might want to use a more secure configuration.
 
 <details>
 <summary><b>Launch it natively</b></summary>
@@ -102,10 +102,6 @@ CREATE DATABASE IF NOT EXISTS shhh;
 ```
 
 #### Flask  
-
-```sh 
-git clone https://github.com/smallwat3r/shhh.git && cd shhh
-```
 
 You will need to set up a few environment variables. We use them to 
 configure Flask, as well as the application connection to the 
@@ -132,9 +128,13 @@ You can now access the app at http://localhost:5000
 <details>
 <summary><b>Launch it with docker-compose</b></summary>
 
+#### deps
+
+Make sure you have `docker` and `docker-compose` installed on your
+machine.  
+
 #### docker-compose  
 
-You will need Docker and docker-compose installed on your machine.  
 From the root of the repository, run
 
 ```sh
