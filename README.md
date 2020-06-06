@@ -87,6 +87,8 @@ public use you might want to use a more secure configuration.
 <details>
 <summary><b>Launch it natively</b></summary>
 
+#### Deps  
+
 Make sure you have `make`, `yarn`, and obviously `python@3.8` 
 installed on your machine.  
 
