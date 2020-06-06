@@ -1,40 +1,46 @@
 import error_parser from "./utils/error_parser.min.js";
 
 const gId = id => document.getElementById(id);
+const decryptBtn = gId("decryptBtn");
 
-gId("decryptBtn").addEventListener("click", _ => {
-  const slug_id = gId("slugId").value;
-  const passphrase = gId("passPhrase").value;
+// Paramaters
+const slug_id = gId("slugId");
+const passphrase = gId("passPhrase");
 
-  gId("response").className = "";
-  gId("msg").textContent = "";
+const r = gId("response");
+const m = gId("msg");
 
-  // prettier-ignore
-  fetch(`/api/r?slug=${slug_id}&passphrase=${passphrase}`, {
+decryptBtn.addEventListener("click", _ => {
+  fetch(`/api/r?slug=${slug_id.value}&passphrase=${passphrase.value}`, {
     method: "GET",
     cache: "no-store",
   })
-    .then(response => { return response.json() })
+    .then(response => {
+      return response.json();
+    })
     .then(data => {
       switch (data.response.status) {
         case "error":
-          gId("response").className = "notification is-danger pop";
-          gId("msg").textContent = error_parser(data.response.details.query);
+          r.className = "notification is-danger pop";
+          m.textContent = error_parser(data.response.details.query);
           return;
         case "invalid":
-          gId("response").className = "notification is-danger pop ";
-          gId("msg").innerHTML = data.response.msg;
+          r.className = "notification is-danger pop ";
+          m.innerHTML = data.response.msg;
           return;
         case "expired":
-          gId("response").className = "notification is-warning pop";
+          r.className = "notification is-warning pop";
           break;
         case "success":
-          gId("response").className = "notification is-success pop";
+          r.className = "notification is-success pop";
           break;
       }
-      gId("passPhrase").value = "";
-      gId("passPhrase").disabled = true;
-      gId("decryptBtn").disabled = true;
-      gId("msg").innerHTML = data.response.msg;
+
+      // Disable form
+      passphrase.value = "";
+      passphrase.disabled = true;
+      decryptBtn.disabled = true;
+
+      m.innerHTML = data.response.msg;
     });
 });

@@ -1,7 +1,9 @@
 const gId = id => document.getElementById(id);
+
 const copy = gId("copy");
+const link = gId("link");
+
 copy.addEventListener("click", _ => {
-  const link = gId("link");
   link.select();
   link.setSelectionRange(0, 99999); // mobile
   document.execCommand("copy");
