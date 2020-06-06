@@ -118,7 +118,7 @@ connect to your local Postgres database).
 Once done, from the root of the repository, run the below command to
 launch the flask application  
 
-```sh
+```
 make local
 ```
 
