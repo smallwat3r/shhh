@@ -31,7 +31,10 @@ env:
 test-env:
 	@./bin/test-deps
 
-local: env
+frontend:
+	@yarn install >/dev/null
+
+local: frontend env
 	@./bin/local
 
 tests: env test-env

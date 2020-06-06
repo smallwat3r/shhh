@@ -87,10 +87,13 @@ public use you might want to use a more secure configuration.
 <details>
 <summary><b>Launch it natively</b></summary>
 
+Make sure you have `make`, `yarn`, and obviously `python@3.8` 
+installed on your machine.  
+
 #### Postgres  
 
-You will need a Postgres server running on localhost in the 
-background. Create a database named Shhh.
+You will need a Postgres server running locally in the background. 
+Create a database named `shhh`.  
 
 ```sql
 CREATE DATABASE IF NOT EXISTS shhh;
@@ -102,53 +105,25 @@ CREATE DATABASE IF NOT EXISTS shhh;
 git clone https://github.com/smallwat3r/shhh.git && cd shhh
 ```
 
-We recommend that you create a Python virtual environment for this 
-project, so you can install the required dependencies.  
-
-```sh
-python -m venv env 
-source env/bin/activate
-pip install -r requirements.txt
-pip install -r test-requirements.txt  # optional
-```
-
-Install the frontend dependencies:
-```sh
-# need yarn (brew install yarn) or (sudo apt install yarn)
-yarn install
-```
-
-Stay in the virtual environment created.  
-
-You then need to set up a few environment variables. These will be 
+You will need to set up a few environment variables. These will be 
 used to configure Flask, as well as the application connection to the 
 database.  
 
+Rename the file `/envs/local.dev.template` to `/envs/local.dev` and 
+fill in the missing values inside (these are the environment 
+variables to access your local Postgres database).  
+
+Once done, from the root of the repository, run the below command to
+launch the flask application  
+
 ```sh
-export FLASK_APP=shhh
-export FLASK_ENV=dev-local
-
-export POSTGRES_HOST=<host>
-export POSTGRES_DB=<database>
-export POSTGRES_USER=<username>
-export POSTGRES_PASSWORD=<password>
-export POSTGRES_PORT=<port>
-
-# Launch the app
-flask run
-```
-
-You can now access the app at http://localhost:5000  
-
-**Note**: To make developing locally easier, and to avoid having to 
-re-set the env variables every time, you can fill in values the local
-env template at `envs/local.dev.template` and rename the file to 
-`envs/local.dev`  
-
-Then, run the command below to launch a local flask server
-```
 make local
 ```
+
+This command will create a virtual environment and will make sure all 
+the needed dependencies are installed.  
+
+You can now access the app at http://localhost:5000  
 
 </details>
 
@@ -157,27 +132,22 @@ make local
 
 #### docker-compose  
 
-You will need Docker and docker-compose installed on your machine.
+You will need Docker and docker-compose installed on your machine.  
+From the root of the repository, run
 
 ```sh
-docker-compose up --build  # start app
-docker-compose stop        # stop app
+make dc-start  # to start the app
+made dc-stop   # to stop the app
 ```
 
-or via Makefile:
-
-```sh
-make dc-start  # start app
-made dc-stop   # stop app
-```
-
-Once the container image has finished building and starting, you can
-access:  
+Once the container image has finished building and has started, you 
+can access:  
 
 * Shhh at http://localhost:5000
-* Database records using Adminer at http://localhost:8080
+* See the database records using Adminer at http://localhost:8080
 
-Note: using docker-compose the application is running with Gunicorn.  
+Note: using docker-compose the application will be running with 
+Gunicorn.  
 
 </details>
 
