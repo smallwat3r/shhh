@@ -130,8 +130,8 @@ You can now access the app at http://localhost:5000
 
 #### deps
 
-Make sure you have `docker` and `docker-compose` installed on your
-machine.  
+Make sure you have `make`, `docker` and `docker-compose` installed on
+your machine.  
 
 #### docker-compose  
 
