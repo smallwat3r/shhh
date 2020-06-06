@@ -1,0 +1,13 @@
+# dev-docker env
+# env file for local development purposes only
+# please do not use this env file in production
+
+FLASK_ENV=dev-docker
+
+POSTGRES_HOST=db
+POSTGRES_USER=shhh
+POSTGRES_PASSWORD=dummypassword
+POSTGRES_PORT=5432
+POSTGRES_DB=shhh
+
+PGDATA=/data/postgres

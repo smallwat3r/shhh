@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Build virtual environment
 set -e
 
 _init_env() {

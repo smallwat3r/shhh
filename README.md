@@ -127,32 +127,37 @@ database.
 ```sh
 export FLASK_APP=shhh
 export FLASK_ENV=dev-local
-export FLASK_DEBUG=1
 
-export POSTGRES_HOST=localhost
-export POSTGRES_DB=shhh
+export POSTGRES_HOST=<host>
+export POSTGRES_DB=<database>
 export POSTGRES_USER=<username>
 export POSTGRES_PASSWORD=<password>
 export POSTGRES_PORT=<port>
 ```
 
-
 You can now launch Shhh with:
 ```sh
 flask run
-```
 
-or using gunicorn:
-```sh
+# or using gunicorn
 gunicorn -b :5000 -w 3 wsgi:app --preload
 ```
 
 You can now access Shhh at http://localhost:5000  
 
+
+For easier local development you can also fill in values the env 
+template at `envs/local.dev.template` and rename it `envs/local.dev`.  
+
+And use the command below to launch a local flask server:  
+```
+make local
+```
+
 </details>
 
 <details>
-<summary><b>Launch it with docker-compose (recommended)</b></summary>
+<summary><b>Launch it with docker-compose</b></summary>
 
 #### docker-compose  
 
@@ -175,6 +180,8 @@ access:
 
 * Shhh at http://localhost:5000
 * Database records using Adminer at http://localhost:8080
+
+Note: using docker-compose the application is running with Gunicorn.  
 
 </details>
 

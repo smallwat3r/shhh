@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Start a local server
+set -e
+
+_load_env() {
+  source ./envs/local.dev
+  export $(grep --regexp ^[A-Z] ./envs/local.dev | cut -d= -f1)
+}
+
+source env/bin/activate
+_load_env && flask run

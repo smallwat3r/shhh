@@ -1,4 +1,4 @@
-.PHONY: help dc-start dc-stop env test-env tests lint mypy secure checks
+.PHONY: help dc-start dc-stop env test-env tests local lint mypy secure checks
 
 .DEFAULT: help
 help:
@@ -28,6 +28,9 @@ env:
 
 test-env:
 	@./bin/test-deps
+
+local: env
+	@./bin/local
 
 tests: env test-env
 	@./bin/run-tests

@@ -7,6 +7,7 @@
 *.rdb
 
 .coverage
+envs/local.dev
 run-local.sh
 
 .mypy_cache/

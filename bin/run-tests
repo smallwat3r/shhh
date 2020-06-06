@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Run unittests
 set -e
 
 if [[ -z $TRAVIS ]]; then
