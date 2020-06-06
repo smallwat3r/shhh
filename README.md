@@ -128,12 +128,12 @@ You can now access the app at http://localhost:5000
 <details>
 <summary><b>Launch it with docker-compose</b></summary>
 
-#### deps
+#### Deps
 
 Make sure you have `make`, `docker` and `docker-compose` installed on
 your machine.  
 
-#### docker-compose  
+#### Docker
 
 From the root of the repository, run
 
