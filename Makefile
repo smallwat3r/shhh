@@ -3,9 +3,11 @@
 .DEFAULT: help
 help:
 	@echo "make dc-start"
-	@echo "  Start dev server using docker-compose."
+	@echo "  Start dev server using docker-compose"
 	@echo "make dc-stop"
-	@echo "  Stop dev docker server."
+	@echo "  Stop dev docker server"
+	@echo "make local"
+	@echo "  Run a local flask server (need envs/local.env setup)"
 	@echo "make tests"
 	@echo "  Run tests"
 	@echo "make lint"
