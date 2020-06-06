@@ -111,15 +111,15 @@ Rename the file `/envs/local.dev.template` to `/envs/local.dev` and
 fill in the missing values inside it (these are the values needed to 
 connect to your local Postgres database).  
 
-Once done, from the root of the repository, run the below command to
-launch the flask application  
+Once done, from the root of the repository, run  
 
 ```
 make local
 ```
 
-This command will create a virtual environment and will make sure all 
-the needed dependencies are installed.  
+This command will make sure a virtual environment is created and that
+all the needed dependencies are installed, and finally launch a flask
+local server  
 
 You can now access the app at http://localhost:5000  
 
