@@ -1,6 +1,6 @@
-.PHONY: help dc-start dc-stop env test-env tests local lint mypy secure checks
-
+.PHONY: help dc-start dc-stop env test-env frontend tests local lint mypy secure checks
 .DEFAULT: help
+
 help:
 	@echo "make dc-start"
 	@echo "  Start dev server using docker-compose"
