@@ -69,4 +69,4 @@ class TestValidators(unittest.TestCase):
             validate_haveibeenpwned("Hello123j0e32hf")
 
         mock_pwned.return_value = False
-        self.assertIsNone(validate_strength("cjHeW9ihf9u43f9u4b3"))
+        self.assertIsNone(validate_haveibeenpwned("cjHeW9ihf9u43f9u4b3"))
