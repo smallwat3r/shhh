@@ -1,4 +1,4 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   description: Keep secrets out of emails and chat logs, share them using secure links with passphrase and expiration dates.
   version: 1.0.0
@@ -17,19 +17,19 @@ paths:
   /api/c:
     post:
       tags:
-      - create
+        - create
       summary: Create a secret
       operationId: createSecret
       consumes:
-      - application/json
+        - application/json
       produces:
-      - application/json
+        - application/json
       parameters:
-      - in: body
-        name: payload
-        description: Secret
-        schema:
-          $ref: '#/definitions/createSecret'
+        - in: body
+          name: payload
+          description: Secret
+          schema:
+            $ref: "#/definitions/createSecret"
       responses:
         201:
           description: secret created
@@ -38,11 +38,11 @@ paths:
   /api/r:
     get:
       tags:
-      - read
+        - read
       summary: Read a secret
       operationId: readSecret
       produces:
-      - application/json
+        - application/json
       parameters:
         - in: query
           type: string
@@ -65,8 +65,8 @@ definitions:
   createSecret:
     type: object
     required:
-    - secret
-    - passphrase
+      - secret
+      - passphrase
     properties:
       secret:
         type: string
