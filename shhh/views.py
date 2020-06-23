@@ -1,6 +1,3 @@
-import inspect
-from typing import Tuple
-
 from flask import current_app as app
 from flask import redirect
 from flask import render_template as rt
@@ -10,13 +7,13 @@ from htmlmin.main import minify
 
 
 @app.route("/")
-def create() -> str:
+def create():
     """View to create a secret."""
     return rt("create.html")
 
 
 @app.route("/c")
-def created() -> str:
+def created():
     """View to see the link for the created secret."""
     link, expires_on = request.args.get("link"), request.args.get("expires_on")
     if not link or not expires_on:
@@ -25,19 +22,19 @@ def created() -> str:
 
 
 @app.route("/r/<slug>")
-def read(slug: str) -> str:
+def read(slug):
     """View to read a secret."""
     return rt("read.html", slug=slug)
 
 
 @app.errorhandler(404)
-def not_found(error: str) -> Tuple[str, int]:
+def not_found(error):
     """404 handler."""
     return rt("404.html", error=error), 404
 
 
 @app.route("/robots.txt")
-def robots() -> str:
+def robots():
     """Robots handler."""
     return send_from_directory(app.static_folder, request.path[1:])
 
