@@ -2,33 +2,43 @@
 
 {% block container %}
   <h2 class="subtitle">Decrypt a secret</h2>
-  <div class="field is-grouped">
-    <p class="control is-expanded has-icons-left">
-      <input
-        class="input"
-        name="passPhrase"
-        id="passPhrase"
-        type="text"
-        placeholder="Passphrase"
-        autocomplete="off"
-        required
-      />
-      <span class="icon is-small is-left">
-        <span class="feather" data-feather="key"></span>
-      </span>
-    </p>
-    <p class="control">
-      <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
-    </p>
-  </div>
-  <p>
+  <form
+    id="readSecret"
+    action="{{ url_for("api.read") }}"
+    method="GET"
+    autocomplete="off"
+  >
+    <div class="field is-grouped">
+      <p class="control is-expanded has-icons-left">
+        <input
+          class="input"
+          name="passphrase"
+          id="passphrase"
+          type="text"
+          placeholder="Passphrase"
+          autocomplete="off"
+          required
+        />
+        <span class="icon is-small is-left">
+          <span class="feather" data-feather="key"></span>
+        </span>
+      </p>
+      <input type="hidden" name="slug" id="slugId" value="{{ slug }}" />
+      <p class="control">
+        <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
+      </p>
+    </div>
+  </form>
+
+  <p class="mt-3">
     <span class="feather" data-feather="alert-triangle"></span>
     As soon as the message is decrypted, <b>it will be deleted forever</b>,
     make sure to save it in a <b>secure</b> place before leaving this page.
   </p>
   <br />
-  <div id="response"><b><span id="msg"></span></b></div>
-  <input id="slugId" type="hidden" value="{{ slug }}" />
+  <div id="response">
+    <b><span id="msg"></span></b>
+  </div>
 {% endblock %}
 
 {% block js %}

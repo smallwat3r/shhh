@@ -1,7 +1,5 @@
-const gId = id => document.getElementById(id);
-
-const copy = gId("copy");
-const link = gId("link");
+const copy = document.getElementById("copy");
+const link = document.getElementById("link");
 
 copy.addEventListener("click", _ => {
   link.select();

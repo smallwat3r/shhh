@@ -9,24 +9,6 @@ from flask import request, send_from_directory, url_for
 from htmlmin.main import minify
 
 
-def qs_to_args(f):
-    """Querystring to Args.
-
-    Decorator function to parse mandatory parameters in function args from
-    querystring. Check that the query keys are matching the args.
-
-    """
-
-    def wrapper(*args, **kwargs):
-
-        if sorted(inspect.getfullargspec(f).args) != sorted(
-                request.args.keys()):
-            return redirect(url_for("create"))
-        return f(**request.args)
-
-    return wrapper
-
-
 @app.route("/")
 def create() -> str:
     """View to create a secret."""
@@ -34,9 +16,11 @@ def create() -> str:
 
 
 @app.route("/c")
-@qs_to_args
-def created(link: str, expires_on: str) -> str:
+def created() -> str:
     """View to see the link for the created secret."""
+    link, expires_on = request.args.get("link"), request.args.get("expires_on")
+    if not link or not expires_on:
+        return redirect(url_for("create"))
     return rt("created.html", link=link, expires_on=expires_on)
 
 

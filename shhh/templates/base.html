@@ -39,15 +39,19 @@
               <hr />
               <div class="has-text-right">
                 <p class="has-text-justified">
-                  Secrets are stored using advanced encryption and are only available for a limited
-                  amount of time. Shhh doesn't store your passphrases. They are only used to encrypt your
-                  secrets. Encryption method used: Fernet with password, random salt value and strong
-                  iteration count (100 000).
+                  Secrets are stored using advanced encryption and are
+                  only available for a limited amount of time. Shhh
+                  doesn't store your passphrases. They are only used
+                  to encrypt your secrets. Encryption method used: Fernet
+                  with password, random salt value and strong iteration
+                  count (100 000).
                 </p>
                 <p class="has-text-justified">
-                  The project, built in Python (Flask) is open-source and available on Github, so feel free to
-                  contribute, star, fork, spread love! There is everything you need to host this app on your
-                  own private / local server if you want even more security and privacy.
+                  The project, built in Python (Flask) is open-source and
+                  available on Github, so feel free to contribute, star, fork,
+                  spread love! There is everything you need to host this app on
+                  your own private / local server if you want even more security
+                  and privacy.
                 </p>
                 <p class="help">
                   <a target="_blank" href="https://github.com/smallwat3r/shhh">
@@ -61,10 +65,10 @@
         </div>
       </div>
     </section>
+
     <script src="{{ url_for('static', filename='vendor/feather-icons/dist/feather.min.js') }}"></script>
     <script>feather.replace();</script>
 
     {% block js %}{% endblock %}
-
   </body>
 </html>

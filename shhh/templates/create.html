@@ -1,13 +1,19 @@
 {% extends 'base.html' %}
 
 {% block container %}
-  <form method="post">
+  <form
+    id="createSecret"
+    action="{{ url_for("api.create") }}"
+    method="POST"
+    autocomplete="off"
+    data-redirect="{{ url_for("created") }}"
+  >
     <p class="has-text-left">Write your secret</p>
     <div class="field">
       <div class="control">
         <textarea
           class="textarea"
-          name="inputSecret"
+          name="secret"
           id="inputSecret"
           rows="4"
           maxlength="150"
@@ -16,7 +22,7 @@
           required
         ></textarea>
       </div>
-      <p id="count" class="help has-text-right"></p>
+      <p id="counter" class="help has-text-right"></p>
     </div>
 
     <div class="columns is-mobile">
@@ -24,7 +30,7 @@
         <p class="has-text-left">Destroy in</p>
         <div class="control has-icons-left">
           <div class="select is-fullwidth">
-            <select id="expiresValue" name="expiresValue">
+            <select id="expiresValue" name="days">
               <option value="1">1 day</option>
               <option value="2">2 days</option>
               <option value="3">3 days</option>
@@ -40,7 +46,7 @@
         <p class="has-text-left">Destroy after</p>
         <div class="control has-icons-left">
           <div class="select is-fullwidth">
-            <select id="maxTries" name="maxTries">
+            <select id="maxTries" name="tries">
               <option value="3">3 tries</option>
               <option value="5">5 tries</option>
               <option value="10">10 tries</option>
@@ -58,8 +64,8 @@
       <p class="control is-expanded has-icons-left">
         <input
           class="input"
-          id="passPhrase"
-          name="passPhrase"
+          id="passphrase"
+          name="passphrase"
           type="text"
           placeholder="Passphrase"
           autocomplete="off"
@@ -70,16 +76,19 @@
         </span>
       </p>
       <div class="control">
-        <button type="button" class="button is-primary" id="createBtn">Go</button>
+        <button type="submit" class="button is-primary" id="createBtn">Go</button>
       </div>
     </div>
     <div class="field has-text-left">
-      <input class="checkbox" id="haveibeenpwned" type="checkbox" checked="checked">
+      <input class="checkbox" name="haveibeenpwned" id="haveibeenpwned" type="checkbox" checked="checked">
       <label for="haveibeenpwned">(optional) check passphrase strength using haveibeenpwned.com</label>
     </div>
   </form>
+
   <br />
-  <div id="response"><b><span id="msg"></span></b></div>
+  <div id="response">
+    <b><span id="msg"></span></b>
+  </div>
 {% endblock %}
 
 {% block js %}

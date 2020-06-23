@@ -1,60 +1,50 @@
 import error_parser from "./utils/error_parser.min.js";
 
-const gId = id => document.getElementById(id);
-const createBtn = gId("createBtn");
-
-// Parameters
-const inputSecret = gId("inputSecret");
-const passPhrase = gId("passPhrase");
-const expiresValue = gId("expiresValue");
-const maxTries = gId("maxTries");
-const haveibeenpwned = gId("haveibeenpwned");
-
-const r = gId("response");
-const m = gId("msg");
+const form = document.getElementById("createSecret");
+const resp = document.getElementById("response");
+const msg = document.getElementById("msg");
 
 // Default values
 expiresValue.value = 3;
 maxTries.value = 5;
 
-inputSecret.onkeyup = function () {
-  gId("count").textContent = "Characters left: " + (150 - this.value.length);
-};
+inputSecret.onkeyup = _ =>
+  (document.getElementById("counter").textContent =
+    "Characters left: " + (150 - inputSecret.value.length));
 
-createBtn.addEventListener("click", _ => {
-  r.className = "";
-  m.textContent = "";
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  resp.className = "";
+  msg.textContent = "";
 
-  let payload = JSON.stringify({
-    secret: inputSecret.value,
-    passphrase: passPhrase.value,
-    days: parseInt(expiresValue.value),
-    tries: parseInt(maxTries.value),
-    haveibeenpwned: haveibeenpwned.checked,
-  });
-
+  let redirect = form.getAttribute("data-redirect");
   let headers = new Headers([
     ["Content-Type", "application/json"],
     ["Accept", "application/json"],
   ]);
 
-  fetch("/api/c", {
-    method: "POST",
+  let formData = new FormData(form);
+  let object = {};
+  formData.forEach((value, key) => (object[key] = value));
+
+  fetch(form.getAttribute("action"), {
+    method: form.getAttribute("method"),
     headers: headers,
-    body: payload,
+    body: JSON.stringify(object),
     cache: "no-store",
   })
-    .then(response => {
-      return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
       switch (data.response.status) {
         case "created":
-          window.location.href = `/c?link=${data.response.link}&expires_on=${data.response.expires_on}`;
+          let params = new URLSearchParams();
+          params.set("link", data.response.link);
+          params.set("expires_on", data.response.expires_on);
+          window.location.href = `${redirect}?${params.toString()}`;
           return;
         case "error":
-          r.className = "notification is-danger pop";
-          m.textContent = error_parser(data.response.details.json);
+          resp.className = "notification is-danger pop";
+          msg.textContent = error_parser(data.response.details.json);
           return;
       }
     });
