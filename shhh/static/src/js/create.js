@@ -34,7 +34,6 @@ form.addEventListener("submit", e => {
     body: JSON.stringify(object),
     cache: "no-store",
   }).then(data => {
-    console.log(data);
     switch (data.response.status) {
       case "created":
         let params = new URLSearchParams();
