@@ -1,4 +1,5 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsmallwat3r%2Fshhh.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsmallwat3r%2Fshhh?ref=badge_shield)
 
 [![Build Status](https://travis-ci.com/smallwat3r/shhh.svg?branch=master)](https://travis-ci.com/smallwat3r/shhh)
 [![codecov](https://codecov.io/gh/smallwat3r/shhh/branch/master/graph/badge.svg)](https://codecov.io/gh/smallwat3r/shhh)
@@ -182,6 +183,9 @@ and security issues.
 
 See [LICENSE](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
 file.  
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsmallwat3r%2Fshhh.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsmallwat3r%2Fshhh?ref=badge_large)
 
 ## Contact
 
