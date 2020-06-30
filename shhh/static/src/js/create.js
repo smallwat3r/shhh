@@ -1,4 +1,5 @@
-import error_parser from "./utils/error_parser.min.js";
+import errorParser from "./utils/errorParser.min.js";
+import fetchRetry from "./utils/fetchRetry.min.js";
 
 const form = document.getElementById("createSecret");
 const resp = document.getElementById("response");
@@ -27,25 +28,23 @@ form.addEventListener("submit", e => {
   let object = {};
   formData.forEach((value, key) => (object[key] = value));
 
-  fetch(form.getAttribute("action"), {
+  fetchRetry(form.getAttribute("action"), {
     method: form.getAttribute("method"),
     headers: headers,
     body: JSON.stringify(object),
     cache: "no-store",
-  })
-    .then(response => response.json())
-    .then(data => {
-      switch (data.response.status) {
-        case "created":
-          let params = new URLSearchParams();
-          params.set("link", data.response.link);
-          params.set("expires_on", data.response.expires_on);
-          window.location.href = `${redirect}?${params.toString()}`;
-          return;
-        case "error":
-          resp.className = "notification is-danger pop";
-          msg.textContent = error_parser(data.response.details.json);
-          return;
-      }
-    });
+  }).then(data => {
+    switch (data.response.status) {
+      case "created":
+        let params = new URLSearchParams();
+        params.set("link", data.response.link);
+        params.set("expires_on", data.response.expires_on);
+        window.location.href = `${redirect}?${params.toString()}`;
+        return;
+      case "error":
+        resp.className = "notification is-danger pop";
+        msg.textContent = errorParser(data.response.details.json);
+        return;
+    }
+  });
 });

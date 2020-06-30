@@ -1,4 +1,5 @@
-import error_parser from "./utils/error_parser.min.js";
+import errorParser from "./utils/errorParser.min.js";
+import fetchRetry from "./utils/fetchRetry.min.js";
 
 const form = document.getElementById("readSecret");
 const resp = document.getElementById("response");
@@ -10,33 +11,31 @@ form.addEventListener("submit", e => {
   let endpoint = form.getAttribute("action");
   let params = new URLSearchParams(new FormData(form)).toString();
 
-  fetch(`${endpoint}?${params}`, {
+  fetchRetry(`${endpoint}?${params}`, {
     method: form.getAttribute("method"),
     cache: "no-store",
-  })
-    .then(response => response.json())
-    .then(data => {
-      switch (data.response.status) {
-        case "error":
-          resp.className = "notification is-danger pop";
-          msg.textContent = error_parser(data.response.details.query);
-          return;
-        case "invalid":
-          resp.className = "notification is-danger pop ";
-          msg.innerHTML = data.response.msg;
-          return;
-        case "expired":
-          resp.className = "notification is-warning pop";
-          break;
-        case "success":
-          msg.setAttribute("style", "white-space: pre;");
-          resp.className = "notification is-success pop";
-          break;
-      }
+  }).then(data => {
+    switch (data.response.status) {
+      case "error":
+        resp.className = "notification is-danger pop";
+        msg.textContent = errorParser(data.response.details.query);
+        return;
+      case "invalid":
+        resp.className = "notification is-danger pop ";
+        msg.innerHTML = data.response.msg;
+        return;
+      case "expired":
+        resp.className = "notification is-warning pop";
+        break;
+      case "success":
+        msg.setAttribute("style", "white-space: pre;");
+        resp.className = "notification is-success pop";
+        break;
+    }
 
-      document.getElementById("passphrase").value = "";
-      Array.from(form.elements).forEach(element => (element.disabled = true));
+    document.getElementById("passphrase").value = "";
+    Array.from(form.elements).forEach(element => (element.disabled = true));
 
-      msg.innerHTML = data.response.msg;
-    });
+    msg.innerHTML = data.response.msg;
+  });
 });
