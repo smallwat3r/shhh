@@ -1,29 +1,33 @@
 .PHONY: help dc-start dc-stop env test-env frontend tests local lint mypy secure checks
-.DEFAULT: help
 
-help:
-	@echo "make dc-start"
-	@echo "  Start dev server using docker-compose"
-	@echo "make dc-stop"
-	@echo "  Stop dev docker server"
-	@echo "make local"
-	@echo "  Run a local flask server (need envs/local.env setup)"
-	@echo "make tests"
-	@echo "  Run tests"
-	@echo "make lint"
-	@echo "  Run pylint"
-	@echo "make mypy"
-	@echo "  Run mypy"
-	@echo "make secure"
-	@echo "  Run bandit"
-	@echo "make checks"
-	@echo "  Run all checks"
+help: ## Show this help menu
+	@echo "Usage: make [TARGET ...]"
+	@echo ""
+	@grep --no-filename -E '^[a-zA-Z_%-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "%-10s %s\n", $$1, $$2}'
 
-dc-stop:
+dc-start: dc-stop  ## Start dev docker server
+	@docker-compose -f docker-compose.yml up --build -d;
+
+dc-stop: ## Stop dev docker server
 	@docker-compose -f docker-compose.yml stop;
 
-dc-start: dc-stop
-	@docker-compose -f docker-compose.yml up --build -d;
+local: frontend env ## Run a local flask server (needs envs/local.env setup)
+	@./bin/local
+
+checks: tests lint mypy secure  ## Run all checks (unit tests, pylint, mypy, bandit)
+
+tests: env test-env ## Run unit tests
+	@./bin/run-tests
+
+lint: env test-env ## Run pylint
+	@pylint --rcfile=.pylintrc shhh
+
+mypy: env test-env ## Run mypy
+	@mypy --ignore-missing-imports shhh
+
+secure: env test-env ## Run bandit
+	@bandit -r shhh
 
 env:
 	@./bin/build-env
@@ -33,20 +37,3 @@ test-env:
 
 frontend:
 	@yarn install >/dev/null
-
-local: frontend env
-	@./bin/local
-
-tests: env test-env
-	@./bin/run-tests
-
-lint: env test-env
-	@pylint --rcfile=.pylintrc shhh
-
-mypy: env test-env
-	@mypy --ignore-missing-imports shhh
-
-secure: env test-env
-	@bandit -r shhh
-
-checks: tests lint mypy secure
