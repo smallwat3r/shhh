@@ -35,13 +35,6 @@ class DefaultConfig:
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
     )
 
-    # Parameters
-    SECRET_MAX_LENGTH = 150
-
-
-
-
-
 
 class TestConfig(DefaultConfig):
     """Testing configuration."""
