@@ -2,6 +2,7 @@ import html
 import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime, timedelta, timezone
+from http import HTTPStatus
 from typing import Dict, Tuple
 
 from cryptography.fernet import Fernet, InvalidToken
@@ -86,14 +87,14 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
     if not secret:
         app.logger.warning(f"{slug} tried to read but do not exists in database")
         return (
-            dict(
-                status=Status.EXPIRED.value,
-                msg=(
+            {
+                "status": Status.EXPIRED.value,
+                "msg": (
                     "Sorry, we can't find a secret, it has expired, "
                     "been deleted or has already been read."
                 ),
-            ),
-            404,
+            },
+            HTTPStatus.NOT_FOUND.value,
         )
 
     try:
@@ -105,14 +106,14 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
             app.logger.warning(f"{slug} tries to open secret exceeded")
             secret.delete()
             return (
-                dict(
-                    status=Status.INVALID.value,
-                    msg=(
+                {
+                    "status": Status.INVALID.value,
+                    "msg": (
                         "The passphrase is not valid. You've exceeded the "
                         "number of tries and the secret has been deleted."
                     ),
-                ),
-                401,
+                },
+                HTTPStatus.UNAUTHORIZED.value,
             )
 
         secret.update(tries=remaining)
@@ -120,19 +121,22 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
             f"{slug} wrong passphrase used. " f"Number of tries remaining: {remaining}"
         )
         return (
-            dict(
-                status=Status.INVALID.value,
-                msg=(
+            {
+                "status": Status.INVALID.value,
+                "msg": (
                     "Sorry the passphrase is not valid. "
                     f"Number of tries remaining: {remaining}"
                 ),
-            ),
-            401,
+            },
+            HTTPStatus.OK.value,
         )
 
     secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
-    return dict(status=Status.SUCCESS.value, msg=html.escape(msg)), 200
+    return (
+        {"status": Status.SUCCESS.value, "msg": html.escape(msg)},
+        HTTPStatus.OK.value,
+    )
 
 
 def create_secret(
@@ -166,12 +170,12 @@ def create_secret(
     app.logger.info(f"{slug} created and expires on {expiration_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()
     return (
-        dict(
-            status=Status.CREATED.value,
-            details="Secret successfully created.",
-            slug=slug,
-            link=f"{request.url_root}r/{slug}",
-            expires_on=f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}",
-        ),
-        201,
+        {
+            "status": Status.CREATED.value,
+            "details": "Secret successfully created.",
+            "slug": slug,
+            "link": f"{request.url_root}r/{slug}",
+            "expires_on": f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}",
+        },
+        HTTPStatus.CREATED.value,
     )

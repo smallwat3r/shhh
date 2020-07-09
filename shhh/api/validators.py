@@ -1,8 +1,10 @@
+# pylint: disable=unused-argument
 import enum
 import re
+from http import HTTPStatus
 
-from flask import current_app as app
 from marshmallow import ValidationError
+from flask import current_app as app
 from webargs.flaskparser import abort, parser
 
 from shhh.api import services
@@ -20,11 +22,12 @@ class Status(enum.Enum):
 
 
 @parser.error_handler
-def handle_parsing_error(
-    err, req, schema, *, error_status_code, error_headers
-):  # pylint: disable=unused-argument
+def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
-    abort(422, response=dict(details=err.messages, status=Status.ERROR.value))
+    abort(
+        HTTPStatus.UNPROCESSABLE_ENTITY.value,
+        response=dict(details=err.messages, status=Status.ERROR.value),
+    )
 
 
 def validate_strength(passphrase: str) -> None:

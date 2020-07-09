@@ -5,7 +5,6 @@ from typing import Dict, Tuple
 from marshmallow import Schema, fields, validates_schema
 from flask import Blueprint
 from flask_restful import Api, Resource
-
 from webargs.flaskparser import use_kwargs
 
 from shhh.api import validators
