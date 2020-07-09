@@ -36,8 +36,8 @@ def pwned_password(passphrase: str) -> Union[int, bool]:
     r = requests.get(f"{endpoint}/{digest[:5]}", timeout=5)
     r.raise_for_status()
 
-    for line in r.text.split('\n'):
-        info = line.split(':')
+    for line in r.text.split("\n"):
+        info = line.split(":")
         if info[0] == digest[5:]:
             return int(info[1])
 

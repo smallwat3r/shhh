@@ -4,10 +4,15 @@ from unittest import mock
 
 from marshmallow import ValidationError
 
-from shhh.api.validators import (validate_days, validate_passphrase,
-                                 validate_secret, validate_slug,
-                                 validate_strength, validate_haveibeenpwned,
-                                 validate_tries)
+from shhh.api.validators import (
+    validate_days,
+    validate_passphrase,
+    validate_secret,
+    validate_slug,
+    validate_strength,
+    validate_haveibeenpwned,
+    validate_tries,
+)
 
 
 class TestValidators(unittest.TestCase):

@@ -8,9 +8,11 @@ class TestSecretEncryption(unittest.TestCase):
 
     secret = "I'm a secret message."
     passphrase = "SuperSecret123"
-    encrypted_text = (b"nKir73XhgyXxjwYyCG-QHQABhqCAAAAAAF6rPvPYX7OYFZRTzy"
-                      b"PdIwvdo2SFwAN0VXrfosL54nGHr0MN1YtyoNjx4t5Y6058lFvDH"
-                      b"zsnv_Q1KaGFL6adJgLLVreOZ9kt5HpwnEe_Lod5Or85Ig==")
+    encrypted_text = (
+        b"nKir73XhgyXxjwYyCG-QHQABhqCAAAAAAF6rPvPYX7OYFZRTzy"
+        b"PdIwvdo2SFwAN0VXrfosL54nGHr0MN1YtyoNjx4t5Y6058lFvDH"
+        b"zsnv_Q1KaGFL6adJgLLVreOZ9kt5HpwnEe_Lod5Or85Ig=="
+    )
 
     def test_unique_encryption(self):
         encrypted = Secret(self.secret.encode(), self.passphrase).encrypt()
@@ -22,7 +24,8 @@ class TestSecretEncryption(unittest.TestCase):
 
     def test_decryption(self):
         self.assertEqual(
-            Secret(self.encrypted_text, self.passphrase).decrypt(), self.secret)
+            Secret(self.encrypted_text, self.passphrase).decrypt(), self.secret
+        )
 
 
 if __name__ == "__main__":

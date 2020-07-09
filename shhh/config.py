@@ -11,12 +11,14 @@ class DefaultConfig:
 
     # Scheduled jobs. Delete expired database records every
     # 60 seconds.
-    JOBS = [{
-        "id": "delete_expired_links",
-        "func": delete_expired_links,
-        "trigger": "interval",
-        "seconds": 60
-    }]
+    JOBS = [
+        {
+            "id": "delete_expired_links",
+            "func": delete_expired_links,
+            "trigger": "interval",
+            "seconds": 60,
+        }
+    ]
 
     # Postgres connection.
     POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
@@ -30,7 +32,8 @@ class DefaultConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI: Optional[str] = (
         f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
+        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+    )
 
 
 class TestConfig(DefaultConfig):
@@ -41,7 +44,8 @@ class TestConfig(DefaultConfig):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = (
         "sqlite:///"
-        f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}")
+        f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
+    )
 
 
 class DockerConfig(DefaultConfig):

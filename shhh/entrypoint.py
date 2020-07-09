@@ -12,11 +12,13 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     """Application factory."""
     logging.basicConfig(
         level=logging.INFO,
-        format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
-                "[%(name)s]> %(message)s"),
-        datefmt="%a, %d %b %Y %H:%M:%S")
+        format=(
+            "[%(asctime)s] [sev %(levelno)s] [%(levelname)s] " "[%(name)s]> %(message)s"
+        ),
+        datefmt="%a, %d %b %Y %H:%M:%S",
+    )
 
-    # Disable werkzeug logging under WARNING.
+    #  Disable werkzeug logging under WARNING.
     logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
     if env == "testing":
@@ -32,8 +34,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         "heroku": "shhh.config.HerokuConfig",
         "production": "shhh.config.ProductionConfig",
     }
-    app.config.from_object(
-        configurations.get(env, "shhh.config.ProductionConfig"))
+    app.config.from_object(configurations.get(env, "shhh.config.ProductionConfig"))
 
     register_extensions(app)
 
@@ -66,21 +67,17 @@ def register_extensions(app):
 
 def compile_assets(app_assets):
     """Configure and build asset bundles."""
-    js_assets = ("create",
-                 "created",
-                 "read",
-                 "utils/errorParser",
-                 "utils/fetchRetry")
-    css_assets = ("styles", )
+    js_assets = ("create", "created", "read", "utils/errorParser", "utils/fetchRetry")
+    css_assets = ("styles",)
     for code in js_assets:
-        bundle = Bundle(f"src/js/{code}.js",
-                        filters="jsmin",
-                        output=f"dist/js/{code}.min.js")
+        bundle = Bundle(
+            f"src/js/{code}.js", filters="jsmin", output=f"dist/js/{code}.min.js"
+        )
         app_assets.register(code, bundle)
         bundle.build()
     for style in css_assets:
-        bundle = Bundle(f"src/css/{style}.css",
-                        filters="cssmin",
-                        output=f"dist/css/{style}.min.css")
+        bundle = Bundle(
+            f"src/css/{style}.css", filters="cssmin", output=f"dist/css/{style}.min.css"
+        )
         app_assets.register(style, bundle)
         bundle.build()

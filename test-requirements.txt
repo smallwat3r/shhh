@@ -1,4 +1,5 @@
-pylint
 bandit
-responses
+black
 mypy
+pylint
+responses

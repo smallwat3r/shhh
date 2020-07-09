@@ -42,6 +42,6 @@ def robots():
 @app.after_request
 def html_minify(response):
     """Minify html responses."""
-    if response.content_type == u"text/html; charset=utf-8":
+    if response.content_type == "text/html; charset=utf-8":
         response.set_data(minify(response.get_data(as_text=True)))
     return response

@@ -21,9 +21,10 @@ query = functools.partial(use_kwargs, location="query")
 class CreateParams(Schema):
     """/api/c API parameters."""
 
-    passphrase = fields.Str(required=True,
-                            validate=(validators.validate_passphrase,
-                                      validators.validate_strength))
+    passphrase = fields.Str(
+        required=True,
+        validate=(validators.validate_passphrase, validators.validate_strength),
+    )
     secret = fields.Str(required=True, validate=validators.validate_secret)
     days = fields.Int(validate=validators.validate_days)
     tries = fields.Int(validate=validators.validate_tries)
@@ -40,15 +41,16 @@ class Create(Resource):
     """/api/c Create secret API."""
 
     @json(CreateParams())
-    def post(self,
-             passphrase: str,
-             secret: str,
-             days: int = 3,
-             tries: int = 5,
-             haveibeenpwned: bool = False) -> Tuple[Dict, int]:
+    def post(
+        self,
+        passphrase: str,
+        secret: str,
+        days: int = 3,
+        tries: int = 5,
+        haveibeenpwned: bool = False,
+    ) -> Tuple[Dict, int]:
         """Post request handler."""
-        response, code = create_secret(passphrase, secret, days, tries,
-                                       haveibeenpwned)
+        response, code = create_secret(passphrase, secret, days, tries, haveibeenpwned)
         return {"response": response}, code
 
 
@@ -56,8 +58,7 @@ class ReadParams(Schema):
     """/api/r API parameters."""
 
     slug = fields.Str(required=True, validate=validators.validate_slug)
-    passphrase = fields.Str(required=True,
-                            validate=validators.validate_passphrase)
+    passphrase = fields.Str(required=True, validate=validators.validate_passphrase)
 
 
 class Read(Resource):

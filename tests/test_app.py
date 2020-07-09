@@ -15,11 +15,13 @@ from shhh.scheduler import tasks
 
 class Parse(SimpleNamespace):
     """Nested dicts to use dot notation for clarity in tests."""
+
     def __init__(self, dictionary, **kwargs):
         super().__init__(**kwargs)
         for k, v in dictionary.items():
-            self.__setattr__(k, Parse(v)) if isinstance(
-                v, dict) else self.__setattr__(k, v)
+            self.__setattr__(k, Parse(v)) if isinstance(v, dict) else self.__setattr__(
+                k, v
+            )
 
 
 class TestApplication(unittest.TestCase):
@@ -46,16 +48,20 @@ class TestApplication(unittest.TestCase):
         # Mock responses from haveibeenpwned.
         responses.add(
             responses.GET,
-            re.compile(
-                r"^(https:\/\/api\.pwnedpasswords\.com\/range\/836BA).*"),
-            body=("BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
-                  "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"))
+            re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/range\/836BA).*"),
+            body=(
+                "BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
+                "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"
+            ),
+        )
         responses.add(
             responses.GET,
-            re.compile(
-                r"^(https:\/\/api\.pwnedpasswords\.com\/)(?!.*836BA).*"),
-            body=("BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
-                  "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"))
+            re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/)(?!.*836BA).*"),
+            body=(
+                "BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
+                "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"
+            ),
+        )
 
     def tearDown(self):
         self.db.session.rollback()
@@ -68,8 +74,9 @@ class TestApplication(unittest.TestCase):
 
         # Test task will run before next minute.
         scheduled = jobs[0].next_run_time.strftime("%Y-%m-%d %H:%M:%S")
-        next_minute = (datetime.now() +
-                       timedelta(minutes=1)).strftime("%Y-%m-%d %H:%M:%S")
+        next_minute = (datetime.now() + timedelta(minutes=1)).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
         self.assertTrue(scheduled <= next_minute)
 
     def test_scheduler_job(self):
@@ -81,15 +88,17 @@ class TestApplication(unittest.TestCase):
         encrypted_text = (
             b"nKir73XhgyXxjwYyCG-QHQABhqCAAAAAAF6rPvPYX7OYFZRTzy"
             b"PdIwvdo2SFwAN0VXrfosL54nGHr0MN1YtyoNjx4t5Y6058lFvDH"
-            b"zsnv_Q1KaGFL6adJgLLVreOZ9kt5HpwnEe_Lod5Or85Ig==")
+            b"zsnv_Q1KaGFL6adJgLLVreOZ9kt5HpwnEe_Lod5Or85Ig=="
+        )
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        expired_date = datetime.strptime(
-            now, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
+        expired_date = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
 
-        Entries.create(slug_link=slug,
-                       encrypted_text=encrypted_text,
-                       date_created=now,
-                       date_expires=expired_date)
+        Entries.create(
+            slug_link=slug,
+            encrypted_text=encrypted_text,
+            date_created=now,
+            date_expires=expired_date,
+        )
 
         # Run scheduler task.
         tasks.delete_expired_links()
@@ -142,7 +151,7 @@ class TestApplication(unittest.TestCase):
         payload = {
             "secret": "secret message",
             "passphrase": "SuperSecret123",
-            "days": 12
+            "days": 12,
         }
         with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
@@ -202,16 +211,16 @@ class TestApplication(unittest.TestCase):
         payload = {
             "secret": "secret message",
             "passphrase": "Hello123",
-            "haveibeenpwned": True
+            "haveibeenpwned": True,
         }
         with self.client as c:
             with responses.RequestsMock() as rsps:
                 rsps.add(
                     responses.GET,
                     re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/).*"),
-                    body=Exception)
-                response = json.loads(
-                    c.post("/api/c", json=payload).get_data())
+                    body=Exception,
+                )
+                response = json.loads(c.post("/api/c", json=payload).get_data())
 
         # haveibeenpwned wasn't reachable, but secret still created if it has
         # all mandatory requirements.
@@ -222,7 +231,7 @@ class TestApplication(unittest.TestCase):
         payload = {
             "secret": "secret message",
             "passphrase": "heeHk3h3i0o",
-            "haveibeenpwned": False
+            "haveibeenpwned": False,
         }
 
         with self.client as c:
@@ -244,10 +253,7 @@ class TestApplication(unittest.TestCase):
         self.assertIsInstance(r.response.details.json.passphrase, list)
 
         # Long but all lowercase and no numbers.
-        payload = {
-            "secret": "secret message",
-            "passphrase": "weak_but_long_passphrase"
-        }
+        payload = {"secret": "secret message", "passphrase": "weak_but_long_passphrase"}
         with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
 
@@ -265,10 +271,7 @@ class TestApplication(unittest.TestCase):
         self.assertIsInstance(r.response.details.json.passphrase, list)
 
         # Long with numbers, but no uppercase.
-        payload = {
-            "secret": "secret message",
-            "passphrase": "long_with_number_123"
-        }
+        payload = {"secret": "secret message", "passphrase": "long_with_number_123"}
         with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
 
@@ -278,11 +281,7 @@ class TestApplication(unittest.TestCase):
 
     @responses.activate
     def test_api_post_created(self):
-        payload = {
-            "secret": "secret message",
-            "passphrase": "PhduiGUI12d",
-            "days": 3
-        }
+        payload = {"secret": "secret message", "passphrase": "PhduiGUI12d", "days": 3}
         with self.client as c:
             response = json.loads(c.post("/api/c", json=payload).get_data())
 
@@ -292,7 +291,8 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.status, "created")
         self.assertEqual(
             r.response.expires_on.split(" ")[0],
-            (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"))
+            (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"),
+        )
 
         # Test all fields in the response are correct.
         for field in ("status", "details", "slug", "link", "expires_on"):
@@ -309,8 +309,10 @@ class TestApplication(unittest.TestCase):
         with self.client as c:
             post = json.loads(c.post("/api/c", json=payload).get_data())
             response = json.loads(
-                c.get(f"/api/r?slug={post['response']['slug']}"
-                      "&passphrase=wrong").get_data())
+                c.get(
+                    f"/api/r?slug={post['response']['slug']}" "&passphrase=wrong"
+                ).get_data()
+            )
 
         # Test passphrase is invalid.
         r = Parse(response)
@@ -321,7 +323,7 @@ class TestApplication(unittest.TestCase):
         payload = {
             "secret": "secret message",
             "passphrase": "UGIUduigui12d",
-            "tries": 3
+            "tries": 3,
         }
         with self.client as c:
             post = json.loads(c.post("/api/c", json=payload).get_data())
@@ -329,8 +331,10 @@ class TestApplication(unittest.TestCase):
 
             for t in range(payload["tries"]):
                 response = json.loads(
-                    c.get(f"/api/r?slug={post['response']['slug']}"
-                          "&passphrase=wrong").get_data())
+                    c.get(
+                        f"/api/r?slug={post['response']['slug']}" "&passphrase=wrong"
+                    ).get_data()
+                )
                 r = Parse(response)
                 self.assertEqual(r.response.status, "invalid")
 
@@ -341,7 +345,8 @@ class TestApplication(unittest.TestCase):
     def test_api_get_wrong_slug(self):
         with self.client as c:
             response = json.loads(
-                c.get("/api/r?slug=hello&passphrase=wrong").get_data())
+                c.get("/api/r?slug=hello&passphrase=wrong").get_data()
+            )
 
         # Test slug doesn't exists.
         r = Parse(response)
@@ -356,8 +361,8 @@ class TestApplication(unittest.TestCase):
             post = json.loads(c.post("/api/c", json=payload).get_data())
             slug = post["response"]["slug"]
             response = json.loads(
-                c.get(f"/api/r?slug={slug}"
-                      f"&passphrase={passphrase}").get_data())
+                c.get(f"/api/r?slug={slug}" f"&passphrase={passphrase}").get_data()
+            )
 
         r = Parse(response)
         # Test if status of the request is correct.

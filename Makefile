@@ -1,4 +1,4 @@
-.PHONY: help dc-start dc-stop env test-env frontend tests local lint mypy secure checks
+.PHONY: help dc-start dc-stop env test-env frontend tests local lint mypy secure fmt checks
 
 help: ## Show this help menu
 	@echo "Usage: make [TARGET ...]"
@@ -20,7 +20,11 @@ checks: tests lint mypy secure  ## Run all checks (unit tests, pylint, mypy, ban
 tests: env test-env ## Run unit tests
 	@./bin/run-tests
 
-lint: env test-env ## Run pylint
+fmt: test-env ## Format python code with black
+	@black --line-length 88 --target-version py38 shhh
+	@black --line-length 88 --target-version py38 tests
+
+lint: test-env ## Run pylint
 	@pylint --rcfile=.pylintrc shhh
 
 mypy: env test-env ## Run mypy
