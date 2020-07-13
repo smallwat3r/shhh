@@ -102,7 +102,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
     except InvalidToken:
         remaining = secret.tries - 1
         if remaining == 0:
-            # Number of tries exceeded
+            # Number of tries exceeded, delete secret
             app.logger.warning(f"{slug} tries to open secret exceeded")
             secret.delete()
             return (
@@ -118,7 +118,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
 
         secret.update(tries=remaining)
         app.logger.warning(
-            f"{slug} wrong passphrase used. " f"Number of tries remaining: {remaining}"
+            f"{slug} wrong passphrase used. Number of tries remaining: {remaining}"
         )
         return (
             {
