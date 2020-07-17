@@ -5,7 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability)](https://codeclimate.com/github/smallwat3r/shhh/maintainability)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
 
-[![Buy me a coffee][buymeacoffee-shield]](buymeacoffee)
+[![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
 
 ## What is it?
 
