@@ -4,6 +4,7 @@
 [![codecov][codecov-shield]][codecov]
 [![Maintainability][codeclimate-shield]][codeclimate]
 [![License: MIT][license-shield]][license]
+
 [![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
 
 ## What is it?
