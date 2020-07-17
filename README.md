@@ -196,7 +196,7 @@ Please report issues or questions
 [heroku-shield]: https://www.herokucdn.com/deploy/button.svg
 [heroku]: https://heroku.com/deploy?template=https://github.com/smallwat3r/shhh
 
-[license-shied]: https://img.shields.io/badge/License-MIT-green.svg
+[license-shield]: https://img.shields.io/badge/License-MIT-green.svg
 [license]: https://github.com/smallwat3r/shhh/blob/master/LICENSE
 
 [codeclimate-shield]: https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability
