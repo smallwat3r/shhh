@@ -1,10 +1,9 @@
 ![Shhh](https://i.imgur.com/0MPGbQj.png)
 
-[![Build Status](https://travis-ci.com/smallwat3r/shhh.svg?branch=master)](https://travis-ci.com/smallwat3r/shhh)
-[![codecov](https://codecov.io/gh/smallwat3r/shhh/branch/master/graph/badge.svg)](https://codecov.io/gh/smallwat3r/shhh)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability)](https://codeclimate.com/github/smallwat3r/shhh/maintainability)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
-
+[![Build Status][travis-shield]][travis]
+[![codecov][codecov-shield]][codecov]
+[![Maintainability][codeclimate-shield]][codeclimate]
+[![License: MIT][license-shield]][license]
 [![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
 
 ## What is it?
@@ -22,7 +21,7 @@ Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
 immediately (using your own server and Postgres database, for free).  
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/smallwat3r/shhh)
+[![Deploy][heroku-shield]][heroku]
 
 ## How does it work?
 
@@ -190,5 +189,21 @@ file.
 Please report issues or questions 
 [here](https://github.com/smallwat3r/shhh/issues).  
 
+
 [buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-2.svg
 [buymeacoffee]: https://www.buymeacoffee.com/smallwat3r
+
+[heroku-shield]: https://www.herokucdn.com/deploy/button.svg
+[heroku]: https://heroku.com/deploy?template=https://github.com/smallwat3r/shhh
+
+[license-shied]: https://img.shields.io/badge/License-MIT-green.svg
+[license]: https://github.com/smallwat3r/shhh/blob/master/LICENSE
+
+[codeclimate-shield]: https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability
+[codeclimate]: https://codeclimate.com/github/smallwat3r/shhh/maintainability
+
+[codecov-shield]: https://codecov.io/gh/smallwat3r/shhh/branch/master/graph/badge.svg
+[codecov]: https://codecov.io/gh/smallwat3r/shhh
+
+[travis-shield]: https://travis-ci.com/smallwat3r/shhh.svg?branch=master
+[travis]: https://travis-ci.com/smallwat3r/shhh
