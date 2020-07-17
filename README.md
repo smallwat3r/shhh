@@ -5,9 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability)](https://codeclimate.com/github/smallwat3r/shhh/maintainability)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
 
-<a href="https://www.buymeacoffee.com/smallwat3r" rel="noreferrer noopener" target="_blank">
-  <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" >
-</a>
+[![Buy me a coffee][buymeacoffee-shield]](buymeacoffee)
 
 ## What is it?
 
@@ -191,3 +189,6 @@ file.
 
 Please report issues or questions 
 [here](https://github.com/smallwat3r/shhh/issues).  
+
+[buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-2.svg
+[buymeacoffee]: https://www.buymeacoffee.com/smallwat3r
