@@ -5,6 +5,10 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability)](https://codeclimate.com/github/smallwat3r/shhh/maintainability)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
 
+<a href="https://www.buymeacoffee.com/smallwat3r" rel="noreferrer noopener" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" >
+</a>
+
 ## What is it?
 
 **Shhh** is a tiny Flask app to create encrypted secrets and share 
@@ -186,4 +190,4 @@ file.
 ## Contact
 
 Please report issues or questions 
-[here](https://github.com/smallwat3r/shhh/issues).
+[here](https://github.com/smallwat3r/shhh/issues).  

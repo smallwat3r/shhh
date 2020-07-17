@@ -34,7 +34,7 @@ paths:
         201:
           description: secret created
         422:
-          description: error in request paramaters
+          description: error in request parameters
   /api/r:
     get:
       tags:
@@ -60,7 +60,7 @@ paths:
         404:
           description: no secret not found
         422:
-          description: error in request paramaters
+          description: error in request parameters
 definitions:
   createSecret:
     type: object
