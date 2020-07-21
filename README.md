@@ -155,6 +155,7 @@ Gunicorn.
 
 <details>
 <summary><b>Run development checks</b></summary>
+<br>
 
 You can run tests and linting / security reports using the Makefile:  
 
