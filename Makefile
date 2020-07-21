@@ -31,15 +31,18 @@ fmt: test-env ## Format python code with black
 
 lint: test-env ## Run pylint
 	@echo "Running Pylint report ..."
-	@source env/bin/activate && pylint --rcfile=.pylintrc shhh
+	@source env/bin/activate || true \
+		&& pylint --rcfile=.pylintrc shhh
 
 mypy: env test-env ## Run mypy
 	@echo "Running Mypy report ..."
-	@source env/bin/activate && mypy --ignore-missing-imports shhh
+	@source env/bin/activate || true \
+		&& mypy --ignore-missing-imports shhh
 
 secure: env test-env ## Run bandit
 	@echo "Running Bandit report ..."
-	@source env/bin/activate && bandit -r shhh
+	@source env/bin/activate || true \
+		&& bandit -r shhh
 
 env:
 	@./bin/build-env
