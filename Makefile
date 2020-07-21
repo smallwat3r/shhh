@@ -1,5 +1,7 @@
 .PHONY: help dc-start dc-stop env test-env yarn tests local lint mypy secure fmt checks
 
+SHELL=/bin/bash
+
 help: ## Show this help menu
 	@echo "Usage: make [TARGET ...]"
 	@echo ""
