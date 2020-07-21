@@ -18,20 +18,26 @@ local: frontend env ## Run a local flask server (needs envs/local.env setup)
 checks: tests lint mypy secure  ## Run all checks (unit tests, pylint, mypy, bandit)
 
 tests: env test-env ## Run unit tests
+	@echo "Running tests ..."
 	@./bin/run-tests
 
 fmt: test-env ## Format python code with black
-	@black --line-length 88 --target-version py38 shhh
-	@black --line-length 88 --target-version py38 tests
+	@echo "Running Black ..."
+	@source env/bin/activate \
+		&& black --line-length 88 --target-version py38 shhh \
+		&& black --line-length 88 --target-version py38 tests
 
 lint: test-env ## Run pylint
-	@pylint --rcfile=.pylintrc shhh
+	@echo "Running Pylint report ..."
+	@source env/bin/activate && pylint --rcfile=.pylintrc shhh
 
 mypy: env test-env ## Run mypy
-	@mypy --ignore-missing-imports shhh
+	@echo "Running Mypy report ..."
+	@source env/bin/activate && mypy --ignore-missing-imports shhh
 
 secure: env test-env ## Run bandit
-	@bandit -r shhh
+	@echo "Running Bandit report ..."
+	@source env/bin/activate && bandit -r shhh
 
 env:
 	@./bin/build-env
@@ -40,4 +46,5 @@ test-env:
 	@./bin/test-deps
 
 frontend:
+	@echo "Installing yarn deps ..."
 	@yarn install >/dev/null
