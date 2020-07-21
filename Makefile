@@ -1,4 +1,4 @@
-.PHONY: help dc-start dc-stop env test-env frontend tests local lint mypy secure fmt checks
+.PHONY: help dc-start dc-stop env test-env yarn tests local lint mypy secure fmt checks
 
 help: ## Show this help menu
 	@echo "Usage: make [TARGET ...]"
@@ -12,7 +12,7 @@ dc-start: dc-stop  ## Start dev docker server
 dc-stop: ## Stop dev docker server
 	@docker-compose -f docker-compose.yml stop;
 
-local: frontend env ## Run a local flask server (needs envs/local.env setup)
+local: yarn env ## Run a local flask server (needs envs/local.env setup)
 	@./bin/local
 
 checks: tests lint mypy secure  ## Run all checks (unit tests, pylint, mypy, bandit)
@@ -45,6 +45,6 @@ env:
 test-env:
 	@./bin/test-deps
 
-frontend:
+yarn:
 	@echo "Installing yarn deps ..."
 	@yarn install >/dev/null

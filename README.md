@@ -111,7 +111,7 @@ Rename the file `/envs/local.dev.template` to `/envs/local.dev` and
 fill in the missing values inside it (these are the values needed to 
 connect to your local Postgres database).  
 
-Once done, from the root of the repository, run  
+Once done, from the root of the repository, run:  
 
 ```
 make local
@@ -119,7 +119,7 @@ make local
 
 This command will make sure a virtual environment is created and that
 all the needed dependencies are installed, and finally launch a flask
-local server  
+local server.  
 
 You can now access the app at http://localhost:5000  
 
@@ -139,7 +139,7 @@ From the root of the repository, run
 
 ```sh
 make dc-start  # to start the app
-made dc-stop   # to stop the app
+make dc-stop   # to stop the app
 ```
 
 Once the container image has finished building and has started, you 
@@ -153,16 +153,22 @@ Gunicorn.
 
 </details>
 
-## Run the checks
+<details>
+<summary><b>Run development checks</b></summary>
+
+You can run tests and linting / security reports using the Makefile:  
 
 ```sh
-make tests   # run tests
-make lint    # run pylint report
-make secure  # run bandit report
-make mypy    # run mypy report
-
 make checks  # run all checks
+
+make tests   # run tests
+make lint    # run Pylint report
+make secure  # run Bandit report
+make mypy    # run Mypy report
 ```
+
+</details>
+
 
 ## Credits
 
