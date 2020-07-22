@@ -12,7 +12,7 @@ services:
       - ./envs/docker.dev
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - postgres:/data/postgres
+      # - postgres:/data/postgres
     ports:
       - 5432:5432
 
