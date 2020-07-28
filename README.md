@@ -98,7 +98,7 @@ You will need a Postgres server running locally in the background.
 Create a database named `shhh`.  
 
 ```sql
-CREATE DATABASE IF NOT EXISTS shhh;
+CREATE DATABASE shhh;
 ```
 
 #### Flask  
