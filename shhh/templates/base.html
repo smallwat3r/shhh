@@ -19,7 +19,7 @@
       content="Keep secrets out of emails and chat logs, share them using secure links with passphrase and expiration dates."
     />
     <title>Shhh - Keep secrets out of emails and chat logs.</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='img/lock.png') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bulma/css/bulma.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/styles.min.css') }}" />
   </head>
@@ -30,7 +30,9 @@
         <div class="hero-body">
           <div class="columns is-centered">
             <div class="column is-half">
-              <a href="/"><h1 class="title">🔐 shhh</h1></a>
+              <a href="/">
+                <img width="15%" src="{{ url_for('static', filename='img/logo.png') }}" />
+              </a>
               <p>Keep secrets out of emails and chat logs.</p>
               <hr />
 
