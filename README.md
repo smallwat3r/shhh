@@ -3,10 +3,12 @@
 </p>
 <p align="center">Keep secrets out of emails and chat logs.</p>
 
+<p align="center">
 [![Build Status][travis-shield]][travis]
 [![codecov][codecov-shield]][codecov]
 [![Maintainability][codeclimate-shield]][codeclimate]
 [![License: MIT][license-shield]][license]
+</p>
 
 ## What is it?
 
