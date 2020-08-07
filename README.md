@@ -1,4 +1,6 @@
-<img align="center" width="20%" src="https://github.com/smallwat3r/shhh/blob/master/shhh/static/img/logo.png" />
+<p align="center">
+  <img width="100px" src="https://github.com/smallwat3r/shhh/blob/master/shhh/static/img/logo.png" />
+</p>
 <p align="center">Keep secrets out of emails and chat logs.</p>
 
 [![Build Status][travis-shield]][travis]
