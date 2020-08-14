@@ -26,8 +26,9 @@ class RetryingQuery(BaseQuery):
     def __iter__(self):
         for _ in range(self._retry_count):
             try:
+                db.session.rollback()
                 return super().__iter__()
-            except OperationalError as err:
+            except OperationalError:
                 app.logger.warning("Retrying to reach database...")
                 time.sleep(self._retry_sleep_interval_sec)
 
