@@ -1,17 +1,15 @@
 # pylint: disable=no-self-use,too-many-arguments
 import functools
-from typing import Dict, Tuple
 
+from flask import Blueprint, Response, jsonify, make_response
+from flask.views import MethodView
 from marshmallow import Schema, fields, validates_schema
-from flask import Blueprint
-from flask_restful import Api, Resource
 from webargs.flaskparser import use_kwargs
 
 from shhh.api import validators
 from shhh.api.utils import create_secret, read_secret
 
-api = Blueprint("api", __name__)
-endpoint = Api(api, prefix="/api")
+api = Blueprint("api", __name__, url_prefix="/api")
 
 json = functools.partial(use_kwargs, location="json")
 query = functools.partial(use_kwargs, location="query")
@@ -36,7 +34,7 @@ class CreateParams(Schema):
             validators.validate_haveibeenpwned(data["passphrase"])
 
 
-class Create(Resource):
+class Create(MethodView):
     """/api/c Create secret API."""
 
     @json(CreateParams())
@@ -47,10 +45,10 @@ class Create(Resource):
         days: int = 3,
         tries: int = 5,
         haveibeenpwned: bool = False,
-    ) -> Tuple[Dict, int]:
+    ) -> Response:
         """Post request handler."""
         response, code = create_secret(passphrase, secret, days, tries, haveibeenpwned)
-        return {"response": response}, code
+        return make_response(jsonify({"response": response}), code)
 
 
 class ReadParams(Schema):
@@ -60,15 +58,15 @@ class ReadParams(Schema):
     passphrase = fields.Str(required=True, validate=validators.validate_passphrase)
 
 
-class Read(Resource):
+class Read(MethodView):
     """/api/r Read secret API."""
 
     @query(ReadParams())
-    def get(self, slug: str, passphrase: str) -> Tuple[Dict, int]:
+    def get(self, slug: str, passphrase: str) -> Response:
         """Get request handler."""
         response, code = read_secret(slug, passphrase)
-        return {"response": response}, code
+        return make_response(jsonify({"response": response}), code)
 
 
-endpoint.add_resource(Create, "/c")
-endpoint.add_resource(Read, "/r")
+api.add_url_rule("c", view_func=Create.as_view("create"))
+api.add_url_rule("r", view_func=Read.as_view("read"))
