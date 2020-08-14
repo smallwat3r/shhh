@@ -28,12 +28,8 @@ class RetryingQuery(BaseQuery):
             try:
                 return super().__iter__()
             except OperationalError as err:
-                # Retry on these specific errors only.
-                if "could not connect" in str(err) or "SSL SYSCALL" in str(err):
-                    app.logger.warning("Retrying to reach database...")
-                    time.sleep(self._retry_sleep_interval_sec)
-                else:
-                    raise
+                app.logger.warning("Retrying to reach database...")
+                time.sleep(self._retry_sleep_interval_sec)
 
         app.logger.critical("Database couldn't be reached.")
         raise DatabaseNotReachable
