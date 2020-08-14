@@ -1,13 +1,46 @@
 # All extensions are used as singletons and initialized in application factory.
+import time
 from typing import Any, Union
+
+from flask import current_app as app
+from flask_sqlalchemy import BaseQuery, Model, SQLAlchemy
+from sqlalchemy.exc import OperationalError
 
 from flask_apscheduler import APScheduler
 from flask_assets import Environment
-from flask_sqlalchemy import SQLAlchemy, Model
+
+
+class DatabaseNotReachable(Exception):
+    """Couldn't connect to database."""
+
+
+class RetryingQuery(BaseQuery):
+    """Retry query if database isn't reachable."""
+
+    _retry_count = 5
+    _retry_sleep_interval_sec = 0.9
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __iter__(self):
+        for _ in range(self._retry_count):
+            try:
+                return super().__iter__()
+            except OperationalError as err:
+                if "could not connect to server" not in str(err):
+                    raise
+                app.logger.warning("Retrying to reach database...")
+                time.sleep(self._retry_sleep_interval_sec)
+
+        app.logger.critical("Database couldn't be reached.")
+        raise DatabaseNotReachable
 
 
 class CRUDMixin(Model):
     """Add convenience methods for CRUD operations with SQLAlchemy."""
+
+    query_class = RetryingQuery
 
     @classmethod
     def create(cls, **kwargs) -> Union[bool, Any]:
@@ -34,6 +67,6 @@ class CRUDMixin(Model):
         return commit and db.session.commit()
 
 
-db = SQLAlchemy(model_class=CRUDMixin)
+db = SQLAlchemy(model_class=CRUDMixin, query_class=RetryingQuery)
 assets = Environment()
 scheduler = APScheduler()

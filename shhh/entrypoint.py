@@ -13,7 +13,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     logging.basicConfig(
         level=logging.INFO,
         format=(
-            "[%(asctime)s] [sev %(levelno)s] [%(levelname)s] " "[%(name)s]> %(message)s"
+            "[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s"
         ),
         datefmt="%a, %d %b %Y %H:%M:%S",
     )
