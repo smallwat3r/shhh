@@ -110,7 +110,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
                 f"Number of tries remaining: {remaining}"
             ),
         }
-        return (response, HTTPStatus.OK.value)
+        return (response, HTTPStatus.UNAUTHORIZED.value)
 
     secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
