@@ -5,6 +5,8 @@ from shhh.extensions import db
 
 
 class _DateTime(db.TypeDecorator):
+    """Format datetime object before passing off to the database."""
+
     impl = db.DateTime
 
     def process_bind_param(self, value, dialect):

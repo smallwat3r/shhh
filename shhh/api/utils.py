@@ -62,19 +62,6 @@ class Secret:
         return Fernet(key).decrypt(message).decode("utf-8")
 
 
-def _generate_unique_slug() -> str:
-    """Generates a unique slug link.
-
-    This function will loop recursively on itself to make sure the slug
-    generated is unique.
-
-    """
-    slug = secrets.token_urlsafe(15)
-    if not Entries.query.filter_by(slug_link=slug).first():
-        return slug
-    return _generate_unique_slug()
-
-
 def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
     """Read a secret.
 
@@ -86,16 +73,14 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
     secret = Entries.query.filter_by(slug_link=slug).first()
     if not secret:
         app.logger.warning(f"{slug} tried to read but do not exists in database")
-        return (
-            {
-                "status": Status.EXPIRED.value,
-                "msg": (
-                    "Sorry, we can't find a secret, it has expired, "
-                    "been deleted or has already been read."
-                ),
-            },
-            HTTPStatus.NOT_FOUND.value,
-        )
+        response = {
+            "status": Status.EXPIRED.value,
+            "msg": (
+                "Sorry, we can't find a secret, it has expired, "
+                "been deleted or has already been read."
+            ),
+        }
+        return (response, HTTPStatus.NOT_FOUND.value)
 
     try:
         msg = Secret(secret.encrypted_text, passphrase).decrypt()
@@ -105,38 +90,45 @@ def read_secret(slug: str, passphrase: str) -> Tuple[Dict, int]:
             # Number of tries exceeded, delete secret
             app.logger.warning(f"{slug} tries to open secret exceeded")
             secret.delete()
-            return (
-                {
-                    "status": Status.INVALID.value,
-                    "msg": (
-                        "The passphrase is not valid. You've exceeded the "
-                        "number of tries and the secret has been deleted."
-                    ),
-                },
-                HTTPStatus.UNAUTHORIZED.value,
-            )
+            response = {
+                "status": Status.INVALID.value,
+                "msg": (
+                    "The passphrase is not valid. You've exceeded the "
+                    "number of tries and the secret has been deleted."
+                ),
+            }
+            return (response, HTTPStatus.UNAUTHORIZED.value)
 
         secret.update(tries=remaining)
         app.logger.warning(
             f"{slug} wrong passphrase used. Number of tries remaining: {remaining}"
         )
-        return (
-            {
-                "status": Status.INVALID.value,
-                "msg": (
-                    "Sorry the passphrase is not valid. "
-                    f"Number of tries remaining: {remaining}"
-                ),
-            },
-            HTTPStatus.OK.value,
-        )
+        response = {
+            "status": Status.INVALID.value,
+            "msg": (
+                "Sorry the passphrase is not valid. "
+                f"Number of tries remaining: {remaining}"
+            ),
+        }
+        return (response, HTTPStatus.OK.value)
 
     secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
-    return (
-        {"status": Status.SUCCESS.value, "msg": html.escape(msg)},
-        HTTPStatus.OK.value,
-    )
+    response = {"status": Status.SUCCESS.value, "msg": html.escape(msg)}
+    return (response, HTTPStatus.OK.value)
+
+
+def _generate_unique_slug() -> str:
+    """Generates a unique slug link.
+
+    This function will loop recursively on itself to make sure the slug
+    generated is unique.
+
+    """
+    slug = secrets.token_urlsafe(15)
+    if not Entries.query.filter_by(slug_link=slug).first():
+        return slug
+    return _generate_unique_slug()
 
 
 def create_secret(
@@ -153,29 +145,25 @@ def create_secret(
 
     """
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    expiration_date = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(
-        days=expire
-    )
+    exp_date = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(days=expire)
 
     slug = _generate_unique_slug()
     Entries.create(
         slug_link=slug,
         encrypted_text=Secret(secret.encode(), passphrase).encrypt(),
         date_created=now,
-        date_expires=expiration_date,
+        date_expires=exp_date,
         tries=tries,
         haveibeenpwned=haveibeenpwned,
     )
 
-    app.logger.info(f"{slug} created and expires on {expiration_date}")
+    app.logger.info(f"{slug} created and expires on {exp_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()
-    return (
-        {
-            "status": Status.CREATED.value,
-            "details": "Secret successfully created.",
-            "slug": slug,
-            "link": f"{request.url_root}r/{slug}",
-            "expires_on": f"{expiration_date.strftime('%Y-%m-%d at %H:%M')} {timez}",
-        },
-        HTTPStatus.CREATED.value,
-    )
+    response = {
+        "status": Status.CREATED.value,
+        "details": "Secret successfully created.",
+        "slug": slug,
+        "link": f"{request.url_root}r/{slug}",
+        "expires_on": f"{exp_date.strftime('%Y-%m-%d at %H:%M')} {timez}",
+    }
+    return (response, HTTPStatus.CREATED.value)
