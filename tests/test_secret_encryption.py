@@ -5,6 +5,7 @@ from shhh.api.utils import Secret
 
 
 class TestSecretEncryption(unittest.TestCase):
+    """Encryption testing."""
 
     secret = "I'm a secret message."
     passphrase = "SuperSecret123"

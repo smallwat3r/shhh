@@ -19,12 +19,15 @@ class Parse(SimpleNamespace):
     def __init__(self, dictionary, **kwargs):
         super().__init__(**kwargs)
         for k, v in dictionary.items():
-            self.__setattr__(k, Parse(v)) if isinstance(v, dict) else self.__setattr__(
-                k, v
-            )
+            if isinstance(v, dict):
+                self.__setattr__(k, Parse(v))
+            else:
+                self.__setattr__(k, v)
 
 
 class TestApplication(unittest.TestCase):
+    """Flask application testing."""
+
     @classmethod
     def setUpClass(cls):
         cls.app = create_app(env="testing")
@@ -119,12 +122,14 @@ class TestApplication(unittest.TestCase):
             self.assertEqual(r.status_code, 200)
 
             self.assertEqual(c.get("/r/fK6YTEVO2bvOln7pHOFi").status_code, 200)
-            # yapf: disable
             self.assertEqual(
-                c.get("/c?link=https://shhh-encrypt.herokuapp.com/r/"
-                      "z6HNg2dCcvvaOXli1z3x&expires_on=2020-05-01%20"
-                      "at%2022:28%20UTC").status_code, 200)
-            # yapf: enable
+                c.get(
+                    "/c?link=https://shhh-encrypt.herokuapp.com/r/"
+                    "z6HNg2dCcvvaOXli1z3x&expires_on=2020-05-01%20"
+                    "at%2022:28%20UTC"
+                ).status_code,
+                200,
+            )
 
             # 302
             self.assertEqual(c.get("/c?link=only").status_code, 302)
@@ -310,7 +315,7 @@ class TestApplication(unittest.TestCase):
             post = json.loads(c.post("/api/c", json=payload).get_data())
             response = json.loads(
                 c.get(
-                    f"/api/r?slug={post['response']['slug']}" "&passphrase=wrong"
+                    f"/api/r?slug={post['response']['slug']}&passphrase=wrong"
                 ).get_data()
             )
 
@@ -332,7 +337,7 @@ class TestApplication(unittest.TestCase):
             for t in range(payload["tries"]):
                 response = json.loads(
                     c.get(
-                        f"/api/r?slug={post['response']['slug']}" "&passphrase=wrong"
+                        f"/api/r?slug={post['response']['slug']}&passphrase=wrong"
                     ).get_data()
                 )
                 r = Parse(response)
@@ -361,7 +366,7 @@ class TestApplication(unittest.TestCase):
             post = json.loads(c.post("/api/c", json=payload).get_data())
             slug = post["response"]["slug"]
             response = json.loads(
-                c.get(f"/api/r?slug={slug}" f"&passphrase={passphrase}").get_data()
+                c.get(f"/api/r?slug={slug}&passphrase={passphrase}").get_data()
             )
 
         r = Parse(response)

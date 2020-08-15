@@ -16,6 +16,8 @@ from shhh.api.validators import (
 
 
 class TestValidators(unittest.TestCase):
+    """API parameter validation testing."""
+
     def test_secret(self):
         with self.assertRaises(ValidationError):
             validate_secret(None)
