@@ -1,7 +1,19 @@
 # pylint: disable=unused-argument, no-self-use, missing-function-docstring
 from datetime import datetime
 
+from sqlalchemy.ext.declarative import declared_attr
+
 from shhh.extensions import db
+
+
+class Base:
+    """Base model class."""
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    @declared_attr
+    def __tablename__(cls):  # pylint: disable=no-self-argument
+        return cls.__name__.lower()
 
 
 class _DateTime(db.TypeDecorator):
@@ -15,12 +27,9 @@ class _DateTime(db.TypeDecorator):
         return value
 
 
-class Entries(db.Model):
-    """Database model for entry links."""
+class Entries(db.Model, Base):
+    """Database model for secret entries."""
 
-    __tablename__ = "links"
-
-    id = db.Column(db.Integer, primary_key=True)
     encrypted_text = db.Column(db.LargeBinary)
     date_created = db.Column(_DateTime)
     date_expires = db.Column(_DateTime, nullable=True)
