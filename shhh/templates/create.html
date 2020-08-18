@@ -83,6 +83,8 @@
       <input class="checkbox" name="haveibeenpwned" id="haveibeenpwned" type="checkbox" checked="checked">
       <label for="haveibeenpwned">(optional) check passphrase strength using haveibeenpwned.com</label>
     </div>
+
+
   </form>
 
   <br />
@@ -92,5 +94,7 @@
 {% endblock %}
 
 {% block js %}
-  <script type="module" src="{{ url_for('static', filename='dist/js/create.min.js') }}"></script>
+  {% assets "create" %}
+    <script type="module" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
 {% endblock %}

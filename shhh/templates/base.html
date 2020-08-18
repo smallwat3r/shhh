@@ -21,7 +21,9 @@
     <title>Shhh - Keep secrets out of emails and chat logs.</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bulma/css/bulma.min.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/styles.min.css') }}" />
+    {% assets "styles" %}
+      <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
   </head>
 
   <body>

@@ -42,5 +42,7 @@
 {% endblock %}
 
 {% block js %}
-  <script type="module" src="{{ url_for('static', filename='dist/js/read.min.js') }}"></script>
+  {% assets "read" %}
+    <script type="module" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
 {% endblock %}

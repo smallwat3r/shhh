@@ -18,5 +18,7 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{{ url_for('static', filename='dist/js/created.min.js') }}"></script>
+  {% assets "created" %}
+    <script type="module" src="{{ ASSET_URL }}"></script>
+  {% endassets %}
 {% endblock %}
