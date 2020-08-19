@@ -27,9 +27,10 @@ class TestValidators(unittest.TestCase):
         self.assertIsNone(validate_secret(30 * "*"))
 
     def test_passphrase(self):
+        not_valid = (None, "")
         with self.assertRaises(ValidationError):
-            validate_passphrase(None)
-            validate_passphrase("")
+            for s in not_valid:
+                validate_passphrase(s)
 
     def test_days(self):
         not_valid = (-1, 0, 8, 10)
