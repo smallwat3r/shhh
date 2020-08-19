@@ -4,10 +4,8 @@ import re
 import unittest
 from datetime import datetime, timedelta
 from types import SimpleNamespace
-from unittest import mock
 
 import responses
-from sqlalchemy.exc import OperationalError
 
 from shhh.entrypoint import create_app
 from shhh.extensions import db, scheduler
