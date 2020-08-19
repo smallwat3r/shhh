@@ -6,11 +6,11 @@ from marshmallow import ValidationError
 
 from shhh.api.validators import (
     validate_days,
+    validate_haveibeenpwned,
     validate_passphrase,
     validate_secret,
     validate_slug,
     validate_strength,
-    validate_haveibeenpwned,
     validate_tries,
 )
 
@@ -19,10 +19,10 @@ class TestValidators(unittest.TestCase):
     """API parameter validation testing."""
 
     def test_secret(self):
+        not_valid = (None, "", 151 * "*")
         with self.assertRaises(ValidationError):
-            validate_secret(None)
-            validate_secret("")
-            validate_secret(151 * "*")
+            for s in not_valid:
+                validate_secret(s)
 
         self.assertIsNone(validate_secret(30 * "*"))
 
@@ -32,37 +32,41 @@ class TestValidators(unittest.TestCase):
             validate_passphrase("")
 
     def test_days(self):
+        not_valid = (-1, 0, 8, 10)
         with self.assertRaises(ValidationError):
-            validate_days(-1)
-            validate_days(0)
-            validate_days(8)
+            for d in not_valid:
+                validate_days(d)
 
         for d in range(1, 8):
             self.assertIsNone(validate_days(d))
 
     def test_tries(self):
+        not_valid = (-1, 0, 2, 11)
         with self.assertRaises(ValidationError):
-            validate_tries(-1)
-            validate_tries(0)
-            validate_tries(2)
-            validate_tries(11)
+            for t in not_valid:
+                validate_tries(t)
 
         for t in range(3, 11):
             self.assertIsNone(validate_tries(t))
 
     def test_slug(self):
+        not_valid = (None, "")
         with self.assertRaises(ValidationError):
-            validate_slug(None)
-            validate_slug("")
+            for s in not_valid:
+                validate_slug(s)
 
     def test_strength(self):
+        not_valid = (
+            "weak",
+            "Weak",
+            "Weak1",
+            "weak_but_long",
+            "weak_but_long_1",
+            "Weak_but_long",
+        )
         with self.assertRaises(ValidationError):
-            validate_strength("weak")
-            validate_strength("Weak")
-            validate_strength("Weak1")
-            validate_strength("weak_but_long")
-            validate_strength("weak_but_long_1")
-            validate_strength("Weak_but_long")
+            for word in not_valid:
+                validate_strength(word)
 
         self.assertIsNone(validate_strength("UPPERlower9211"))
 

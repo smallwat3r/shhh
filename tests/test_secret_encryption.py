@@ -1,6 +1,7 @@
 import unittest
 
 from cryptography.fernet import InvalidToken
+
 from shhh.api.utils import Secret
 
 
