@@ -112,7 +112,7 @@ def add_security_headers(response):
             "gyroscope 'none'; ",
             "magnetometer 'none'; ",
             "microphone 'none'; ",
-            "payment 'none';",
+            "payment 'none'; ",
             "usb 'none'",
         ),
     )
