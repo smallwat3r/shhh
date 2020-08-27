@@ -95,25 +95,10 @@ def add_security_headers(response):
     )
     response.headers.add(
         "Content-Security-Policy",
-        (
-            "default-src 'self'; ",
-            "img-src 'self'; ",
-            "object-src 'self'; ",
-            "script-src 'self'; ",
-            "style-src 'self'",
-        ),
+        "default-src 'self'; img-src 'self'; object-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'",  # pylint: disable=line-too-long
     )
     response.headers.add(
         "feature-policy",
-        (
-            "accelerometer 'none'; ",
-            "camera 'none'; ",
-            "geolocation 'none'; ",
-            "gyroscope 'none'; ",
-            "magnetometer 'none'; ",
-            "microphone 'none'; ",
-            "payment 'none'; ",
-            "usb 'none'",
-        ),
+        "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'",  # pylint: disable=line-too-long
     )
     return response
