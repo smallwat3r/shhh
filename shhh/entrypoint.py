@@ -95,7 +95,7 @@ def add_security_headers(response):
     )
     response.headers.add(
         "Content-Security-Policy",
-        "default-src 'self'; img-src 'self'; object-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'",  # pylint: disable=line-too-long
+        "default-src 'self'; img-src 'self'; object-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'",  # pylint: disable=line-too-long
     )
     response.headers.add(
         "feature-policy",
