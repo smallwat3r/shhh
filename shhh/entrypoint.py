@@ -50,6 +50,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
 
         from shhh import views  # pylint: disable=unused-import
 
+    app.after_request(add_security_headers)
     return app
 
 
@@ -81,3 +82,38 @@ def compile_assets(app_assets):
         )
         app_assets.register(style, bundle)
         bundle.build()
+
+
+def add_security_headers(response):
+    """Add required security headers."""
+    response.headers.add("X-Frame-Options", "SAMEORIGIN")
+    response.headers.add("X-Content-Type-Options", "nosniff")
+    response.headers.add("X-XSS-Protection", "1; mode=block")
+    response.headers.add("Referrer-Policy", "no-referrer-when-downgrade")
+    response.headers.add(
+        "Strict-Transport-Security", "max-age=63072000; includeSubdomains; preload"
+    )
+    response.headers.add(
+        "Content-Security-Policy",
+        (
+            "default-src 'self'; ",
+            "img-src 'self'; ",
+            "object-src 'self'; ",
+            "script-src 'self'; ",
+            "style-src 'self'",
+        ),
+    )
+    response.headers.add(
+        "feature-policy",
+        (
+            "accelerometer 'none'; ",
+            "camera 'none'; ",
+            "geolocation 'none'; ",
+            "gyroscope 'none'; ",
+            "magnetometer 'none'; ",
+            "microphone 'none'; ",
+            "payment 'none' ;",
+            "usb 'none'",
+        ),
+    )
+    return response
