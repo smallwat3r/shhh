@@ -168,8 +168,8 @@ You can run tests and linting / security reports using the Makefile:
 make checks  # run all checks
 
 make tests   # run tests
-make lint    # run Pylint report
-make secure  # run Bandit report
+make pylint  # run Pylint report
+make bandit  # run Bandit report
 make mypy    # run Mypy report
 ```
 

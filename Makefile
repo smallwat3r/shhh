@@ -1,6 +1,9 @@
-.PHONY: help dc-start dc-stop env test-env yarn tests local lint mypy secure fmt checks
+.PHONY: help dc-start dc-stop env test-env yarn tests local pylint mypy bandit fmt checks
 
 SHELL=/bin/bash
+
+SRC_DIR=shhh
+TESTS_DIR=tests
 
 help: ## Show this help menu
 	@echo "Usage: make [TARGET ...]"
@@ -17,7 +20,7 @@ dc-stop: ## Stop dev docker server
 local: yarn env ## Run a local flask server (needs envs/local.env setup)
 	@./bin/local
 
-checks: tests lint mypy secure  ## Run all checks (unit tests, pylint, mypy, bandit)
+checks: tests pylint mypy bandit  ## Run all checks (unit tests, pylint, mypy, bandit)
 
 tests: env test-env ## Run unit tests
 	@echo "Running tests ..."
@@ -26,23 +29,23 @@ tests: env test-env ## Run unit tests
 fmt: test-env ## Format python code with black
 	@echo "Running Black ..."
 	@source env/bin/activate \
-		&& black --line-length 88 --target-version py38 shhh \
-		&& black --line-length 88 --target-version py38 tests
+		&& black --line-length 88 --target-version py38 $(SRC_DIR) \
+		&& black --line-length 88 --target-version py38 $(TESTS_DIR)
 
-lint: test-env ## Run pylint
+pylint: test-env ## Run pylint
 	@echo "Running Pylint report ..."
 	@source env/bin/activate || true \
-		&& pylint --rcfile=.pylintrc shhh
+		&& pylint --rcfile=.pylintrc $(SRC_DIR)
 
 mypy: env test-env ## Run mypy
 	@echo "Running Mypy report ..."
 	@source env/bin/activate || true \
-		&& mypy --ignore-missing-imports shhh
+		&& mypy --ignore-missing-imports $(SRC_DIR)
 
-secure: env test-env ## Run bandit
+bandit: env test-env ## Run bandit
 	@echo "Running Bandit report ..."
 	@source env/bin/activate || true \
-		&& bandit -r shhh
+		&& bandit -r $(SRC_DIR)
 
 env:
 	@./bin/build-env
