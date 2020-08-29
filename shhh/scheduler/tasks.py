@@ -15,4 +15,6 @@ def delete_expired_links():
         for record in expired:
             record.delete()
             deleted += 1
-        logging.getLogger("scheduler").info(f"{deleted} expired records were deleted.")
+        logging.getLogger("scheduler").info(
+            f"{deleted} expired records have been deleted."
+        )
