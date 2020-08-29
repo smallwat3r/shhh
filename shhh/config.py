@@ -8,6 +8,7 @@ class DefaultConfig:
     """Default config values (dev-local)."""
 
     DEBUG = True
+    FORCE_HTTPS = False
 
     # Scheduled jobs. Delete expired database records every 60 seconds.
     JOBS = [
@@ -56,6 +57,7 @@ class HerokuConfig(DefaultConfig):
     """Heroku configuration (heroku)."""
 
     DEBUG = False
+    FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
@@ -64,4 +66,5 @@ class ProductionConfig(DefaultConfig):
     """Production configuration (production)."""
 
     DEBUG = False
+    FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False

@@ -2,11 +2,14 @@ import enum
 import logging
 import os
 
+from apscheduler.schedulers import SchedulerAlreadyRunningError
 from flask import Flask
-
 from flask_assets import Bundle
+from webassets.env import RegisterError
+
 from shhh.api import api
 from shhh.extensions import assets, db, scheduler
+from shhh.security import add_security_headers, force_https
 
 
 @enum.unique
@@ -50,15 +53,22 @@ def create_app(env=os.environ.get("FLASK_ENV")):
 
     with app.app_context():
         register_blueprints(app)
-
         db.create_all()
-        scheduler.start()
-
+        try:
+            scheduler.start()
+        except SchedulerAlreadyRunningError:
+            pass
         assets.manifest = False
         assets.cache = False
-        compile_assets(assets)
+        try:
+            compile_assets(assets)
+        except RegisterError:
+            pass
 
         from shhh import views  # pylint: disable=unused-import
+
+    if app.config.get("FORCE_HTTPS"):
+        app.before_request(force_https)
 
     app.after_request(add_security_headers)
     return app
@@ -73,7 +83,10 @@ def register_extensions(app):
     """Register application extensions."""
     assets.init_app(app)
     db.init_app(app)
-    scheduler.init_app(app)
+    try:
+        scheduler.init_app(app)
+    except SchedulerAlreadyRunningError:
+        pass
 
 
 def compile_assets(app_assets):
@@ -92,23 +105,3 @@ def compile_assets(app_assets):
         )
         app_assets.register(style, bundle)
         bundle.build()
-
-
-def add_security_headers(response):
-    """Add required security headers."""
-    response.headers.add("X-Frame-Options", "SAMEORIGIN")
-    response.headers.add("X-Content-Type-Options", "nosniff")
-    response.headers.add("X-XSS-Protection", "1; mode=block")
-    response.headers.add("Referrer-Policy", "no-referrer-when-downgrade")
-    response.headers.add(
-        "Strict-Transport-Security", "max-age=63072000; includeSubdomains; preload"
-    )
-    response.headers.add(
-        "Content-Security-Policy",
-        "default-src 'self'; img-src 'self'; object-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'",  # pylint: disable=line-too-long
-    )
-    response.headers.add(
-        "feature-policy",
-        "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'",  # pylint: disable=line-too-long
-    )
-    return response
