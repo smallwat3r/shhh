@@ -18,9 +18,6 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         datefmt="%a, %d %b %Y %H:%M:%S",
     )
 
-    #  Disable werkzeug logging under WARNING.
-    logging.getLogger("werkzeug").setLevel(logging.WARNING)
-
     if env == "testing":
         logging.getLogger("shhh").setLevel(logging.CRITICAL)
         logging.getLogger("apscheduler").setLevel(logging.CRITICAL)

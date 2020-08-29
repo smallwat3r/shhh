@@ -9,8 +9,7 @@ class DefaultConfig:
 
     DEBUG = True
 
-    # Scheduled jobs. Delete expired database records every
-    # 60 seconds.
+    # Scheduled jobs. Delete expired database records every 60 seconds.
     JOBS = [
         {
             "id": "delete_expired_links",
@@ -28,7 +27,7 @@ class DefaultConfig:
     POSTGRES_DB = os.environ.get("POSTGRES_DB", "shhh")
 
     # SqlAlchemy
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI: Optional[str] = (
         f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
@@ -41,7 +40,6 @@ class TestConfig(DefaultConfig):
 
     DEBUG = False
     TESTING = True
-    SQLALCHEMY_ECHO = False
     SQLALCHEMY_DATABASE_URI = (
         "sqlite:///"
         f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
