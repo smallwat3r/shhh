@@ -3,6 +3,7 @@
 # please do not use this env file in production
 
 FLASK_ENV=dev-local
+FLASK_DEBUG=1
 
 POSTGRES_HOST=
 POSTGRES_USER=
