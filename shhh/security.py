@@ -1,5 +1,4 @@
 # pylint: disable=line-too-long
-import enum
 from flask import request, redirect
 
 

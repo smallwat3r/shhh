@@ -9,8 +9,6 @@ from sqlalchemy.exc import OperationalError
 from flask_apscheduler import APScheduler
 from flask_assets import Environment
 
-from typing import Union
-
 
 class DatabaseNotReachable(Exception):
     """Couldn't connect to database."""
