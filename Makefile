@@ -18,6 +18,7 @@ dc-stop: ## Stop dev docker server
 	@docker-compose -f docker-compose.yml stop;
 
 local: yarn env ## Run a local flask server (needs envs/local.env setup)
+	@echo "Starting local server ..."
 	@./bin/local
 
 checks: tests pylint mypy bandit  ## Run all checks (unit tests, pylint, mypy, bandit)
