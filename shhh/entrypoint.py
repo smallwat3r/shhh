@@ -1,11 +1,23 @@
+import enum
 import logging
 import os
 
 from flask import Flask
-from flask_assets import Bundle
 
+from flask_assets import Bundle
 from shhh.api import api
 from shhh.extensions import assets, db, scheduler
+
+
+@enum.unique
+class EnvConfig(enum.Enum):
+    """Environment config values."""
+
+    TESTING = "testing"
+    DEV_LOCAL = "dev-local"
+    DEV_DOCKER = "dev-docker"
+    HEROKU = "heroku"
+    PRODUCTION = "production"
 
 
 def create_app(env=os.environ.get("FLASK_ENV")):
@@ -18,18 +30,18 @@ def create_app(env=os.environ.get("FLASK_ENV")):
         datefmt="%a, %d %b %Y %H:%M:%S",
     )
 
-    if env == "testing":
+    if env == EnvConfig.TESTING.value:
         logging.getLogger("shhh").setLevel(logging.CRITICAL)
         logging.getLogger("apscheduler").setLevel(logging.CRITICAL)
 
     app = Flask(__name__)
 
     configurations = {
-        "dev-local": "shhh.config.DefaultConfig",
-        "testing": "shhh.config.TestConfig",
-        "dev-docker": "shhh.config.DockerConfig",
-        "heroku": "shhh.config.HerokuConfig",
-        "production": "shhh.config.ProductionConfig",
+        EnvConfig.TESTING.value: "shhh.config.TestConfig",
+        EnvConfig.DEV_LOCAL.value: "shhh.config.DefaultConfig",
+        EnvConfig.DEV_DOCKER.value: "shhh.config.DockerConfig",
+        EnvConfig.HEROKU.value: "shhh.config.HerokuConfig",
+        EnvConfig.PRODUCTION.value: "shhh.config.ProductionConfig",
     }
     app.config.from_object(configurations.get(env, "shhh.config.ProductionConfig"))
 
