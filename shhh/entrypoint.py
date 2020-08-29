@@ -33,7 +33,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     if env == EnvConfig.TESTING.value:
         logging.getLogger("shhh").setLevel(logging.CRITICAL)
         logging.getLogger("apscheduler").setLevel(logging.CRITICAL)
-        logging.getLogger("scheduler").setLevel(logging.CRITICAL)
+        logging.getLogger("tasks").setLevel(logging.CRITICAL)
 
     app = Flask(__name__)
 
