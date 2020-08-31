@@ -1,3 +1,6 @@
+import gzip
+from io import BytesIO
+
 from flask import current_app as app
 from flask import redirect
 from flask import render_template as rt
@@ -40,8 +43,21 @@ def robots():
 
 
 @app.after_request
-def html_minify(response):
-    """Minify html responses."""
-    if response.content_type == "text/html; charset=utf-8":
+def response_handler(response):
+    """Minify HTML and use gzip compression."""
+    if response.mimetype == "text/html":
         response.set_data(minify(response.get_data(as_text=True)))
+
+    if response.content_length < 500:  # do not gzip below 500 bytes
+        return response
+
+    response.direct_passthrough = False
+
+    gzip_buffer = BytesIO()
+    gzip_file = gzip.GzipFile(mode="wb", compresslevel=6, fileobj=gzip_buffer)
+    gzip_file.write(response.get_data())
+    gzip_file.close()
+
+    response.set_data(gzip_buffer.getvalue())
+    response.headers.add("Content-Encoding", "gzip")
     return response
