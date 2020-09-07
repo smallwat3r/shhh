@@ -25,7 +25,10 @@ Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
 immediately (using your own server and Postgres database, for free).  
 
-[![Deploy][heroku-shield]][heroku]
+[![Deploy][heroku-shield]][heroku]  
+
+Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
+a Go client to interact with the Shhh API from the command line.  
 
 ## How does it work?
 
@@ -56,11 +59,7 @@ copy the Shhh link to it with the passphrase._
 
 ## Is there an API?
 
-Yes, you can find the doc [here](https://app.swaggerhub.com/apis-docs/smallwat3r/shhh-api/1.0.0).  
-
-Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
-a Go client to interact with the Shhh API from the terminal.  
-
+Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3r/shhh-api/1.0.0).  
 
 ## What's the stack?
 
