@@ -6,6 +6,6 @@
   "dependencies": {
     "bulma": "^0.9.0",
     "feather-icons": "^4.28.0",
-    "typeface-work-sans": "^0.0.72"
+    "typeface-work-sans": "^1.1.13"
   }
 }
