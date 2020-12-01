@@ -1,4 +1,4 @@
-aniso8601==8.0.0
+aniso8601==8.1.0
 APScheduler==3.6.3
 certifi==2020.11.8
 cffi==1.14.4
