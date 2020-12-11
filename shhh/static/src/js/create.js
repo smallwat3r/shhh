@@ -42,7 +42,7 @@ form.addEventListener("submit", e => {
         window.location.href = `${redirect}?${params.toString()}`;
         return;
       case "error":
-        resp.className = "notification is-danger pop";
+        resp.className = "notification is-danger pop mt-4";
         msg.textContent = errorParser(data.response.details.json);
         return;
     }

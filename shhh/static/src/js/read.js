@@ -17,19 +17,19 @@ form.addEventListener("submit", e => {
   }).then(data => {
     switch (data.response.status) {
       case "error":
-        resp.className = "notification is-danger pop";
+        resp.className = "notification is-danger pop mt-4";
         msg.textContent = errorParser(data.response.details.query);
         return;
       case "invalid":
-        resp.className = "notification is-danger pop ";
+        resp.className = "notification is-danger pop mt-4";
         msg.innerHTML = data.response.msg;
         return;
       case "expired":
-        resp.className = "notification is-warning pop";
+        resp.className = "notification is-warning pop mt-4";
         break;
       case "success":
         msg.setAttribute("style", "white-space: pre;");
-        resp.className = "notification is-success pop";
+        resp.className = "notification is-success pop mt-4";
         break;
     }
 

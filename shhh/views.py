@@ -5,8 +5,9 @@ from flask import current_app as app
 from flask import redirect
 from flask import render_template as rt
 from flask import request, send_from_directory, url_for
-
 from htmlmin.main import minify
+
+from . import __version__
 
 
 @app.route("/")
@@ -40,6 +41,12 @@ def not_found(error):
 def robots():
     """Robots handler."""
     return send_from_directory(app.static_folder, request.path[1:])
+
+
+@app.context_processor
+def context():
+    """Context data."""
+    return {"version": __version__}
 
 
 @app.after_request
