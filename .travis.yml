@@ -2,6 +2,8 @@ language: python
 python:
   - "3.8"
 script:
+  # checks run: unitests, pylint, mypy and SAST analysis with Bandit.
+  # Break if an issue is spotted in any of the above.
   - make checks
 after_success:
   - codecov
