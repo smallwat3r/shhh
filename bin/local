@@ -3,8 +3,8 @@
 set -e
 
 _load_env() {
-  source ./envs/local.dev
-  export $(grep --regexp ^[A-Z] ./envs/local.dev | cut -d= -f1)
+  source ./environments/local.dev
+  export $(grep --regexp ^[A-Z] ./environments/local.dev | cut -d= -f1)
 }
 
 source env/bin/activate

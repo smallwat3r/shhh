@@ -17,7 +17,7 @@ dc-start: dc-stop  ## Start dev docker server
 dc-stop: ## Stop dev docker server
 	@docker-compose -f docker-compose.yml stop;
 
-local: yarn env ## Run a local flask server (needs envs/local.env setup)
+local: yarn env ## Run a local flask server (needs environments/local.env setup)
 	@echo "Starting local server ..."
 	@./bin/local
 

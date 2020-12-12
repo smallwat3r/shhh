@@ -6,9 +6,11 @@
 *.pid
 *.rdb
 
+environments/
+!environments/docker.dev
+!environments/local.dev.template
+
 .coverage
-envs/local.dev
-run-local.sh
 tags
 
 .mypy_cache/

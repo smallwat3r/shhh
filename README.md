@@ -102,9 +102,9 @@ You will need to set up a few environment variables. We use them to
 configure Flask, as well as the application connection to the 
 database.  
 
-Rename the file `/envs/local.dev.template` to `/envs/local.dev` and 
-fill in the missing values inside it (these are the values needed to 
-connect to your local Postgres database).  
+Rename the file `/environments/local.dev.template` to
+`/environments/local.dev` and fill in the missing variables 
+(these are the variables needed to connect to your local Postgres database).  
 
 Once done, from the root of the repository, run:  
 
