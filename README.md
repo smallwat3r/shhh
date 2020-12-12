@@ -63,18 +63,9 @@ Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3
 
 ## What's the stack?
 
-### Core application
-* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, used as
-our Python backend web-framework.  
-* **[Postgres](https://www.postgresql.org/)** used to store only: 
-the unique links, the encrypted messages, the creation and expiration
-dates.  
-* **[Bulma](https://bulma.io/)**, the CSS framework.  
-
-
-### Tools
-* **[Adminer](https://www.adminer.org/)**, check database records.  
-
+* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, our application web-framework.  
+* **[Postgres](https://www.postgresql.org/)**, our relational database management system.  
+* **[Bulma](https://bulma.io/)**, our CSS framework.  
 
 ## What are the dependencies?
 
