@@ -63,7 +63,7 @@ Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3
 
 ## What's the stack?
 
-* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, our application web-framework.  
+* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, our Python application web-framework.  
 * **[Postgres](https://www.postgresql.org/)**, our relational database management system.  
 * **[Bulma](https://bulma.io/)**, our CSS framework.  
 
