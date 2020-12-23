@@ -232,6 +232,7 @@ class TestApplication(unittest.TestCase):
         r = Parse(response)
         self.assertEqual(r.response.status, "created")
 
+    @responses.activate
     def test_api_post_dont_check_haveibeenpwned(self):
         payload = {
             "secret": "secret message",
@@ -246,6 +247,7 @@ class TestApplication(unittest.TestCase):
         r = Parse(response)
         self.assertEqual(r.response.status, "created")
 
+    @responses.activate
     def test_api_post_check_haveibeenpwned(self):
         payload = {
             "secret": "secret message",
