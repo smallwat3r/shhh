@@ -366,7 +366,7 @@ class TestApplication(unittest.TestCase):
             post = json.loads(c.post("/api/c", json=payload).get_data())
             slug = post["response"]["slug"]
 
-            for t in range(payload["tries"]):
+            for _ in range(payload["tries"]):
                 response = json.loads(
                     c.get(f"/api/r?slug={post['response']['slug']}&passphrase=wrong").get_data()
                 )
