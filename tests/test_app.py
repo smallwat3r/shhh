@@ -248,7 +248,7 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(r.response.status, "created")
 
     @responses.activate
-    def test_api_post_check_haveibeenpwned(self):
+    def test_api_post_check_haveibeenpwned_success(self):
         payload = {
             "secret": "secret message",
             "passphrase": "heeHk3h3i0o",
@@ -261,6 +261,21 @@ class TestApplication(unittest.TestCase):
         # Secret created with check from haveibeenpwned.
         r = Parse(response)
         self.assertEqual(r.response.status, "created")
+
+    @responses.activate
+    def test_api_post_check_haveibeenpwned_failed(self):
+        payload = {
+            "secret": "secret message",
+            "passphrase": "Hello123",  # This passphrase has been pwned in the mock
+            "haveibeenpwned": True,
+        }
+
+        with self.client as c:
+            response = json.loads(c.post("/api/c", json=payload).get_data())
+
+        # Secret not created.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "error")
 
     @responses.activate
     def test_api_post_weak_passphrase(self):
