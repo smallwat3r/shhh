@@ -53,7 +53,7 @@ class TestApplication(unittest.TestCase):
             responses.GET,
             re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/range\/836BA).*"),
             body=(
-                "BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
+                "BDDC66080E01D52B8272AA9461C69EE0496:12145\n"  # Hello123
                 "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"
             ),
         )
@@ -61,7 +61,7 @@ class TestApplication(unittest.TestCase):
             responses.GET,
             re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/)(?!.*836BA).*"),
             body=(
-                "BDDC66080E01D52B8272AA9461C69EE0496:12145\n"
+                "BDDC66080E01D52B8272AA9461C69EE0496:12145\n"  # Hello123
                 "00d4f6e8fa6eecad2a3aa415eec418d38ec:2"
             ),
         )
@@ -235,7 +235,7 @@ class TestApplication(unittest.TestCase):
     def test_api_post_dont_check_haveibeenpwned(self):
         payload = {
             "secret": "secret message",
-            "passphrase": "heeHk3h3i0o",
+            "passphrase": "Hello123",  # This passphrase has been pwned in the mock
             "haveibeenpwned": False,
         }
 
@@ -243,6 +243,20 @@ class TestApplication(unittest.TestCase):
             response = json.loads(c.post("/api/c", json=payload).get_data())
 
         # Secret created without check from haveibeenpwned.
+        r = Parse(response)
+        self.assertEqual(r.response.status, "created")
+
+    def test_api_post_check_haveibeenpwned(self):
+        payload = {
+            "secret": "secret message",
+            "passphrase": "heeHk3h3i0o",
+            "haveibeenpwned": True,
+        }
+
+        with self.client as c:
+            response = json.loads(c.post("/api/c", json=payload).get_data())
+
+        # Secret created with check from haveibeenpwned.
         r = Parse(response)
         self.assertEqual(r.response.status, "created")
 
