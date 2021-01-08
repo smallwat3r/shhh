@@ -35,6 +35,12 @@ class DefaultConfig:
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
     )
 
+    # This variable can be used to specify a custom hostname to use as the
+    # domain URL when Shhh creates a secret (ex: https://mydomain.com). If not
+    # set, the hostname defaults to request.url_root, which should be fine in
+    # most cases.
+    SHHH_HOST = os.environ.get("SHHH_HOST")
+
 
 class TestConfig(DefaultConfig):
     """Testing configuration."""
@@ -45,6 +51,7 @@ class TestConfig(DefaultConfig):
         "sqlite:///"
         f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
     )
+    SHHH_HOST = "http://test.test"
 
 
 class DockerConfig(DefaultConfig):

@@ -11,7 +11,7 @@ if [[ -z $TRAVIS ]]; then
   }
   python -m unittest discover -s './tests' -p 'test_*.py' -v
 else
-  # Travis will automatically post report to Codecov.
+  # Travis will automatically post report to Codecov.
   pip install codecov
   coverage run -m unittest discover
 fi

@@ -3,6 +3,7 @@ import os
 import re
 import unittest
 from datetime import datetime, timedelta
+from urllib.parse import urlparse
 from types import SimpleNamespace
 
 import responses
@@ -329,6 +330,10 @@ class TestApplication(unittest.TestCase):
             r.response.expires_on.split(" ")[0],
             (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"),
         )
+
+        # Test the link generated is using the test SHHH_HOST variable
+        hostname = urlparse(r.response.link).netloc
+        self.assertEqual(hostname, "test.test")
 
         # Test all fields in the response are correct.
         for field in ("status", "details", "slug", "link", "expires_on"):
