@@ -159,11 +159,16 @@ def create_secret(
 
     app.logger.info(f"{slug} created and expires on {exp_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()
+
+    hostname = request.url_root
+    if app.config["SHHH_HOST"]:
+        hostname = f"{app.config['SHHH_HOST']}/"
+
     response = {
         "status": Status.CREATED.value,
         "details": "Secret successfully created.",
         "slug": slug,
-        "link": f"{request.url_root}r/{slug}",
+        "link": f"{hostname}r/{slug}",
         "expires_on": f"{exp_date.strftime('%Y-%m-%d at %H:%M')} {timez}",
     }
     return (response, HTTPStatus.CREATED.value)
