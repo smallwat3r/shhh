@@ -14,7 +14,7 @@ gunicorn==20.0.4
 htmlmin==0.1.12
 idna==2.10
 itsdangerous==1.1.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 jsmin==2.2.2
 MarkupSafe==1.1.1
 marshmallow==3.10.0
