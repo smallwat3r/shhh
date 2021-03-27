@@ -53,7 +53,7 @@ def validate_haveibeenpwned(passphrase: str) -> None:
 
     if times_pwned:
         raise ValidationError(
-            f"This password has been pwned {times_pwned} times "
+            f"This password has been pwned {times_pwned} time(s) "
             "(haveibeenpwned.com), please chose another one."
         )
 
