@@ -1,13 +1,13 @@
 # pylint: disable=no-self-use,too-many-arguments
 import functools
 
-from flask import Blueprint, Response, jsonify, make_response
+from flask import Blueprint, Response, make_response
 from flask.views import MethodView
 from marshmallow import Schema, fields, validates_schema
 from webargs.flaskparser import use_kwargs
 
 from shhh.api import validators
-from shhh.api.handlers import write_secret, read_secret
+from shhh.api.handlers import read_secret, write_secret
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -65,7 +65,7 @@ class Read(MethodView):
     def get(self, slug: str, passphrase: str) -> Response:
         """Get request handler."""
         response, code = read_secret(slug, passphrase)
-        return make_response(jsonify({"response": response}), code)
+        return make_response(response.make(), code)
 
 
 api.add_url_rule("c", view_func=Create.as_view("create"))
