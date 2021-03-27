@@ -88,7 +88,10 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
         secret.update(tries=remaining)
         app.logger.info(f"{slug} wrong passphrase used. Number of tries remaining: {remaining}")
         return (
-            ReadResponse(Status.INVALID.value, Messages.INVALID.value.format(remaining=remaining),),
+            ReadResponse(
+                Status.INVALID.value,
+                Messages.INVALID.value.format(remaining=remaining),
+            ),
             HTTPStatus.UNAUTHORIZED.value,
         )
 

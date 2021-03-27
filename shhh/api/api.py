@@ -19,7 +19,8 @@ class CreateParams(Schema):
     """/api/c API parameters."""
 
     passphrase = fields.Str(
-        required=True, validate=(validators.validate_passphrase, validators.validate_strength),
+        required=True,
+        validate=(validators.validate_passphrase, validators.validate_strength),
     )
     secret = fields.Str(required=True, validate=validators.validate_secret)
     days = fields.Int(validate=validators.validate_days)

@@ -26,7 +26,12 @@ class Status(enum.Enum):
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
     response = {"response": {"details": err.messages, "status": Status.ERROR.value}}
-    abort(make_response(jsonify(response), HTTPStatus.UNPROCESSABLE_ENTITY.value,))
+    abort(
+        make_response(
+            jsonify(response),
+            HTTPStatus.UNPROCESSABLE_ENTITY.value,
+        )
+    )
 
 
 def validate_strength(passphrase: str) -> None:

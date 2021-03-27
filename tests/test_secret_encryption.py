@@ -25,9 +25,7 @@ class TestSecretEncryption(unittest.TestCase):
             Secret(self.encrypted_text, "wrongPassphrase").decrypt()
 
     def test_decryption(self):
-        self.assertEqual(
-            Secret(self.encrypted_text, self.passphrase).decrypt(), self.secret
-        )
+        self.assertEqual(Secret(self.encrypted_text, self.passphrase).decrypt(), self.secret)
 
 
 if __name__ == "__main__":
