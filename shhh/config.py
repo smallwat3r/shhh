@@ -48,8 +48,7 @@ class TestConfig(DefaultConfig):
     DEBUG = False
     TESTING = True
     SQLALCHEMY_DATABASE_URI = (
-        "sqlite:///"
-        f"{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
+        f"sqlite:///{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
     )
     SHHH_HOST = "http://test.test"
 

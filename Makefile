@@ -30,8 +30,8 @@ tests: env test-env ## Run unit tests
 fmt: test-env ## Format python code with black
 	@echo "Running Black ..."
 	@source env/bin/activate \
-		&& black --line-length 88 --target-version py38 $(SRC_DIR) \
-		&& black --line-length 88 --target-version py38 $(TESTS_DIR)
+		&& black --line-length 100 --target-version py38 $(SRC_DIR) \
+		&& black --line-length 100 --target-version py38 $(TESTS_DIR)
 
 pylint: test-env ## Run pylint
 	@echo "Running Pylint report ..."

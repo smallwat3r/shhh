@@ -26,7 +26,12 @@ class Status(enum.Enum):
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
     response = {"response": {"details": err.messages, "status": Status.ERROR.value}}
-    abort(make_response(jsonify(response), HTTPStatus.UNPROCESSABLE_ENTITY.value,))
+    abort(
+        make_response(
+            jsonify(response),
+            HTTPStatus.UNPROCESSABLE_ENTITY.value,
+        )
+    )
 
 
 def validate_strength(passphrase: str) -> None:
@@ -39,8 +44,7 @@ def validate_strength(passphrase: str) -> None:
         regex = re.compile(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
         if not regex.search(passphrase) is not None:
             raise ValidationError(
-                "Passphrase too weak. Minimun 8 characters, including "
-                "1 number and 1 uppercase."
+                "Passphrase too weak. Minimun 8 characters, including 1 number and 1 uppercase."
             )
 
 
@@ -54,7 +58,7 @@ def validate_haveibeenpwned(passphrase: str) -> None:
 
     if times_pwned:
         raise ValidationError(
-            f"This password has been pwned {times_pwned} times "
+            f"This password has been pwned {times_pwned} time(s) "
             "(haveibeenpwned.com), please chose another one."
         )
 
@@ -76,13 +80,9 @@ def validate_passphrase(passphrase: str) -> None:
 def validate_days(days: int) -> None:
     """Expiration validation handler."""
     if days == 0:
-        raise ValidationError(
-            "The minimum number of days to keep the secret alive is 1."
-        )
+        raise ValidationError("The minimum number of days to keep the secret alive is 1.")
     if days > 7:
-        raise ValidationError(
-            "The maximum number of days to keep the secret alive is 7."
-        )
+        raise ValidationError("The maximum number of days to keep the secret alive is 7.")
 
 
 def validate_tries(tries: int) -> None:
@@ -90,9 +90,7 @@ def validate_tries(tries: int) -> None:
     if tries < 3:
         raise ValidationError("The minimum number of tries to decrypt the secret is 3.")
     if tries > 10:
-        raise ValidationError(
-            "The maximum number of tries to decrypt the secret is 10."
-        )
+        raise ValidationError("The maximum number of tries to decrypt the secret is 10.")
 
 
 def validate_slug(slug: str) -> None:

@@ -7,7 +7,7 @@ from marshmallow import Schema, fields, validates_schema
 from webargs.flaskparser import use_kwargs
 
 from shhh.api import validators
-from shhh.api.utils import create_secret, read_secret
+from shhh.api.handlers import write_secret, read_secret
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -47,8 +47,8 @@ class Create(MethodView):
         haveibeenpwned: bool = False,
     ) -> Response:
         """Post request handler."""
-        response, code = create_secret(passphrase, secret, days, tries, haveibeenpwned)
-        return make_response(jsonify({"response": response}), code)
+        response, code = write_secret(passphrase, secret, days, tries, haveibeenpwned)
+        return make_response(response.make(), code)
 
 
 class ReadParams(Schema):

@@ -1,4 +1,4 @@
-FROM python:3.8-alpine3.12
+FROM python:3.9-alpine3.13
 
 RUN apk update \
   && apk add --no-cache \
@@ -6,7 +6,8 @@ RUN apk update \
     libffi-dev \
     musl-dev \
     postgresql-dev \
-    yarn
+    yarn \
+  && python -m pip install --upgrade pip
 
 WORKDIR /opt/shhh
 
@@ -24,6 +25,8 @@ RUN addgroup --gid "$GID" "$GROUP" \
 
 USER "$USER"
 ENV PATH="/home/$USER/.local/bin:${PATH}"
+
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 COPY requirements.txt .
 RUN pip install \
