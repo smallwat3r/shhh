@@ -55,7 +55,8 @@ def response_handler(response):
     if response.mimetype == "text/html":
         response.set_data(minify(response.get_data(as_text=True)))
 
-    if response.content_length < 500:  # do not gzip below 500 bytes
+    # Do not gzip below 500 bytes or on JSON content
+    if response.content_length < 500 or response.mimetype == "application/json":
         return response
 
     response.direct_passthrough = False
