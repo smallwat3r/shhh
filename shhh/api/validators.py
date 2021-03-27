@@ -26,74 +26,73 @@ class Status(enum.Enum):
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
     response = {"response": {"details": err.messages, "status": Status.ERROR.value}}
-    abort(
-        make_response(
-            jsonify(response),
-            HTTPStatus.UNPROCESSABLE_ENTITY.value,
-        )
-    )
+    abort(make_response(jsonify(response), HTTPStatus.UNPROCESSABLE_ENTITY.value,))
 
 
-def validate_strength(passphrase: str) -> None:
-    """Passphrase strength validation handler.
+class Validator:
+    """Validate API parameters."""
 
-    Minimum 8 characters containing at least one number and one uppercase.
+    @classmethod
+    def strength(cls, passphrase: str) -> None:
+        """Passphrase strength validation handler.
 
-    """
-    if passphrase:
-        regex = re.compile(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
-        if not regex.search(passphrase) is not None:
+        Minimum 8 characters containing at least one number and one uppercase.
+
+        """
+        if passphrase:
+            regex = re.compile(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
+            if not regex.search(passphrase) is not None:
+                raise ValidationError(
+                    "Passphrase too weak. Minimun 8 characters, including 1 number and 1 uppercase."
+                )
+
+    @classmethod
+    def haveibeenpwned(cls, passphrase: str) -> None:
+        """Validate passphrase against haveibeenpwned API."""
+        try:
+            times_pwned = services.pwned_password(passphrase)
+        except Exception as err:  # pylint: disable=broad-except
+            app.logger.error(err)
+            times_pwned = False  # don't break if service isn't reachable.
+
+        if times_pwned:
             raise ValidationError(
-                "Passphrase too weak. Minimun 8 characters, including 1 number and 1 uppercase."
+                f"This password has been pwned {times_pwned} time(s) "
+                "(haveibeenpwned.com), please chose another one."
             )
 
+    @classmethod
+    def secret(cls, secret: str) -> None:
+        """Secret validation handler."""
+        if not secret:
+            raise ValidationError("Missing a secret to encrypt.")
+        if len(secret) > 150:
+            raise ValidationError("The secret needs to have less than 150 characters.")
 
-def validate_haveibeenpwned(passphrase: str) -> None:
-    """Validate passphrase against haveibeenpwned API."""
-    try:
-        times_pwned = services.pwned_password(passphrase)
-    except Exception as err:  # pylint: disable=broad-except
-        app.logger.error(err)
-        times_pwned = False  # don't break if service isn't reachable.
+    @classmethod
+    def passphrase(cls, passphrase: str) -> None:
+        """Passphrase validation handler."""
+        if not passphrase:
+            raise ValidationError("Missing a passphrase.")
 
-    if times_pwned:
-        raise ValidationError(
-            f"This password has been pwned {times_pwned} time(s) "
-            "(haveibeenpwned.com), please chose another one."
-        )
+    @classmethod
+    def days(cls, days: int) -> None:
+        """Expiration validation handler."""
+        if days == 0:
+            raise ValidationError("The minimum number of days to keep the secret alive is 1.")
+        if days > 7:
+            raise ValidationError("The maximum number of days to keep the secret alive is 7.")
 
+    @classmethod
+    def tries(cls, tries: int) -> None:
+        """Maximum tries validation handler."""
+        if tries < 3:
+            raise ValidationError("The minimum number of tries to decrypt the secret is 3.")
+        if tries > 10:
+            raise ValidationError("The maximum number of tries to decrypt the secret is 10.")
 
-def validate_secret(secret: str) -> None:
-    """Secret validation handler."""
-    if not secret:
-        raise ValidationError("Missing a secret to encrypt.")
-    if len(secret) > 150:
-        raise ValidationError("The secret needs to have less than 150 characters.")
-
-
-def validate_passphrase(passphrase: str) -> None:
-    """Passphrase validation handler."""
-    if not passphrase:
-        raise ValidationError("Missing a passphrase.")
-
-
-def validate_days(days: int) -> None:
-    """Expiration validation handler."""
-    if days == 0:
-        raise ValidationError("The minimum number of days to keep the secret alive is 1.")
-    if days > 7:
-        raise ValidationError("The maximum number of days to keep the secret alive is 7.")
-
-
-def validate_tries(tries: int) -> None:
-    """Maximum tries validation handler."""
-    if tries < 3:
-        raise ValidationError("The minimum number of tries to decrypt the secret is 3.")
-    if tries > 10:
-        raise ValidationError("The maximum number of tries to decrypt the secret is 10.")
-
-
-def validate_slug(slug: str) -> None:
-    """Link validation handler."""
-    if not slug:
-        raise ValidationError("Missing a secret link.")
+    @classmethod
+    def slug(cls, slug: str) -> None:
+        """Link validation handler."""
+        if not slug:
+            raise ValidationError("Missing a secret link.")

@@ -6,8 +6,8 @@ from flask.views import MethodView
 from marshmallow import Schema, fields, validates_schema
 from webargs.flaskparser import use_kwargs
 
-from shhh.api import validators
 from shhh.api.handlers import read_secret, write_secret
+from shhh.api.validators import Validator
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -18,20 +18,24 @@ query = functools.partial(use_kwargs, location="query")
 class CreateParams(Schema):
     """/api/c API parameters."""
 
-    passphrase = fields.Str(
-        required=True,
-        validate=(validators.validate_passphrase, validators.validate_strength),
-    )
-    secret = fields.Str(required=True, validate=validators.validate_secret)
-    days = fields.Int(validate=validators.validate_days)
-    tries = fields.Int(validate=validators.validate_tries)
+    passphrase = fields.Str(required=True, validate=(Validator.passphrase, Validator.strength),)
+    secret = fields.Str(required=True, validate=Validator.secret)
+    days = fields.Int(validate=Validator.days)
+    tries = fields.Int(validate=Validator.tries)
     haveibeenpwned = fields.Bool()
 
     @validates_schema
     def haveibeenpwned_checker(self, data, **kwargs):
         """Check the passphrase against haveibeenpwned if set to true."""
         if data.get("haveibeenpwned"):
-            validators.validate_haveibeenpwned(data["passphrase"])
+            Validator.haveibeenpwned(data["passphrase"])
+
+
+class ReadParams(Schema):
+    """/api/r API parameters."""
+
+    slug = fields.Str(required=True, validate=Validator.slug)
+    passphrase = fields.Str(required=True, validate=Validator.passphrase)
 
 
 class Create(MethodView):
@@ -49,13 +53,6 @@ class Create(MethodView):
         """Post request handler."""
         response, code = write_secret(passphrase, secret, days, tries, haveibeenpwned)
         return make_response(response.make(), code)
-
-
-class ReadParams(Schema):
-    """/api/r API parameters."""
-
-    slug = fields.Str(required=True, validate=validators.validate_slug)
-    passphrase = fields.Str(required=True, validate=validators.validate_passphrase)
 
 
 class Read(MethodView):
