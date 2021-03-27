@@ -1,3 +1,4 @@
+import enum
 import html
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -8,7 +9,6 @@ from cryptography.fernet import InvalidToken
 from flask import current_app as app
 from flask import jsonify, request
 
-from shhh.api.constants import Messages
 from shhh.api.utils import Secret, generate_unique_slug
 from shhh.api.validators import Status
 from shhh.models import Entries
@@ -56,6 +56,18 @@ class WriteResponse:
         )
 
 
+class Messages(enum.Enum):
+    """Message constants."""
+
+    # fmt: off
+    # pylint: disable=line-too-long
+    NOT_FOUND = "Sorry, we can't find a secret, it has expired, been deleted or has already been read."
+    EXCEEDED = "The passphrase is not valid. You've exceeded the number of tries and the secret has been deleted."
+    INVALID = "Sorry the passphrase is not valid. Number of tries remaining {remaining}."
+    CREATED = "Secret successfully created."
+    # fmt: on
+
+
 def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
     """Read a secret.
 
@@ -88,10 +100,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
         secret.update(tries=remaining)
         app.logger.info(f"{slug} wrong passphrase used. Number of tries remaining: {remaining}")
         return (
-            ReadResponse(
-                Status.INVALID.value,
-                Messages.INVALID.value.format(remaining=remaining),
-            ),
+            ReadResponse(Status.INVALID.value, Messages.INVALID.value.format(remaining=remaining),),
             HTTPStatus.UNAUTHORIZED.value,
         )
 
