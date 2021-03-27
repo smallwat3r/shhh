@@ -39,8 +39,7 @@ def validate_strength(passphrase: str) -> None:
         regex = re.compile(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
         if not regex.search(passphrase) is not None:
             raise ValidationError(
-                "Passphrase too weak. Minimun 8 characters, including "
-                "1 number and 1 uppercase."
+                "Passphrase too weak. Minimun 8 characters, including 1 number and 1 uppercase."
             )
 
 
@@ -76,13 +75,9 @@ def validate_passphrase(passphrase: str) -> None:
 def validate_days(days: int) -> None:
     """Expiration validation handler."""
     if days == 0:
-        raise ValidationError(
-            "The minimum number of days to keep the secret alive is 1."
-        )
+        raise ValidationError("The minimum number of days to keep the secret alive is 1.")
     if days > 7:
-        raise ValidationError(
-            "The maximum number of days to keep the secret alive is 7."
-        )
+        raise ValidationError("The maximum number of days to keep the secret alive is 7.")
 
 
 def validate_tries(tries: int) -> None:
@@ -90,9 +85,7 @@ def validate_tries(tries: int) -> None:
     if tries < 3:
         raise ValidationError("The minimum number of tries to decrypt the secret is 3.")
     if tries > 10:
-        raise ValidationError(
-            "The maximum number of tries to decrypt the secret is 10."
-        )
+        raise ValidationError("The maximum number of tries to decrypt the secret is 10.")
 
 
 def validate_slug(slug: str) -> None:

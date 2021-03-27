@@ -27,9 +27,7 @@ def create_app(env=os.environ.get("FLASK_ENV")):
     """Application factory."""
     logging.basicConfig(
         level=logging.INFO,
-        format=(
-            "[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s"
-        ),
+        format="[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s",
         datefmt="%a, %d %b %Y %H:%M:%S",
     )
 
@@ -94,9 +92,7 @@ def compile_assets(app_assets):
     js_assets = ("create", "created", "read", "utils/errorParser", "utils/fetchRetry")
     css_assets = ("styles",)
     for code in js_assets:
-        bundle = Bundle(
-            f"src/js/{code}.js", filters="jsmin", output=f"dist/js/{code}.min.js"
-        )
+        bundle = Bundle(f"src/js/{code}.js", filters="jsmin", output=f"dist/js/{code}.min.js")
         app_assets.register(code, bundle)
         bundle.build()
     for style in css_assets:
