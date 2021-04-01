@@ -14,7 +14,7 @@ class DatabaseNotReachable(Exception):
     """Couldn't connect to database."""
 
 
-class RetryingQuery(BaseQuery):  # pylint: disable=too-many-ancestors
+class RetryingQuery(BaseQuery):
     """Retry query if database isn't reachable."""
 
     _retry_count = 5
