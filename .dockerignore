@@ -24,6 +24,7 @@ runtime.txt
 
 .mypy_cache/
 .git/
+.github/
 __pycache__/
 app.egg-info/
 bin/
