@@ -171,7 +171,8 @@ make mypy    # run Mypy report
 
 Here is the list of environment variables used by Shhh.  
 
-#### Mandatory
+<details>
+<summary><b>Mandatory</b></summary>
 
 * `FLASK_ENV`: the environment config to load (testing, dev-local, dev-docker, heroku, production).
 * `POSTGRES_HOST`: the database hostname
@@ -179,20 +180,25 @@ Here is the list of environment variables used by Shhh.
 * `POSTGRES_PASSWORD`: the database password
 * `POSTGRES_DB`: the database name
 
-#### Optional
+</details>
+
+<details>
+<summary><b>Optional</b></summary>
 
 * `SHHH_HOST`: This variable can be used to specify a custom hostname to use as the
 domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not set, the hostname 
 defaults to request.url_root, which should be fine in most cases.
 
+</details>
+
 ## Credits
 
-#### Existing cool apps that gave me the idea to develop my own version using Python and Flask
+#### Other cool OTS apps
 
 * [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
 * [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
 
-#### Thanks to
+#### Thanks
 
 * [@AustinTSchaffer](https://github.com/AustinTSchaffer) for 
 contributing to set-up a Docker environment.
