@@ -15,7 +15,7 @@ PGDATA=/data/postgres
 
 # [OPTIONAL]
 # This variable can be used to specify a custom hostname to use as the
-# domain URL when Shhh creates a secret (ex: https://mydomain.com). If not
+# domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not
 # set, the hostname defaults to request.url_root, which should be fine in
 # most cases.
 SHHH_HOST=

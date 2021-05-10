@@ -63,15 +63,15 @@ Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3
 
 ## What's the stack?
 
-* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)**, our Python application web-framework.  
-* **[Postgres](https://www.postgresql.org/)**, our relational database management system.  
-* **[Bulma](https://bulma.io/)**, our CSS framework.  
+* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)** : web framework.  
+* **[Postgres](https://www.postgresql.org/)** : relational database management system.  
+* **[Bulma](https://bulma.io/)** : CSS framework.  
 
 ## What are the dependencies?
 
 You can find the list of the Python dependencies 
 [here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt), 
-and the list of the frontend dependencies 
+and the list of the Js dependencies 
 [here](https://github.com/smallwat3r/shhh/blob/master/package.json).
 
 ## How to launch Shhh locally?
@@ -128,6 +128,8 @@ You can now access the app at http://localhost:5000
 Make sure you have `make`, `docker` and `docker-compose` installed on
 your machine.  
 
+The application will use the development env variables from [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev).  
+
 #### Docker
 
 From the root of the repository, run
@@ -165,6 +167,23 @@ make mypy    # run Mypy report
 
 </details>
 
+## Environment variables
+
+Here is the list of environment variables used by Shhh.  
+
+#### Mandatory
+
+* `FLASK_ENV`: the environment config to load (testing, dev-local, dev-docker, heroku, production).
+* `POSTGRES_HOST`: the database hostname
+* `POSTGRES_USER`: the database username
+* `POSTGRES_PASSWORD`: the database password
+* `POSTGRES_DB`: the database name
+
+#### Optional
+
+* `SHHH_HOST`: This variable can be used to specify a custom hostname to use as the
+domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not set, the hostname 
+defaults to request.url_root, which should be fine in most cases.
 
 ## Credits
 
