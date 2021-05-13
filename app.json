@@ -2,34 +2,45 @@
   "name": "Shhh",
   "description": "Keep secrets out of your emails or chat logs, share them using secure links with passphrase and expiration dates.",
   "repository": "https://github.com/smallwat3r/shhh",
-  "keywords": ["secrets", "security", "password", "encryption", "expire", "protection"],
-  "addons": [{
-    "plan": "heroku-postgresql",
-    "options": {
-      "version": "12"
+  "keywords": [
+    "secrets",
+    "security",
+    "password",
+    "encryption",
+    "expire",
+    "protection"
+  ],
+  "addons": [
+    {
+      "plan": "heroku-postgresql",
+      "options": {
+        "version": "12"
+      }
     }
-  }],
+  ],
   "env": {
-    "FLASK_ENV": {
-      "description": "Application environment (DO NOT CHANGE ME!).",
-      "value": "heroku"
-    },
+    "FLASK_ENV": "heroku",
     "WEB_CONCURRENCY": {
       "description": "The number of processes to run.",
       "value": "3"
     },
     "SHHH_HOST": {
       "description": "Custom hostname to use when Shhh creates a secret. Do not change this if you are unsure, the default (empty) should be fine in most cases.",
-      "value": ""
+      "value": "",
+      "required": false
     },
     "SHHH_SECRET_MAX_LENGTH": {
-      "description": "The maximum number of characters Shhh allows when creating a secret.",
-      "value": "250"
+      "description": "The maximum number of characters Shhh allows when creating a secret. The default value is 250.",
+      "value": "250",
+      "required": false
     }
   },
-  "buildpacks": [{
-    "url": "heroku/python"
-  }, {
-    "url": "heroku/nodejs"
-  }]
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
 }
