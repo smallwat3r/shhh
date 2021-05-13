@@ -65,7 +65,12 @@ class HerokuConfig(DefaultConfig):
     DEBUG = False
     FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+
+    # SQLAlchemy 1.4 removed the deprecated postgres dialect name, the name postgresql
+    # must be used instead.
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "").replace(
+        "postgres://", "postgresql://", 1
+    )
 
 
 class ProductionConfig(DefaultConfig):
