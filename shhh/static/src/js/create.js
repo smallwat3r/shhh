@@ -9,12 +9,15 @@ const msg = document.getElementById("msg");
 expiresValue.value = 3;
 maxTries.value = 5;
 
-inputSecret.onkeyup = _ =>
+inputSecret.onkeyup = (_) =>
   (document.getElementById("counter").textContent =
-    "Characters left: " + (150 - inputSecret.value.length));
+    "Characters left: " + (inputSecret.maxLength - inputSecret.value.length));
 
-form.addEventListener("submit", e => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  createBtn.className = "button is-primary is-loading"
+
   resp.className = "";
   msg.textContent = "";
 
@@ -33,7 +36,7 @@ form.addEventListener("submit", e => {
     headers: headers,
     body: JSON.stringify(object),
     cache: "no-store",
-  }).then(data => {
+  }).then((data) => {
     switch (data.response.status) {
       case "created":
         let params = new URLSearchParams();
@@ -44,6 +47,7 @@ form.addEventListener("submit", e => {
       case "error":
         resp.className = "notification is-danger pop mt-4";
         msg.textContent = errorParser(data.response.details.json);
+        createBtn.className = "button is-primary"
         return;
     }
   });

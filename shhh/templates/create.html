@@ -3,12 +3,18 @@
 {% block container %}
   <form
     id="createSecret"
-    action="{{ url_for("api.create") }}"
+    action="{{ url_for('api.create') }}"
     method="POST"
     autocomplete="off"
-    data-redirect="{{ url_for("created") }}"
+    data-redirect="{{ url_for('created') }}"
   >
     <p class="has-text-left">Write your secret</p>
+    <p class="has-text-justified help mb-2">
+      Tip: for better security, avoid writing any info on how/where to use the secret you're sharing
+      (like urls, websites or emails). Instead, explain this in your email or chat, with the link and passphrase
+      generated from Shhh. So even if someone got access to your secret, there is no way for the attacker
+      to know how and where to use it.
+    </p>
     <div class="field">
       <div class="control">
         <textarea
@@ -16,8 +22,8 @@
           name="secret"
           id="inputSecret"
           rows="4"
-          maxlength="150"
-          placeholder="Tip: for better security, avoid writing any info on how/where to use the secret you're sharing (like urls or apps names). Explain this in your email, alongside the link and passphrase generated."
+          maxlength="{{ shhh_max_secret_length }}"
+          placeholder="Your secret..."
           autocomplete="off"
           required
         ></textarea>
@@ -27,7 +33,7 @@
 
     <div class="columns is-mobile">
       <div class="column">
-        <p class="has-text-left">Destroy in</p>
+        <p class="has-text-left mb-1">Destroy in</p>
         <div class="control has-icons-left">
           <div class="select is-fullwidth">
             <select id="expiresValue" name="days">
@@ -43,7 +49,7 @@
         </div>
       </div>
       <div class="column">
-        <p class="has-text-left">Destroy after</p>
+        <p class="has-text-left mb-1">Destroy after</p>
         <div class="control has-icons-left">
           <div class="select is-fullwidth">
             <select id="maxTries" name="tries">
@@ -59,7 +65,7 @@
       </div>
     </div>
 
-    <p class="has-text-left">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
+    <p class="has-text-left mb-1">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
     <div class="field is-grouped">
       <p class="control is-expanded has-icons-left">
         <input
@@ -79,9 +85,9 @@
         <button type="submit" class="button is-primary" id="createBtn">Go</button>
       </div>
     </div>
-    <div class="field has-text-left">
+    <div class="field has-text-left help">
       <input class="checkbox" name="haveibeenpwned" id="haveibeenpwned" type="checkbox" checked="checked">
-      <label for="haveibeenpwned">(optional) check passphrase strength using haveibeenpwned.com</label>
+      <label for="haveibeenpwned">&nbsp;(optional) check passphrase with haveibeenpwned.com</label>
     </div>
   </form>
 

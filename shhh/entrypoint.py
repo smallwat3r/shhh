@@ -1,6 +1,5 @@
 import enum
 import logging
-import os
 
 from apscheduler.schedulers import SchedulerAlreadyRunningError
 from flask import Flask
@@ -23,7 +22,7 @@ class EnvConfig(enum.Enum):
     PRODUCTION = "production"
 
 
-def create_app(env=os.environ.get("FLASK_ENV")):
+def create_app(env):
     """Application factory."""
     logging.basicConfig(
         level=logging.INFO,

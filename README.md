@@ -188,6 +188,8 @@ Here is the list of environment variables used by Shhh.
 * `SHHH_HOST`: This variable can be used to specify a custom hostname to use as the
 domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not set, the hostname 
 defaults to request.url_root, which should be fine in most cases.
+* `SHHH_SECRET_MAX_LENGTH`: This variable manages how long the secrets your share with Shhh can 
+be. It defaults to 250 characters.
 
 </details>
 

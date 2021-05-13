@@ -10,13 +10,21 @@
     }
   }],
   "env": {
+    "FLASK_ENV": {
+      "description": "Application environment (DO NOT CHANGE ME!).",
+      "value": "heroku"
+    },
     "WEB_CONCURRENCY": {
       "description": "The number of processes to run.",
       "value": "3"
     },
-    "FLASK_ENV": {
-      "description": "Application environment.",
-      "value": "heroku"
+    "SHHH_HOST": {
+      "description": "Custom hostname to use when Shhh creates a secret. Do not change this if you are unsure, the default (empty) should be fine in most cases.",
+      "value": ""
+    },
+    "SHHH_SECRET_MAX_LENGTH": {
+      "description": "The maximum number of characters Shhh allows when creating a secret.",
+      "value": "250"
     }
   },
   "buildpacks": [{
