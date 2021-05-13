@@ -18,7 +18,10 @@ query = functools.partial(use_kwargs, location="query")
 class CreateParams(Schema):
     """/api/c API parameters."""
 
-    passphrase = fields.Str(required=True, validate=(Validator.passphrase, Validator.strength),)
+    passphrase = fields.Str(
+        required=True,
+        validate=(Validator.passphrase, Validator.strength),
+    )
     secret = fields.Str(required=True, validate=Validator.secret)
     days = fields.Int(validate=Validator.days)
     tries = fields.Int(validate=Validator.tries)

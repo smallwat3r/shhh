@@ -35,11 +35,18 @@ class DefaultConfig:
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
     )
 
+    #
+    # Shhh optional configurations
+    #
+
     # This variable can be used to specify a custom hostname to use as the
-    # domain URL when Shhh creates a secret (ex: https://mydomain.com). If not
+    # domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not
     # set, the hostname defaults to request.url_root, which should be fine in
     # most cases.
     SHHH_HOST = os.environ.get("SHHH_HOST")
+
+    # Default max secret length
+    SHHH_SECRET_MAX_LENGTH = int(os.environ.get("SHHH_SECRET_MAX_LENGTH", 250))
 
 
 class TestConfig(DefaultConfig):

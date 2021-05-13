@@ -7,7 +7,8 @@ from flask import render_template as rt
 from flask import request, send_from_directory, url_for
 from htmlmin.main import minify
 
-from . import __version__
+from shhh import __version__
+from shhh.config import DefaultConfig
 
 
 @app.route("/")
@@ -46,7 +47,7 @@ def robots():
 @app.context_processor
 def context():
     """Context data."""
-    return {"version": __version__}
+    return {"version": __version__, "shhh_max_secret_length": DefaultConfig.SHHH_SECRET_MAX_LENGTH}
 
 
 @app.after_request

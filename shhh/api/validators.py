@@ -9,6 +9,7 @@ from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser
 
 from shhh.api import services
+from shhh.config import DefaultConfig
 
 
 @enum.unique
@@ -26,7 +27,12 @@ class Status(enum.Enum):
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
     response = {"response": {"details": err.messages, "status": Status.ERROR.value}}
-    abort(make_response(jsonify(response), HTTPStatus.UNPROCESSABLE_ENTITY.value,))
+    abort(
+        make_response(
+            jsonify(response),
+            HTTPStatus.UNPROCESSABLE_ENTITY.value,
+        )
+    )
 
 
 class Validator:
@@ -66,8 +72,11 @@ class Validator:
         """Secret validation handler."""
         if not secret:
             raise ValidationError("Missing a secret to encrypt.")
-        if len(secret) > 150:
-            raise ValidationError("The secret needs to have less than 150 characters.")
+        if len(secret) > DefaultConfig.SHHH_SECRET_MAX_LENGTH:
+            raise ValidationError(
+                "The secret needs to have less than "
+                f"{DefaultConfig.SHHH_SECRET_MAX_LENGTH} characters."
+            )
 
     @classmethod
     def passphrase(cls, passphrase: str) -> None:
