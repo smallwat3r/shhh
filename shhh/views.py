@@ -8,7 +8,6 @@ from flask import request, send_from_directory, url_for
 from htmlmin.main import minify
 
 from shhh import __version__
-from shhh.config import DefaultConfig
 
 
 @app.route("/")
@@ -47,7 +46,10 @@ def robots():
 @app.context_processor
 def context():
     """Context data."""
-    return {"version": __version__, "shhh_secret_max_length": DefaultConfig.SHHH_SECRET_MAX_LENGTH}
+    return {
+        "version": __version__,
+        "shhh_secret_max_length": app.config["SHHH_SECRET_MAX_LENGTH"],
+    }
 
 
 @app.after_request

@@ -1,33 +1,38 @@
-import re
 import unittest
 from unittest import mock
 
 from marshmallow import ValidationError
 
 from shhh.api.validators import Validator
+from shhh.entrypoint import create_app
 
 
 class TestValidators(unittest.TestCase):
     """API parameter validation testing."""
 
     def test_secret(self):
-        not_valid = (None, "", 151 * "*")
-        with self.assertRaises(ValidationError):
-            for s in not_valid:
+        # We need the app context as we need to access the app config
+        app = create_app(env="testing")
+        app_context = app.app_context()
+        app_context.push()
+
+        not_valid = (None, "", 251 * "*")
+        for s in not_valid:
+            with self.assertRaises(ValidationError):
                 Validator.secret(s)
 
         self.assertIsNone(Validator.secret(30 * "*"))
 
     def test_passphrase(self):
         not_valid = (None, "")
-        with self.assertRaises(ValidationError):
-            for s in not_valid:
+        for s in not_valid:
+            with self.assertRaises(ValidationError):
                 Validator.passphrase(s)
 
     def test_days(self):
         not_valid = (-1, 0, 8, 10)
-        with self.assertRaises(ValidationError):
-            for d in not_valid:
+        for d in not_valid:
+            with self.assertRaises(ValidationError):
                 Validator.days(d)
 
         for d in range(1, 8):
@@ -35,8 +40,8 @@ class TestValidators(unittest.TestCase):
 
     def test_tries(self):
         not_valid = (-1, 0, 2, 11)
-        with self.assertRaises(ValidationError):
-            for t in not_valid:
+        for t in not_valid:
+            with self.assertRaises(ValidationError):
                 Validator.tries(t)
 
         for t in range(3, 11):
@@ -44,8 +49,8 @@ class TestValidators(unittest.TestCase):
 
     def test_slug(self):
         not_valid = (None, "")
-        with self.assertRaises(ValidationError):
-            for s in not_valid:
+        for s in not_valid:
+            with self.assertRaises(ValidationError):
                 Validator.slug(s)
 
     def test_strength(self):
@@ -57,8 +62,8 @@ class TestValidators(unittest.TestCase):
             "weak_but_long_1",
             "Weak_but_long",
         )
-        with self.assertRaises(ValidationError):
-            for word in not_valid:
+        for word in not_valid:
+            with self.assertRaises(ValidationError):
                 Validator.strength(word)
 
         self.assertIsNone(Validator.strength("UPPERlower9211"))

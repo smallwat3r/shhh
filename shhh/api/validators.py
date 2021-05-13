@@ -9,7 +9,6 @@ from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser
 
 from shhh.api import services
-from shhh.config import DefaultConfig
 
 
 @enum.unique
@@ -72,10 +71,10 @@ class Validator:
         """Secret validation handler."""
         if not secret:
             raise ValidationError("Missing a secret to encrypt.")
-        if len(secret) > DefaultConfig.SHHH_SECRET_MAX_LENGTH:
+        if len(secret) > app.config["SHHH_SECRET_MAX_LENGTH"]:
             raise ValidationError(
                 "The secret needs to have less than "
-                f"{DefaultConfig.SHHH_SECRET_MAX_LENGTH} characters."
+                f"{app.config['SHHH_SECRET_MAX_LENGTH']} characters."
             )
 
     @classmethod
@@ -87,7 +86,7 @@ class Validator:
     @classmethod
     def days(cls, days: int) -> None:
         """Expiration validation handler."""
-        if days == 0:
+        if days <= 0:
             raise ValidationError("The minimum number of days to keep the secret alive is 1.")
         if days > 7:
             raise ValidationError("The maximum number of days to keep the secret alive is 7.")
