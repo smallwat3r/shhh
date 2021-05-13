@@ -47,7 +47,7 @@ def robots():
 @app.context_processor
 def context():
     """Context data."""
-    return {"version": __version__, "shhh_max_secret_length": DefaultConfig.SHHH_SECRET_MAX_LENGTH}
+    return {"version": __version__, "shhh_secret_max_length": DefaultConfig.SHHH_SECRET_MAX_LENGTH}
 
 
 @app.after_request
