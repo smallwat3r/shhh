@@ -8,7 +8,7 @@ const msg = document.getElementById("msg");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  decryptBtn.className = "button is-primary is-loading"
+  decryptBtn.className = "button is-primary is-loading";
 
   let endpoint = form.getAttribute("action");
   let params = new URLSearchParams(new FormData(form)).toString();
@@ -21,10 +21,12 @@ form.addEventListener("submit", (e) => {
       case "error":
         resp.className = "notification is-danger pop mt-4";
         msg.textContent = errorParser(data.response.details.query);
+        decryptBtn.className = "button is-primary";
         return;
       case "invalid":
         resp.className = "notification is-danger pop mt-4";
         msg.innerHTML = data.response.msg;
+        decryptBtn.className = "button is-primary";
         return;
       case "expired":
         resp.className = "notification is-warning pop mt-4";
@@ -35,7 +37,7 @@ form.addEventListener("submit", (e) => {
         break;
     }
 
-    decryptBtn.className = "button is-primary"
+    decryptBtn.className = "button is-primary";
 
     document.getElementById("passphrase").value = "";
     Array.from(form.elements).forEach((element) => (element.disabled = true));
