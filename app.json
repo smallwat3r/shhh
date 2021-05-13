@@ -19,7 +19,10 @@
     }
   ],
   "env": {
-    "FLASK_ENV": "heroku",
+    "FLASK_ENV": {
+      "description": "Application environment (DO NOT CHANGE ME!).",
+      "value": "heroku"
+    },
     "WEB_CONCURRENCY": {
       "description": "The number of processes to run.",
       "value": "3"
