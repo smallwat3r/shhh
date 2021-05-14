@@ -38,7 +38,7 @@
       "required": false
     },
     "SHHH_DB_LIVENESS_RETRY_COUNT": {
-      "description": "Manages the number of read/write retries to performin case the database is not reachable or is asleep (for instance this happens often on Heroku free plans).The default retry number is 5.",
+      "description": "Manages the number of tries to reach the database before performing a read or write operation. It could happens that the database is not reachable or is asleep (for instance this happens often on Heroku free plans). The default retry number is 5.",
       "value": "5",
       "required": false
     },
