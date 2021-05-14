@@ -1,0 +1,60 @@
+daemon off;
+worker_processes auto;
+
+events {
+   use epoll;
+   accept_mutex on;
+   worker_connections 1024;
+   multi_accept on;
+}
+
+http {
+   server_tokens off;
+   gzip on;
+   gzip_min_length 250;
+
+   access_log off;
+   error_log logs/nginx/error.log crit;
+
+   include mime.types;
+   default_type application/octet-stream;
+
+   upstream app_server {
+      server unix:/tmp/nginx.socket fail_timeout=0;
+   }
+
+   server {
+      listen <%= ENV["PORT"] %>;
+      server_name example.com default_server;
+
+
+      root /app/frontend/build;
+      index index.html;      location / {
+          try_files $uri /$uri index.html;
+      }
+
+      location ^~ /api {
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header Host $server_name;
+         proxy_redirect off;
+         proxy_pass http://app_server;
+      }
+      location ^~ /admin {
+         proxy_set_header Host $http_host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Host $http_host;
+         proxy_redirect off;
+         proxy_pass http://app_server;
+      }
+
+      # static
+      location ~* \.(jpg|jpeg|png|gif|ico|svg|otf)$ {
+            expires 30d;
+        }
+        location ~* \.(css|js)$ {
+            expires 7d;
+        }
+   }
+}

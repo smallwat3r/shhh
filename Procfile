@@ -1,1 +1,1 @@
-web: gunicorn -w 3 wsgi:app --preload
+web: bin/start-nginx gunicorn -c gunicorn.heroku.py wsgi:app --preload
