@@ -1,0 +1,66 @@
+daemon off;
+worker_processes auto;
+
+events {
+   use epoll;
+   accept_mutex on;
+   worker_connections 1024;
+   multi_accept on;
+}
+
+http {
+   charset utf-8;
+   sendfile on;
+   tcp_nopush on;
+   tcp_nodelay on;
+   server_tokens off;
+   log_not_found off;
+
+   access_log off;
+   error_log logs/nginx/error.log crit;
+
+   include mime.types;
+   default_type application/octet-stream;
+
+   upstream app_server {
+      server unix:/tmp/nginx.socket fail_timeout=0;
+   }
+
+   server {
+      listen <%= ENV["PORT"] %>;
+      server_name default_server;
+
+      proxy_http_version 1.1;
+      proxy_cache_bypass $http_upgrade;
+
+      proxy_hide_header X-Powered-By;
+      proxy_hide_header Server;
+      proxy_hide_header X-AspNetMvc-Version;
+      proxy_hide_header X-AspNet-Version;
+
+      location / {
+         proxy_set_header Proxy "";
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "upgrade";
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header X-Forwarded-Host $host;
+         proxy_set_header X-Forwarded-Port $server_port;
+         proxy_redirect off;
+
+         proxy_pass http://app_server;
+      }
+
+      # static
+      location ~* \.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
+         expires 7d;
+         add_header Pragma public;
+         add_header Cache-Control public;
+
+         proxy_pass http://app_server;
+      }
+
+   }
+}
