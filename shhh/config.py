@@ -48,6 +48,13 @@ class DefaultConfig:
     # Default max secret length
     SHHH_SECRET_MAX_LENGTH = int(os.environ.get("SHHH_SECRET_MAX_LENGTH", 250))
 
+    # Number of read/write retries to perform in case the database is not reachable or is
+    # asleep (for instance this happens often on Heroku free plans).
+    SHHH_DB_LIVENESS_RETRY_COUNT = int(os.environ.get("SHHH_DB_LIVENESS_RETRY_COUNT", 5))
+
+    # Sleep interval in seconds between database liveness retries.
+    SHHH_DB_LIVENESS_SLEEP_INTERVAL = int(os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL", 1))
+
 
 class TestConfig(DefaultConfig):
     """Testing configuration."""
