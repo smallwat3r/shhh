@@ -3,6 +3,7 @@ FROM python:3.9-alpine3.13
 RUN apk update \
   && apk add --no-cache \
     gcc \
+    g++ \
     libffi-dev \
     musl-dev \
     postgresql-dev \
