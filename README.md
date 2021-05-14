@@ -23,7 +23,8 @@ in this repo everything you need to host the app yourself.
 
 Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
-immediately (using your own server and Postgres database, for free).  
+immediately (using your own server running Flask behind Gunicorn and Nginx, 
+and your own Postgres database, for free).  
 
 [![Deploy][heroku-shield]][heroku]  
 
