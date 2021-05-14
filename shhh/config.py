@@ -8,7 +8,6 @@ class DefaultConfig:
     """Default config values (dev-local)."""
 
     DEBUG = True
-    FORCE_HTTPS = False
 
     # Scheduled jobs. Delete expired database records every 60 seconds.
     JOBS = [
@@ -79,7 +78,6 @@ class HerokuConfig(DefaultConfig):
     """Heroku configuration (heroku)."""
 
     DEBUG = False
-    FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False
 
     # SQLAlchemy 1.4 removed the deprecated postgres dialect name, the name postgresql
@@ -93,5 +91,4 @@ class ProductionConfig(DefaultConfig):
     """Production configuration (production)."""
 
     DEBUG = False
-    FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False

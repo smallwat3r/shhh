@@ -8,7 +8,7 @@ from webassets.env import RegisterError
 
 from shhh.api import api
 from shhh.extensions import assets, db, scheduler
-from shhh.security import add_security_headers, force_https
+from shhh.security import add_security_headers
 
 
 @enum.unique
@@ -63,9 +63,6 @@ def create_app(env):
             pass
 
         from shhh import views  # pylint: disable=unused-import
-
-    if app.config.get("FORCE_HTTPS"):
-        app.before_request(force_https)
 
     app.after_request(add_security_headers)
     return app
