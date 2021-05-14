@@ -8,7 +8,6 @@ class DefaultConfig:
     """Default config values (dev-local)."""
 
     DEBUG = True
-    FORCE_HTTPS = False
 
     # Scheduled jobs. Delete expired database records every 60 seconds.
     JOBS = [
@@ -48,6 +47,14 @@ class DefaultConfig:
     # Default max secret length
     SHHH_SECRET_MAX_LENGTH = int(os.environ.get("SHHH_SECRET_MAX_LENGTH", 250))
 
+    # Number of tries to reach the database before performing a read or write operation. It
+    # could happens that the database is not reachable or is asleep (for instance this happens
+    # often on Heroku free plans). The default retry number is 5.
+    SHHH_DB_LIVENESS_RETRY_COUNT = int(os.environ.get("SHHH_DB_LIVENESS_RETRY_COUNT", 5))
+
+    # Sleep interval in seconds between database liveness retries. The default value is 1 second.
+    SHHH_DB_LIVENESS_SLEEP_INTERVAL = float(os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL", 1))
+
 
 class TestConfig(DefaultConfig):
     """Testing configuration."""
@@ -58,6 +65,8 @@ class TestConfig(DefaultConfig):
         f"sqlite:///{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
     )
     SHHH_HOST = "http://test.test"
+    SHHH_DB_LIVENESS_RETRY_COUNT = 1
+    SHHH_DB_LIVENESS_SLEEP_INTERVAL = 0.1
 
 
 class DockerConfig(DefaultConfig):
@@ -70,7 +79,6 @@ class HerokuConfig(DefaultConfig):
     """Heroku configuration (heroku)."""
 
     DEBUG = False
-    FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False
 
     # SQLAlchemy 1.4 removed the deprecated postgres dialect name, the name postgresql
@@ -84,5 +92,4 @@ class ProductionConfig(DefaultConfig):
     """Production configuration (production)."""
 
     DEBUG = False
-    FORCE_HTTPS = True
     SQLALCHEMY_ECHO = False

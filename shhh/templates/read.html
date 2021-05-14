@@ -8,26 +8,28 @@
     method="GET"
     autocomplete="off"
   >
-    <div class="field is-grouped">
-      <p class="control is-expanded has-icons-left">
-        <input
-          class="input"
-          name="passphrase"
-          id="passphrase"
-          type="text"
-          placeholder="Passphrase"
-          autocomplete="off"
-          required
-        />
-        <span class="icon is-small is-left">
-          <span class="feather" data-feather="key"></span>
-        </span>
-      </p>
-      <input type="hidden" name="slug" id="slugId" value="{{ slug }}" />
-      <p class="control">
-        <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
-      </p>
-    </div>
+    <fieldset id="readSecretFs">
+      <div class="field is-grouped">
+        <p class="control is-expanded has-icons-left">
+          <input
+            class="input"
+            name="passphrase"
+            id="passphrase"
+            type="text"
+            placeholder="Passphrase"
+            autocomplete="off"
+            required
+          />
+          <span class="icon is-small is-left">
+            <span class="feather" data-feather="key"></span>
+          </span>
+        </p>
+        <input type="hidden" name="slug" id="slugId" value="{{ slug }}" />
+        <p class="control">
+          <button type="submit" class="button is-primary" id="decryptBtn">Decrypt</button>
+        </p>
+      </div>
+    </fieldset>
   </form>
 
   <p class="mt-3">

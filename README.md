@@ -190,6 +190,11 @@ domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not se
 defaults to request.url_root, which should be fine in most cases.
 * `SHHH_SECRET_MAX_LENGTH`: This variable manages how long the secrets your share with Shhh can 
 be. It defaults to 250 characters.
+* `SHHH_DB_LIVENESS_RETRY_COUNT`: This variable manages the number of tries to reach the database 
+before performing a read or write operation. It could happens that the database is not reachable or is 
+asleep (for instance this happens often on Heroku free plans). The default retry number is 5.
+* `SHHH_DB_LIVENESS_SLEEP_INTERVAL`: This variable manages the interval in seconds between the database
+liveness retries. The default value is 1 second.
 
 </details>
 

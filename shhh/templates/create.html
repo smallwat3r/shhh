@@ -8,87 +8,89 @@
     autocomplete="off"
     data-redirect="{{ url_for('created') }}"
   >
-    <p class="has-text-left">Write your secret</p>
-    <p class="has-text-justified help mb-2">
-      Tip: for better security, avoid writing any info on how/where to use the secret you're sharing
-      (like urls, websites or emails). Instead, explain this in your email or chat, with the link and passphrase
-      generated from Shhh. So even if someone got access to your secret, there is no way for the attacker
-      to know how and where to use it.
-    </p>
-    <div class="field">
-      <div class="control">
-        <textarea
-          class="textarea"
-          name="secret"
-          id="inputSecret"
-          rows="4"
-          maxlength="{{ shhh_secret_max_length }}"
-          placeholder="Your secret..."
-          autocomplete="off"
-          required
-        ></textarea>
-      </div>
-      <p id="counter" class="help has-text-right"></p>
-    </div>
-
-    <div class="columns is-mobile">
-      <div class="column">
-        <p class="has-text-left mb-1">Destroy in</p>
-        <div class="control has-icons-left">
-          <div class="select is-fullwidth">
-            <select id="expiresValue" name="days">
-              <option value="1">1 day</option>
-              <option value="2">2 days</option>
-              <option value="3">3 days</option>
-              <option value="7">1 week</option>
-            </select>
-          </div>
-          <div class="icon is-small is-left">
-            <span class="feather" data-feather="activity"></span>
-          </div>
-        </div>
-      </div>
-      <div class="column">
-        <p class="has-text-left mb-1">Destroy after</p>
-        <div class="control has-icons-left">
-          <div class="select is-fullwidth">
-            <select id="maxTries" name="tries">
-              <option value="3">3 tries</option>
-              <option value="5">5 tries</option>
-              <option value="10">10 tries</option>
-            </select>
-          </div>
-          <div class="icon is-small is-left">
-            <span class="feather" data-feather="crosshair"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <p class="has-text-left mb-1">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
-    <div class="field is-grouped">
-      <p class="control is-expanded has-icons-left">
-        <input
-          class="input"
-          id="passphrase"
-          name="passphrase"
-          type="text"
-          placeholder="Passphrase"
-          autocomplete="off"
-          required
-        />
-        <span class="icon is-small is-left">
-          <span class="feather" data-feather="key"></span>
-        </span>
+    <fieldset id="createSecretFs">
+      <p class="has-text-left">Write your secret</p>
+      <p class="has-text-justified help mb-2">
+        Tip: for better security, avoid writing any info on how/where to use the secret you're sharing
+        (like urls, websites or emails). Instead, explain this in your email or chat, with the link and passphrase
+        generated from Shhh. So even if someone got access to your secret, there is no way for the attacker
+        to know how and where to use it.
       </p>
-      <div class="control">
-        <button type="submit" class="button is-primary" id="createBtn">Go</button>
+      <div class="field">
+        <div class="control">
+          <textarea
+            class="textarea"
+            name="secret"
+            id="inputSecret"
+            rows="4"
+            maxlength="{{ shhh_secret_max_length }}"
+            placeholder="Your secret..."
+            autocomplete="off"
+            required
+          ></textarea>
+        </div>
+        <p id="counter" class="help has-text-right"></p>
       </div>
-    </div>
-    <div class="field has-text-left help">
-      <input class="checkbox" name="haveibeenpwned" id="haveibeenpwned" type="checkbox" checked="checked">
-      <label for="haveibeenpwned">&nbsp;(optional) check passphrase with haveibeenpwned.com</label>
-    </div>
+
+      <div class="columns is-mobile">
+        <div class="column">
+          <p class="has-text-left mb-1">Destroy in</p>
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <select id="expiresValue" name="days">
+                <option value="1">1 day</option>
+                <option value="2">2 days</option>
+                <option value="3">3 days</option>
+                <option value="7">1 week</option>
+              </select>
+            </div>
+            <div class="icon is-small is-left">
+              <span class="feather" data-feather="activity"></span>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <p class="has-text-left mb-1">Destroy after</p>
+          <div class="control has-icons-left">
+            <div class="select is-fullwidth">
+              <select id="maxTries" name="tries">
+                <option value="3">3 tries</option>
+                <option value="5">5 tries</option>
+                <option value="10">10 tries</option>
+              </select>
+            </div>
+            <div class="icon is-small is-left">
+              <span class="feather" data-feather="crosshair"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="has-text-left mb-1">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
+      <div class="field is-grouped">
+        <p class="control is-expanded has-icons-left">
+          <input
+            class="input"
+            id="passphrase"
+            name="passphrase"
+            type="text"
+            placeholder="Passphrase"
+            autocomplete="off"
+            required
+          />
+          <span class="icon is-small is-left">
+            <span class="feather" data-feather="key"></span>
+          </span>
+        </p>
+        <div class="control">
+          <button type="submit" class="button is-primary" id="createBtn">Go</button>
+        </div>
+      </div>
+      <div class="field has-text-left help">
+        <input class="checkbox" name="haveibeenpwned" id="haveibeenpwned" type="checkbox" checked="checked">
+        <label for="haveibeenpwned">&nbsp;(optional) check passphrase with haveibeenpwned.com</label>
+      </div>
+    </fieldset>
   </form>
 
   <div id="response">

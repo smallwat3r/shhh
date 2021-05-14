@@ -8,7 +8,7 @@ from webassets.env import RegisterError
 
 from shhh.api import api
 from shhh.extensions import assets, db, scheduler
-from shhh.security import add_security_headers, force_https
+from shhh.security import add_security_headers
 
 
 @enum.unique
@@ -64,9 +64,6 @@ def create_app(env):
 
         from shhh import views  # pylint: disable=unused-import
 
-    if app.config.get("FORCE_HTTPS"):
-        app.before_request(force_https)
-
     app.after_request(add_security_headers)
     return app
 
@@ -88,7 +85,7 @@ def register_extensions(app):
 
 def compile_assets(app_assets):
     """Configure and build asset bundles."""
-    js_assets = ("create", "created", "read", "utils/errorParser", "utils/fetchRetry")
+    js_assets = ("create", "created", "read")
     css_assets = ("styles",)
     for code in js_assets:
         bundle = Bundle(f"src/js/{code}.js", filters="jsmin", output=f"dist/js/{code}.min.js")

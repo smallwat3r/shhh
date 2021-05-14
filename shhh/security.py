@@ -1,13 +1,4 @@
 # pylint: disable=line-too-long
-from flask import request, redirect
-
-
-def force_https():
-    """Force HTTPS redirect."""
-    if not request.headers.get("X-Forwarded-Proto", "http") == "https":
-        if request.url.startswith("http://"):
-            return redirect(request.url.replace("http://", "https://", 1), 301)
-
 
 def add_security_headers(response):
     """Add required security headers."""

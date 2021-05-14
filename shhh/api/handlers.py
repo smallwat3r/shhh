@@ -9,6 +9,7 @@ from cryptography.fernet import InvalidToken
 from flask import current_app as app
 from flask import jsonify, request
 
+from shhh.decorators import LivenessClient, db_liveness_ping
 from shhh.api.utils import Secret, generate_unique_slug
 from shhh.api.validators import Status
 from shhh.models import Entries
@@ -68,6 +69,7 @@ class Messages(enum.Enum):
     # fmt: on
 
 
+@db_liveness_ping(LivenessClient.WEB.value)
 def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
     """Read a secret.
 
@@ -115,6 +117,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
     )
 
 
+@db_liveness_ping(LivenessClient.WEB.value)
 def write_secret(
     passphrase: str, secret: str, expire: int, tries: int, haveibeenpwned: bool
 ) -> Tuple[WriteResponse, int]:

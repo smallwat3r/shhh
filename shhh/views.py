@@ -10,13 +10,13 @@ from htmlmin.main import minify
 from shhh import __version__
 
 
-@app.route("/")
+@app.get("/")
 def create():
     """View to create a secret."""
     return rt("create.html")
 
 
-@app.route("/c")
+@app.get("/c")
 def created():
     """View to see the link for the created secret."""
     link, expires_on = request.args.get("link"), request.args.get("expires_on")
@@ -25,7 +25,7 @@ def created():
     return rt("created.html", link=link, expires_on=expires_on)
 
 
-@app.route("/r/<slug>")
+@app.get("/r/<slug>")
 def read(slug):
     """View to read a secret."""
     return rt("read.html", slug=slug)
@@ -37,7 +37,7 @@ def not_found(error):
     return rt("404.html", error=error), 404
 
 
-@app.route("/robots.txt")
+@app.get("/robots.txt")
 def robots():
     """Robots handler."""
     return send_from_directory(app.static_folder, request.path[1:])

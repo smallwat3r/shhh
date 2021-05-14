@@ -147,8 +147,6 @@ class TestApplication(unittest.TestCase):
         # Test response request status and error details.
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.secret, list)
-        self.assertIsInstance(r.response.details.json.passphrase, list)
 
     @responses.activate
     def test_api_post_too_much_days(self):
@@ -163,7 +161,6 @@ class TestApplication(unittest.TestCase):
         # Test response request status and error details.
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.days, list)
 
     @responses.activate
     def test_api_post_wrong_formats(self):
@@ -174,9 +171,6 @@ class TestApplication(unittest.TestCase):
         # Test response request status and error details.
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.days, list)
-        self.assertIsInstance(r.response.details.json.passphrase, list)
-        self.assertIsInstance(r.response.details.json.secret, list)
 
     @responses.activate
     def test_api_post_missing_passphrase(self):
@@ -187,7 +181,6 @@ class TestApplication(unittest.TestCase):
         # Test response request status and error details.
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.passphrase, list)
 
     @responses.activate
     def test_api_post_missing_secret(self):
@@ -198,7 +191,6 @@ class TestApplication(unittest.TestCase):
         # Test response request status and error details.
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.secret, list)
 
     @responses.activate
     def test_api_post_passphrase_pwned(self):
@@ -209,7 +201,6 @@ class TestApplication(unittest.TestCase):
         # Test response request status and error details.
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.secret, list)
 
     def test_api_post_haveibeenpwned_not_reachable(self):
         payload = {
@@ -285,7 +276,6 @@ class TestApplication(unittest.TestCase):
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.passphrase, list)
 
         # Long but all lowercase and no numbers.
         payload = {"secret": "secret message", "passphrase": "weak_but_long_passphrase"}
@@ -294,7 +284,6 @@ class TestApplication(unittest.TestCase):
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.passphrase, list)
 
         # Uppercase, lowercase, numbers, but too short.
         payload = {"secret": "secret message", "passphrase": "88AsA"}
@@ -303,7 +292,6 @@ class TestApplication(unittest.TestCase):
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.passphrase, list)
 
         # Long with numbers, but no uppercase.
         payload = {"secret": "secret message", "passphrase": "long_with_number_123"}
@@ -312,7 +300,6 @@ class TestApplication(unittest.TestCase):
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
-        self.assertIsInstance(r.response.details.json.passphrase, list)
 
     @responses.activate
     def test_api_post_created(self):

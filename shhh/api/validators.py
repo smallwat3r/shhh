@@ -25,8 +25,13 @@ class Status(enum.Enum):
 @parser.error_handler
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
-    response = {"response": {"details": err.messages, "status": Status.ERROR.value}}
-    abort(
+    error = ""
+    for source in ("json", "query"):
+        for _, message in err.messages.get(source, {}).items():
+            error += f"{message[0]} "
+
+    response = {"response": {"details": error, "status": Status.ERROR.value}}
+    return abort(
         make_response(
             jsonify(response),
             HTTPStatus.UNPROCESSABLE_ENTITY.value,

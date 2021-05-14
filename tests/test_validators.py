@@ -79,3 +79,7 @@ class TestValidators(unittest.TestCase):
 
         mock_pwned.return_value = False
         self.assertIsNone(Validator.haveibeenpwned("cjHeW9ihf9u43f9u4b3"))
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,7 +1,5 @@
-import errorParser from "./utils/errorParser.min.js";
-import fetchRetry from "./utils/fetchRetry.min.js";
-
 const form = document.getElementById("createSecret");
+const formFs = document.getElementById("createSecretFs");
 const resp = document.getElementById("response");
 const msg = document.getElementById("msg");
 
@@ -16,7 +14,7 @@ inputSecret.onkeyup = (_) =>
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  createBtn.className = "button is-primary is-loading"
+  createBtn.className = "button is-primary is-loading";
 
   resp.className = "";
   msg.textContent = "";
@@ -31,24 +29,31 @@ form.addEventListener("submit", (e) => {
   let object = {};
   formData.forEach((value, key) => (object[key] = value));
 
-  fetchRetry(form.getAttribute("action"), {
+  formFs.setAttribute("disabled", "disabled");
+
+  fetch(form.getAttribute("action"), {
     method: form.getAttribute("method"),
     headers: headers,
     body: JSON.stringify(object),
     cache: "no-store",
-  }).then((data) => {
-    switch (data.response.status) {
-      case "created":
-        let params = new URLSearchParams();
-        params.set("link", data.response.link);
-        params.set("expires_on", data.response.expires_on);
-        window.location.href = `${redirect}?${params.toString()}`;
-        return;
-      case "error":
-        resp.className = "notification is-danger pop mt-4";
-        msg.textContent = errorParser(data.response.details.json);
-        createBtn.className = "button is-primary"
-        return;
-    }
-  });
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      switch (data.response.status) {
+        case "created":
+          let params = new URLSearchParams();
+          params.set("link", data.response.link);
+          params.set("expires_on", data.response.expires_on);
+          window.location.href = `${redirect}?${params.toString()}`;
+          return;
+        case "error":
+          resp.className = "notification is-danger pop mt-4";
+          msg.textContent = data.response.details;
+          formFs.removeAttribute("disabled");
+          createBtn.className = "button is-primary";
+          return;
+      }
+    });
 });

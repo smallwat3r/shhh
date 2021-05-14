@@ -36,6 +36,16 @@
       "description": "The maximum number of characters Shhh allows when creating a secret. The default value is 250.",
       "value": "250",
       "required": false
+    },
+    "SHHH_DB_LIVENESS_RETRY_COUNT": {
+      "description": "Manages the number of read/write retries to performin case the database is not reachable or is asleep (for instance this happens often on Heroku free plans).The default retry number is 5.",
+      "value": "5",
+      "required": false
+    },
+    "SHHH_DB_LIVENESS_SLEEP_INTERVAL": {
+      "description": "Manages the interval in seconds between the database liveness retries. The default value is 1 second.",
+      "value": "1",
+      "required": false
     }
   },
   "buildpacks": [
