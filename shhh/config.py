@@ -65,6 +65,8 @@ class TestConfig(DefaultConfig):
         f"sqlite:///{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
     )
     SHHH_HOST = "http://test.test"
+    SHHH_DB_LIVENESS_RETRY_COUNT = 1
+    SHHH_DB_LIVENESS_SLEEP_INTERVAL = 0.1
 
 
 class DockerConfig(DefaultConfig):
