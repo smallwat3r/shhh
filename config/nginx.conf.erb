@@ -9,7 +9,13 @@ events {
 }
 
 http {
+   charset utf-8;
    server_tokens off;
+   sendfile on;
+   tcp_nopush on;
+   tcp_nodelay on;
+   server_tokens off;
+   log_not_found off;
 
    access_log off;
    error_log logs/nginx/error.log crit;
@@ -25,25 +31,37 @@ http {
       listen <%= ENV["PORT"] %>;
       server_name _;
 
+      proxy_http_version 1.1;
+      proxy_cache_bypass $http_upgrade;
+
       proxy_hide_header X-Powered-By;
       proxy_hide_header Server;
       proxy_hide_header X-AspNetMvc-Version;
       proxy_hide_header X-AspNet-Version;
 
       location / {
+         proxy_set_header Proxy "";
+         proxy_set_header Upgrade $http_upgrade;
+         proxy_set_header Connection "upgrade";
+         proxy_set_header Host $server_name;
          proxy_set_header X-Real-IP $remote_addr;
          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-         proxy_set_header Host $server_name;
+         proxy_set_header X-Forwarded-Proto $scheme;
+         proxy_set_header X-Forwarded-Host $host;
+         proxy_set_header X-Forwarded-Port $server_port;
          proxy_redirect off;
+
          proxy_pass http://app_server;
       }
 
-      location ~* \.(jpg|jpeg|png|gif|ico|svg|otf)$ {
-         expires 30d;
+      # static
+      location ~* \.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$ {
+         expires 7d;
+         add_header Pragma public;
+         add_header Cache-Control public;
+
+         proxy_pass http://app_server;
       }
 
-      location ~* \.(css|js)$ {
-         expires 7d;
-      }
    }
 }
