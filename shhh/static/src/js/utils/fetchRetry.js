@@ -2,7 +2,7 @@ export default function fetchRetry(
   url,
   options = {},
   retries = 10,
-  backoff = 150
+  backoff = 250
 ) {
   return fetch(url, options)
     .then((res) => {
