@@ -19,7 +19,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.alpine
+      dockerfile: alpine.Dockerfile
     depends_on:
       - db
     env_file:
