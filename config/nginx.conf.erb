@@ -22,7 +22,7 @@ http {
    }
 
    server {
-      listen <%= ENV["PORT"] %>; ssl http2 default_server;
+      listen <%= ENV["PORT"] %> ssl http2 default_server;
       server_name _;
 
       proxy_hide_header X-Powered-By;
