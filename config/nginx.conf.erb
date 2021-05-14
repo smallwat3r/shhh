@@ -22,7 +22,7 @@ http {
    }
 
    server {
-      listen <%= ENV["PORT"] %> ssl http2 default_server;
+      listen <%= ENV["PORT"] %>;
       server_name _;
 
       proxy_hide_header X-Powered-By;
@@ -39,18 +39,10 @@ http {
       }
 
       location ~* \.(jpg|jpeg|png|gif|ico|svg|otf)$ {
-         http2_push_preload on;
-         http2_push /static/img/logo.png
          expires 30d;
       }
 
       location ~* \.(css|js)$ {
-         http2_push_preload on;
-         http2_push /static/vendor/bulma/css/styles.min.css
-         http2_push /static/vendor/bulma/css/bulma.min.css
-         http2_push /static/vendor/feather-icons/dist/feather.min.js
-         http2_push /static/dist/js/create.min.js
-         http2_push /static/dist/js/created.min.js
          expires 7d;
       }
    }
