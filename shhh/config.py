@@ -53,7 +53,7 @@ class DefaultConfig:
     SHHH_DB_LIVENESS_RETRY_COUNT = int(os.environ.get("SHHH_DB_LIVENESS_RETRY_COUNT", 5))
 
     # Sleep interval in seconds between database liveness retries.
-    SHHH_DB_LIVENESS_SLEEP_INTERVAL = int(os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL", 1))
+    SHHH_DB_LIVENESS_SLEEP_INTERVAL = float(os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL", 1))
 
 
 class TestConfig(DefaultConfig):
