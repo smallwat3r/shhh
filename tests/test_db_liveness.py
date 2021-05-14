@@ -48,3 +48,7 @@ class TestDbLiveness(unittest.TestCase):
 
         # Request returns 503
         self.assertEqual(response.status_code, 503)
+
+
+if __name__ == "__main__":
+    unittest.main()
