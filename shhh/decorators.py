@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 class LivenessClient(enum.Enum):
-    """Liveness client type"""
+    """Liveness client type."""
 
     WEB = "web"
     TASK = "task"
@@ -31,10 +31,10 @@ def db_liveness_ping(client):
     """
 
     def inner(f):
-        """Inner function"""
+        """Inner function."""
 
         def wrapper(*args, **kwargs):
-            """Wrapper function"""
+            """Wrapper function."""
 
             if client == LivenessClient.TASK.value:
                 scheduler_app = scheduler.app
