@@ -40,11 +40,8 @@ form.addEventListener("submit", (e) => {
           break;
       }
 
-      formFs.removeAttribute("disabled");
       decryptBtn.className = "button is-primary";
-
       document.getElementById("passphrase").value = "";
-      Array.from(form.elements).forEach((element) => (element.disabled = true));
 
       msg.innerHTML = data.response.msg;
     });
