@@ -3,23 +3,17 @@
   src: url("/static/vendor/typeface-work-sans/files/work-sans-latin-400.woff");
 }
 
+@font-face {
+  font-family: "Hack";
+  src: url("/static/vendor/hack-font/build/web/fonts/hack-regular.woff");
+}
+
 body {
   font-family: "Work Sans", sans-serif;
-  font-size: 14px;
 }
-input,
-textarea,
-select {
-  font-family: "Work Sans", sans-serif;
-}
-textarea::placeholder {
-  font-size: 14px;
-}
+
 a {
   color: #fff;
-}
-a:hover {
-  color: #0092ff;
 }
 
 hr {
@@ -31,6 +25,10 @@ hr {
     rgba(0, 0, 0, 0),
     rgba(0, 0, 0, 0.75)
   );
+}
+
+.is-family-monospace {
+  font-family: "Hack", monospace !important;
 }
 
 /* Icons */

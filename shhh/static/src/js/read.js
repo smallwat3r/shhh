@@ -36,7 +36,8 @@ form.addEventListener("submit", (e) => {
           break;
         case "success":
           msg.setAttribute("style", "white-space: pre;");
-          resp.className = "notification is-success pop mt-4";
+          resp.className =
+            "notification has-text-left is-family-monospace is-success is-light pop mt-4";
           break;
       }
 
