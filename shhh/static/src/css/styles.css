@@ -27,8 +27,16 @@ hr {
   );
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .is-family-monospace {
   font-family: "Hack", monospace !important;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .secret-message {

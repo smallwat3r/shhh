@@ -2,6 +2,7 @@ const form = document.getElementById("readSecret");
 const formFs = document.getElementById("readSecretFs");
 const resp = document.getElementById("response");
 const msg = document.getElementById("msg");
+const copy = document.getElementById("copy");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -37,7 +38,9 @@ form.addEventListener("submit", (e) => {
         case "success":
           msg.className = "secret-message";
           resp.className =
-            "notification has-text-left is-family-monospace is-success is-light pop mt-4";
+            "notification has-text-left is-family-monospace is-success is-light pop mt-1";
+          copy.textContent = "Copy to clipboard";
+          copy.className = "has-text-left help has-text-success mt-4 clickable";
           break;
       }
 
@@ -46,4 +49,17 @@ form.addEventListener("submit", (e) => {
 
       msg.innerHTML = data.response.msg;
     });
+});
+
+copy.addEventListener("click", (e) => {
+  e.preventDefault();
+  let range = document.createRange();
+  range.selectNode(msg);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+  document.execCommand("copy");
+  window.getSelection().removeAllRanges();
+  copy.textContent = "Copied to clipboard";
+  copy.className = "has-text-left help has-text-success-dark mt-4 clickable";
+  feather.replace();
 });
