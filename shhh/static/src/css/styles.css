@@ -31,6 +31,13 @@ hr {
   font-family: "Hack", monospace !important;
 }
 
+.secret-message {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
 /* Icons */
 .feather {
   width: 15px;
