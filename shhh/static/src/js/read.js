@@ -25,12 +25,6 @@ form.addEventListener("submit", (e) => {
     })
     .then((data) => {
       switch (data.response.status) {
-        case "error":
-          resp.className = "notification is-danger pop mt-4";
-          msg.textContent = data.response.details;
-          decryptBtn.className = "button is-primary";
-          formFs.removeAttribute("disabled");
-          return;
         case "invalid":
           resp.className = "notification is-danger pop mt-4";
           msg.innerHTML = data.response.msg;
