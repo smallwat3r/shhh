@@ -68,7 +68,7 @@ class TestValidators(unittest.TestCase):
 
         self.assertIsNone(Validator.strength("UPPERlower9211"))
 
-    @mock.patch("shhh.api.services.pwned_password")
+    @mock.patch("shhh.api.validators.pwned_password")
     def test_haveibeenpwned(self, mock_pwned):
         with self.assertRaises(ValidationError):
             mock_pwned.return_value = 123

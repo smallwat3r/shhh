@@ -3,7 +3,7 @@
 {% block container %}
   <form
     id="createSecret"
-    action="{{ url_for('api.create') }}"
+    action="{{ url_for('api.secret') }}"
     method="POST"
     autocomplete="off"
     data-redirect="{{ url_for('created') }}"

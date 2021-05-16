@@ -54,7 +54,7 @@ mypy: env test-env ## Run mypy
 bandit: env test-env ## Run bandit
 	@echo "Running Bandit report ..."
 	@source env/bin/activate || true \
-		&& bandit -r $(SRC_DIR)
+		&& bandit -r $(SRC_DIR) -x $(SRC_DIR)/static
 
 .PHONY: env
 env:

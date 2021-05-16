@@ -1,42 +1,51 @@
 # pylint: disable=unused-argument
-import enum
+import hashlib
 import re
-from http import HTTPStatus
+from typing import Union
 
+import requests
 from flask import current_app as app
-from flask import jsonify, make_response
 from marshmallow import ValidationError
-from webargs.flaskparser import abort, parser
-
-from shhh.api import services
 
 
-@enum.unique
-class Status(enum.Enum):
-    """API body response statuses."""
+def pwned_password(passphrase: str) -> Union[int, bool]:
+    """Check passphrase with Troy's Hunt haveibeenpwned API.
 
-    CREATED = "created"
-    SUCCESS = "success"
-    EXPIRED = "expired"
-    INVALID = "invalid"
-    ERROR = "error"
+    Query the API to check if the passphrase has already been pwned in the
+    past. If it has, returns the number of times it has been pwned, else
+    returns False.
 
+    Notes:
+        (source haveibeenpwned.com)
 
-@parser.error_handler
-def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
-    """Handle request parsing errors."""
-    error = ""
-    for source in ("json", "query"):
-        for _, message in err.messages.get(source, {}).items():
-            error += f"{message[0]} "
+        (...) implements a k-Anonymity model that allows a password to be
+        searched for by partial hash. This allows the first 5 characters of a
+        SHA-1 password hash (not case-sensitive) to be passed to the API.
 
-    response = {"response": {"details": error, "status": Status.ERROR.value}}
-    return abort(
-        make_response(
-            jsonify(response),
-            HTTPStatus.UNPROCESSABLE_ENTITY.value,
-        )
-    )
+        When a password hash with the same first 5 characters is found in the
+        Pwned Passwords repository, the API will respond with an HTTP 200 and
+        include the suffix of every hash beginning with the specified prefix,
+        followed by a count of how many times it appears in the data set. The
+        API consumer can then search the results of the response for the
+        presence of their source hash.
+
+    """
+    # See nosec exclusion explanation in function docstring, we are cropping
+    # the hash to use a k-Anonymity model to retrieve the pwned passwords.
+    hasher = hashlib.sha1()  # nosec
+    hasher.update(passphrase.encode("utf-8"))
+    digest = hasher.hexdigest().upper()
+
+    endpoint = "https://api.pwnedpasswords.com/range"
+    r = requests.get(f"{endpoint}/{digest[:5]}", timeout=5)
+    r.raise_for_status()
+
+    for line in r.text.split("\n"):
+        info = line.split(":")
+        if info[0] == digest[5:]:
+            return int(info[1])
+
+    return False  # Password hasn't been pwned.
 
 
 class Validator:
@@ -60,7 +69,7 @@ class Validator:
     def haveibeenpwned(cls, passphrase: str) -> None:
         """Validate passphrase against haveibeenpwned API."""
         try:
-            times_pwned = services.pwned_password(passphrase)
+            times_pwned = pwned_password(passphrase)
         except Exception as err:  # pylint: disable=broad-except
             app.logger.error(err)
             times_pwned = False  # don't break if service isn't reachable.

@@ -1,5 +1,8 @@
 import os
 import unittest
+from http import HTTPStatus
+
+from flask import url_for
 
 from shhh.entrypoint import create_app
 from shhh.extensions import db
@@ -43,11 +46,11 @@ class TestDbLiveness(unittest.TestCase):
             "passphrase": "heeHk3h3i0o",
             "haveibeenpwned": True,
         }
-        with self.client as c:
-            response = c.post("/api/c", json=payload)
+        with self.app.test_request_context(), self.client as c:
+            response = c.post(url_for("api.secret"), json=payload)
 
         # Request returns 503
-        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.status_code, HTTPStatus.SERVICE_UNAVAILABLE.value)
 
 
 if __name__ == "__main__":
