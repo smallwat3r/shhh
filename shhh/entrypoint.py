@@ -115,12 +115,12 @@ def inject_global_vars():
 
 
 def not_found_error(error):
-    """Not found error handler"""
+    """Not found error handler."""
     return rt("error.html", error=error), HTTPStatus.NOT_FOUND.value
 
 
 def internal_server_error(error):
-    """Internal server error handler"""
+    """Internal server error handler."""
     return rt("error.html", error=error), HTTPStatus.INTERNAL_SERVER_ERROR.value
 
 
