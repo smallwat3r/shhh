@@ -4,8 +4,8 @@
 }
 
 @font-face {
-  font-family: "Hack";
-  src: url("/static/vendor/hack-font/build/web/fonts/hack-regular.woff");
+  font-family: "Mononoki";
+  src: url("/static/vendor/@fontsource/mononoki/files/mononoki-latin-400-normal.woff");
 }
 
 body {
@@ -32,7 +32,7 @@ hr {
 }
 
 .is-family-monospace {
-  font-family: "Hack", monospace !important;
+  font-family: "Mononoki", monospace !important;
 }
 
 .clickable {

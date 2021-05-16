@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
+    "@fontsource/mononoki": "^4.3.0",
     "bulma": "^0.9.0",
     "feather-icons": "^4.28.0",
-    "hack-font": "^3.3.0",
     "typeface-work-sans": "^1.1.13"
   }
 }
