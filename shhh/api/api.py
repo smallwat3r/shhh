@@ -15,8 +15,15 @@ json = functools.partial(use_kwargs, location="json")
 query = functools.partial(use_kwargs, location="query")
 
 
-class CreateParams(Schema):
-    """Create secret parameters."""
+class GetParams(Schema):
+    """GET parameters."""
+
+    slug = fields.Str(required=True, validate=Validator.slug)
+    passphrase = fields.Str(required=True, validate=Validator.passphrase)
+
+
+class PostParams(Schema):
+    """POST parameters."""
 
     passphrase = fields.Str(
         required=True,
@@ -34,13 +41,6 @@ class CreateParams(Schema):
             Validator.haveibeenpwned(data["passphrase"])
 
 
-class ReadParams(Schema):
-    """Read secret parameters."""
-
-    slug = fields.Str(required=True, validate=Validator.slug)
-    passphrase = fields.Str(required=True, validate=Validator.passphrase)
-
-
 @parser.error_handler
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
@@ -51,13 +51,13 @@ def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
 class Api(MethodView):
     """API endpoint."""
 
-    @query(ReadParams())
+    @query(GetParams())
     def get(self, slug: str, passphrase: str) -> Response:
         """Get secret request handler."""
         response, code = read_secret(slug, passphrase)
         return make_response(response.make(), code)
 
-    @json(CreateParams())
+    @json(PostParams())
     def post(
         self,
         passphrase: str,
