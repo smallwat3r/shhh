@@ -1,12 +1,12 @@
-# pylint: disable=no-self-use,too-many-arguments
+# pylint: disable=no-self-use,too-many-arguments,unused-argument
 import functools
 
 from flask import Blueprint, Response, make_response
 from flask.views import MethodView
 from marshmallow import Schema, fields, validates_schema
-from webargs.flaskparser import use_kwargs
+from webargs.flaskparser import abort, parser, use_kwargs
 
-from shhh.api.handlers import read_secret, write_secret
+from shhh.api.handlers import parse_error, read_secret, write_secret
 from shhh.api.validators import Validator
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -16,7 +16,7 @@ query = functools.partial(use_kwargs, location="query")
 
 
 class CreateParams(Schema):
-    """/api/c API parameters."""
+    """Create secret parameters."""
 
     passphrase = fields.Str(
         required=True,
@@ -35,14 +35,27 @@ class CreateParams(Schema):
 
 
 class ReadParams(Schema):
-    """/api/r API parameters."""
+    """Read secret parameters."""
 
     slug = fields.Str(required=True, validate=Validator.slug)
     passphrase = fields.Str(required=True, validate=Validator.passphrase)
 
 
-class Create(MethodView):
-    """/api/c Create secret API."""
+@parser.error_handler
+def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
+    """Handle request parsing errors."""
+    response, code = parse_error(err)
+    return abort(response.make(), code)
+
+
+class Api(MethodView):
+    """API endpoint."""
+
+    @query(ReadParams())
+    def get(self, slug: str, passphrase: str) -> Response:
+        """Get secret request handler."""
+        response, code = read_secret(slug, passphrase)
+        return make_response(response.make(), code)
 
     @json(CreateParams())
     def post(
@@ -53,20 +66,9 @@ class Create(MethodView):
         tries: int = 5,
         haveibeenpwned: bool = False,
     ) -> Response:
-        """Post request handler."""
+        """Create secret request handler."""
         response, code = write_secret(passphrase, secret, days, tries, haveibeenpwned)
         return make_response(response.make(), code)
 
 
-class Read(MethodView):
-    """/api/r Read secret API."""
-
-    @query(ReadParams())
-    def get(self, slug: str, passphrase: str) -> Response:
-        """Get request handler."""
-        response, code = read_secret(slug, passphrase)
-        return make_response(response.make(), code)
-
-
-api.add_url_rule("c", view_func=Create.as_view("create"))
-api.add_url_rule("r", view_func=Read.as_view("read"))
+api.add_url_rule("/secret", view_func=Api.as_view("secret"))

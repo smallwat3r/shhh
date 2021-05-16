@@ -1,12 +1,13 @@
 import json
-import os
 import re
 import unittest
 from datetime import datetime, timedelta
-from urllib.parse import urlparse
+from http import HTTPStatus
 from types import SimpleNamespace
+from urllib.parse import urlparse
 
 import responses
+from flask import url_for
 
 from shhh.entrypoint import create_app
 from shhh.extensions import db, scheduler
@@ -112,37 +113,46 @@ class TestApplication(unittest.TestCase):
         self.scheduler.resume_job("delete_expired_links")
 
     def test_views(self):
-        with self.client as c:
+        with self.app.test_request_context(), self.client as c:
             # 200
-            self.assertEqual(c.get("/").status_code, 200)
+            self.assertEqual(c.get(url_for("create")).status_code, HTTPStatus.OK.value)
 
             r = c.get("/robots.txt")
             r.close()  # avoids unclosed file warning.
-            self.assertEqual(r.status_code, 200)
+            self.assertEqual(r.status_code, HTTPStatus.OK.value)
 
-            self.assertEqual(c.get("/r/fK6YTEVO2bvOln7pHOFi").status_code, 200)
+            self.assertEqual(
+                c.get(url_for("read", slug="fK6YTEVO2bvOln7pHOFi")).status_code, HTTPStatus.OK.value
+            )
             self.assertEqual(
                 c.get(
-                    "/c?link=https://shhh-encrypt.herokuapp.com/r/"
+                    f"{url_for('created')}?link=https://shhh-encrypt.herokuapp.com/r/"
                     "z6HNg2dCcvvaOXli1z3x&expires_on=2020-05-01%20"
                     "at%2022:28%20UTC"
                 ).status_code,
-                200,
+                HTTPStatus.OK.value,
             )
 
             # 302
-            self.assertEqual(c.get("/c?link=only").status_code, 302)
-            self.assertEqual(c.get("/c?expires_on=only").status_code, 302)
-            self.assertEqual(c.get("/c?link=only&other=only").status_code, 302)
+            self.assertEqual(
+                c.get(f"{url_for('created')}?link=only").status_code, HTTPStatus.FOUND.value
+            )
+            self.assertEqual(
+                c.get(f"{url_for('created')}?expires_on=only").status_code, HTTPStatus.FOUND.value
+            )
+            self.assertEqual(
+                c.get(f"{url_for('created')}?link=only&other=only").status_code,
+                HTTPStatus.FOUND.value,
+            )
 
             # 404
-            self.assertEqual(c.get("/r").status_code, 404)
-            self.assertEqual(c.get("/donotexists").status_code, 404)
+            self.assertEqual(c.get("/read").status_code, HTTPStatus.NOT_FOUND.value)
+            self.assertEqual(c.get("/donotexists").status_code, HTTPStatus.NOT_FOUND.value)
 
     @responses.activate
     def test_api_post_missing_all(self):
-        with self.client as c:
-            response = json.loads(c.post("/api/c").get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret")).get_data())
 
         # Test response request status and error details.
         r = Parse(response)
@@ -155,8 +165,8 @@ class TestApplication(unittest.TestCase):
             "passphrase": "SuperSecret123",
             "days": 12,
         }
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Test response request status and error details.
         r = Parse(response)
@@ -165,8 +175,8 @@ class TestApplication(unittest.TestCase):
     @responses.activate
     def test_api_post_wrong_formats(self):
         payload = {"secret": 1, "passphrase": 1, "days": "not an integer"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Test response request status and error details.
         r = Parse(response)
@@ -175,8 +185,8 @@ class TestApplication(unittest.TestCase):
     @responses.activate
     def test_api_post_missing_passphrase(self):
         payload = {"secret": "secret message"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Test response request status and error details.
         r = Parse(response)
@@ -185,8 +195,8 @@ class TestApplication(unittest.TestCase):
     @responses.activate
     def test_api_post_missing_secret(self):
         payload = {"passphrase": "SuperPassword123"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Test response request status and error details.
         r = Parse(response)
@@ -195,8 +205,8 @@ class TestApplication(unittest.TestCase):
     @responses.activate
     def test_api_post_passphrase_pwned(self):
         payload = {"passphrase": "Hello123"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Test response request status and error details.
         r = Parse(response)
@@ -208,14 +218,14 @@ class TestApplication(unittest.TestCase):
             "passphrase": "Hello123",
             "haveibeenpwned": True,
         }
-        with self.client as c:
+        with self.app.test_request_context(), self.client as c:
             with responses.RequestsMock() as rsps:
                 rsps.add(
                     responses.GET,
                     re.compile(r"^(https:\/\/api\.pwnedpasswords\.com\/).*"),
                     body=Exception,
                 )
-                response = json.loads(c.post("/api/c", json=payload).get_data())
+                response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # haveibeenpwned wasn't reachable, but secret still created if it has
         # all mandatory requirements.
@@ -230,8 +240,8 @@ class TestApplication(unittest.TestCase):
             "haveibeenpwned": False,
         }
 
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Secret created without check from haveibeenpwned.
         r = Parse(response)
@@ -245,8 +255,8 @@ class TestApplication(unittest.TestCase):
             "haveibeenpwned": True,
         }
 
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Secret created with check from haveibeenpwned.
         r = Parse(response)
@@ -260,8 +270,8 @@ class TestApplication(unittest.TestCase):
             "haveibeenpwned": True,
         }
 
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         # Secret not created.
         r = Parse(response)
@@ -271,32 +281,32 @@ class TestApplication(unittest.TestCase):
     def test_api_post_weak_passphrase(self):
         # Weak passphrase.
         payload = {"secret": "secret message", "passphrase": "weak"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
 
         # Long but all lowercase and no numbers.
         payload = {"secret": "secret message", "passphrase": "weak_but_long_passphrase"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
 
         # Uppercase, lowercase, numbers, but too short.
         payload = {"secret": "secret message", "passphrase": "88AsA"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
 
         # Long with numbers, but no uppercase.
         payload = {"secret": "secret message", "passphrase": "long_with_number_123"}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         r = Parse(response)
         self.assertEqual(r.response.status, "error")
@@ -304,8 +314,8 @@ class TestApplication(unittest.TestCase):
     @responses.activate
     def test_api_post_created(self):
         payload = {"secret": "secret message", "passphrase": "PhduiGUI12d", "days": 3}
-        with self.client as c:
-            response = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
         r = Parse(response)
 
@@ -332,10 +342,12 @@ class TestApplication(unittest.TestCase):
     @responses.activate
     def test_api_get_wrong_passphrase(self):
         payload = {"secret": "secret message", "passphrase": "UGIUduigui12d"}
-        with self.client as c:
-            post = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            post = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
             response = json.loads(
-                c.get(f"/api/r?slug={post['response']['slug']}&passphrase=wrong").get_data()
+                c.get(
+                    f"{url_for('api.secret')}?slug={post['response']['slug']}&passphrase=wrong"
+                ).get_data()
             )
 
         # Test passphrase is invalid.
@@ -349,13 +361,15 @@ class TestApplication(unittest.TestCase):
             "passphrase": "UGIUduigui12d",
             "tries": 3,
         }
-        with self.client as c:
-            post = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            post = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
             slug = post["response"]["slug"]
 
             for _ in range(payload["tries"]):
                 response = json.loads(
-                    c.get(f"/api/r?slug={post['response']['slug']}&passphrase=wrong").get_data()
+                    c.get(
+                        f"{url_for('api.secret')}?slug={post['response']['slug']}&passphrase=wrong"
+                    ).get_data()
                 )
                 r = Parse(response)
                 self.assertEqual(r.response.status, "invalid")
@@ -365,8 +379,10 @@ class TestApplication(unittest.TestCase):
         self.assertIsNone(link)
 
     def test_api_get_wrong_slug(self):
-        with self.client as c:
-            response = json.loads(c.get("/api/r?slug=hello&passphrase=wrong").get_data())
+        with self.app.test_request_context(), self.client as c:
+            response = json.loads(
+                c.get(f"{url_for('api.secret')}?slug=hello&passphrase=wrong").get_data()
+            )
 
         # Test slug doesn't exists.
         r = Parse(response)
@@ -377,10 +393,12 @@ class TestApplication(unittest.TestCase):
         message, passphrase = "secret message", "dieh32u0hoHBI"
         payload = {"secret": message, "passphrase": passphrase}
 
-        with self.client as c:
-            post = json.loads(c.post("/api/c", json=payload).get_data())
+        with self.app.test_request_context(), self.client as c:
+            post = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
             slug = post["response"]["slug"]
-            response = json.loads(c.get(f"/api/r?slug={slug}&passphrase={passphrase}").get_data())
+            response = json.loads(
+                c.get(f"{url_for('api.secret')}?slug={slug}&passphrase={passphrase}").get_data()
+            )
 
         r = Parse(response)
         # Test if status of the request is correct.

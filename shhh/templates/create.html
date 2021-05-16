@@ -3,7 +3,7 @@
 {% block container %}
   <form
     id="createSecret"
-    action="{{ url_for('api.create') }}"
+    action="{{ url_for('api.secret') }}"
     method="POST"
     autocomplete="off"
     data-redirect="{{ url_for('created') }}"
@@ -94,7 +94,7 @@
   </form>
 
   <div id="response">
-    <span id="msg"></span>
+    <strong><span id="msg"></span></strong>
   </div>
 {% endblock %}
 

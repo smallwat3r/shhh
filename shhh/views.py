@@ -1,4 +1,5 @@
 import gzip
+from http import HTTPStatus
 from io import BytesIO
 
 from flask import current_app as app
@@ -16,7 +17,7 @@ def create():
     return rt("create.html")
 
 
-@app.get("/c")
+@app.get("/secret")
 def created():
     """View to see the link for the created secret."""
     link, expires_on = request.args.get("link"), request.args.get("expires_on")
@@ -25,7 +26,7 @@ def created():
     return rt("created.html", link=link, expires_on=expires_on)
 
 
-@app.get("/r/<slug>")
+@app.get("/read/<slug>")
 def read(slug):
     """View to read a secret."""
     return rt("read.html", slug=slug)
@@ -34,7 +35,7 @@ def read(slug):
 @app.errorhandler(404)
 def not_found(error):
     """404 handler."""
-    return rt("404.html", error=error), 404
+    return rt("404.html", error=error), HTTPStatus.NOT_FOUND.value
 
 
 @app.get("/robots.txt")

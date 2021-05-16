@@ -14,28 +14,7 @@ externalDocs:
   url: https://github.com/smallwat3r/shhh
 
 paths:
-  /api/c:
-    post:
-      tags:
-        - create
-      summary: Create a secret
-      operationId: createSecret
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: payload
-          description: Secret
-          schema:
-            $ref: "#/definitions/createSecret"
-      responses:
-        201:
-          description: secret created
-        422:
-          description: error in request parameters
-  /api/r:
+  /api/secret:
     get:
       tags:
         - read
@@ -59,6 +38,26 @@ paths:
           description: passphrase not valid
         404:
           description: no secret not found
+        422:
+          description: error in request parameters
+    post:
+      tags:
+        - create
+      summary: Create a secret
+      operationId: createSecret
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: payload
+          description: Secret
+          schema:
+            $ref: "#/definitions/createSecret"
+      responses:
+        201:
+          description: secret created
         422:
           description: error in request parameters
 definitions:

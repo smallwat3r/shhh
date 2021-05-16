@@ -3,12 +3,11 @@ import logging
 import time
 from http import HTTPStatus
 
-from flask import abort
+from flask import abort, make_response
 from flask import current_app as app
-from flask import jsonify, make_response
 from sqlalchemy.exc import OperationalError
 
-from shhh.api.validators import Status
+from shhh.api.responses import ErrorResponse, Message
 from shhh.extensions import db, scheduler
 
 logger = logging.getLogger(__name__)
@@ -64,18 +63,8 @@ def db_liveness_ping(client):
             if client == LivenessClient.TASK.value:
                 return None
 
-            response = {
-                "response": {
-                    "details": "An unexpected error has happened, please try again.",
-                    "status": Status.ERROR.value,
-                }
-            }
-            return abort(
-                make_response(
-                    jsonify(response),
-                    HTTPStatus.SERVICE_UNAVAILABLE.value,
-                )
-            )
+            response = ErrorResponse(Message.UNEXPECTED.value)
+            return abort(make_response(response.make(), HTTPStatus.SERVICE_UNAVAILABLE.value))
 
         return wrapper
 

@@ -2,7 +2,7 @@ import unittest
 
 from cryptography.fernet import InvalidToken
 
-from shhh.api.utils import Secret
+from shhh.api.encryption import Secret
 
 
 class TestSecretEncryption(unittest.TestCase):

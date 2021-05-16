@@ -6,24 +6,9 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-from shhh.models import Entries
-
-
-def generate_unique_slug() -> str:
-    """Generates a unique slug link.
-
-    This function will loop recursively on itself to make sure the slug
-    generated is unique.
-
-    """
-    slug = secrets.token_urlsafe(15)
-    if not Entries.query.filter_by(slug_link=slug).first():
-        return slug
-    return generate_unique_slug()
-
 
 class Secret:
-    """Secrets encryption / decryption management."""
+    """Encrypt and decrypt secrets."""
 
     __slots__ = ("secret", "passphrase")
 
@@ -31,7 +16,7 @@ class Secret:
         self.secret = secret
         self.passphrase = passphrase
 
-    def __derive_key(self, salt: bytes, iterations: int) -> bytes:
+    def _derive_key(self, salt: bytes, iterations: int) -> bytes:
         """Derive a secret key from a given passphrase and salt."""
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -45,7 +30,7 @@ class Secret:
     def encrypt(self, iterations: int = 100_000) -> bytes:
         """Encrypt secret."""
         salt = secrets.token_bytes(16)
-        key = self.__derive_key(salt, iterations)
+        key = self._derive_key(salt, iterations)
         return urlsafe_b64encode(
             b"%b%b%b"
             % (
@@ -64,5 +49,5 @@ class Secret:
             urlsafe_b64encode(decoded[20:]),
         )
         iterations = int.from_bytes(iteration, "big")
-        key = self.__derive_key(salt, iterations)
+        key = self._derive_key(salt, iterations)
         return Fernet(key).decrypt(message).decode("utf-8")
