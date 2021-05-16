@@ -115,18 +115,19 @@ class TestApplication(unittest.TestCase):
     def test_views(self):
         with self.app.test_request_context(), self.client as c:
             # 200
-            self.assertEqual(c.get(url_for("create")).status_code, HTTPStatus.OK.value)
+            self.assertEqual(c.get(url_for("views.create")).status_code, HTTPStatus.OK.value)
 
             r = c.get("/robots.txt")
             r.close()  # avoids unclosed file warning.
             self.assertEqual(r.status_code, HTTPStatus.OK.value)
 
             self.assertEqual(
-                c.get(url_for("read", slug="fK6YTEVO2bvOln7pHOFi")).status_code, HTTPStatus.OK.value
+                c.get(url_for("views.read", slug="fK6YTEVO2bvOln7pHOFi")).status_code,
+                HTTPStatus.OK.value,
             )
             self.assertEqual(
                 c.get(
-                    f"{url_for('created')}?link=https://shhh-encrypt.herokuapp.com/r/"
+                    f"{url_for('views.created')}?link=https://shhh-encrypt.herokuapp.com/r/"
                     "z6HNg2dCcvvaOXli1z3x&expires_on=2020-05-01%20"
                     "at%2022:28%20UTC"
                 ).status_code,
@@ -135,13 +136,14 @@ class TestApplication(unittest.TestCase):
 
             # 302
             self.assertEqual(
-                c.get(f"{url_for('created')}?link=only").status_code, HTTPStatus.FOUND.value
+                c.get(f"{url_for('views.created')}?link=only").status_code, HTTPStatus.FOUND.value
             )
             self.assertEqual(
-                c.get(f"{url_for('created')}?expires_on=only").status_code, HTTPStatus.FOUND.value
+                c.get(f"{url_for('views.created')}?expires_on=only").status_code,
+                HTTPStatus.FOUND.value,
             )
             self.assertEqual(
-                c.get(f"{url_for('created')}?link=only&other=only").status_code,
+                c.get(f"{url_for('views.created')}?link=only&other=only").status_code,
                 HTTPStatus.FOUND.value,
             )
 

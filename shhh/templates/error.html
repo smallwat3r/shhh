@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block container %}
+  <p class="mb-4">{{ error }}</p>
+  <a class="button is-primary" href="{{ url_for('views.create') }}">Go back</a>
+{% endblock %}

@@ -1,18 +1,23 @@
-import enum
+import gzip
 import logging
+from enum import Enum
+from http import HTTPStatus
+from io import BytesIO
 
 from apscheduler.schedulers import SchedulerAlreadyRunningError
 from flask import Flask
+from flask import render_template as rt
 from flask_assets import Bundle
+from htmlmin.main import minify
 from webassets.env import RegisterError
 
+from shhh import __version__
 from shhh.api import api
 from shhh.extensions import assets, db, scheduler
-from shhh.security import add_security_headers
+from shhh.views import views
 
 
-@enum.unique
-class EnvConfig(enum.Enum):
+class EnvConfig(Enum):
     """Environment config values."""
 
     TESTING = "testing"
@@ -62,15 +67,20 @@ def create_app(env):
         except RegisterError:
             pass
 
-        from shhh import views  # pylint: disable=unused-import
+    app.context_processor(inject_global_vars)
+    app.after_request(optimize_response)
+    app.after_request(security_headers)
 
-    app.after_request(add_security_headers)
+    app.register_error_handler(HTTPStatus.NOT_FOUND.value, not_found_error)
+    app.register_error_handler(HTTPStatus.INTERNAL_SERVER_ERROR.value, internal_server_error)
+
     return app
 
 
 def register_blueprints(app):
     """Register application blueprints."""
     app.register_blueprint(api)
+    app.register_blueprint(views)
 
 
 def register_extensions(app):
@@ -97,3 +107,60 @@ def compile_assets(app_assets):
         )
         app_assets.register(style, bundle)
         bundle.build()
+
+
+def inject_global_vars():
+    """Global Jinja variables."""
+    return {"version": __version__}
+
+
+def not_found_error(error):
+    """Not found error handler"""
+    return rt("error.html", error=error), HTTPStatus.NOT_FOUND.value
+
+
+def internal_server_error(error):
+    """Internal server error handler"""
+    return rt("error.html", error=error), HTTPStatus.INTERNAL_SERVER_ERROR.value
+
+
+def optimize_response(response):
+    """Minify HTML and use gzip compression."""
+    if response.mimetype == "text/html":
+        response.set_data(minify(response.get_data(as_text=True)))
+
+    # Do not gzip below 500 bytes or on JSON content
+    if response.content_length < 500 or response.mimetype == "application/json":
+        return response
+
+    response.direct_passthrough = False
+
+    gzip_buffer = BytesIO()
+    gzip_file = gzip.GzipFile(mode="wb", compresslevel=6, fileobj=gzip_buffer)
+    gzip_file.write(response.get_data())
+    gzip_file.close()
+
+    response.set_data(gzip_buffer.getvalue())
+    response.headers.add("Content-Encoding", "gzip")
+    return response
+
+
+# pylint: disable=line-too-long
+def security_headers(response):
+    """Add required security headers."""
+    response.headers.add("X-Frame-Options", "SAMEORIGIN")
+    response.headers.add("X-Content-Type-Options", "nosniff")
+    response.headers.add("X-XSS-Protection", "1; mode=block")
+    response.headers.add("Referrer-Policy", "no-referrer-when-downgrade")
+    response.headers.add(
+        "Strict-Transport-Security", "max-age=63072000; includeSubdomains; preload"
+    )
+    response.headers.add(
+        "Content-Security-Policy",
+        "default-src 'self'; img-src 'self'; object-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'",
+    )
+    response.headers.add(
+        "feature-policy",
+        "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'",
+    )
+    return response

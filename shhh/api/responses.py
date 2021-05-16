@@ -51,9 +51,9 @@ class WriteResponse:
     details: Message = Message.CREATED
 
     def __post_init__(self):
-        self.link = f"{request.url_root.rstrip('/')}{url_for('read', slug=self.slug)}"
+        self.link = request.url_root.rstrip("/") + url_for("views.read", slug=self.slug)
         if _host := app.config["SHHH_HOST"]:
-            self.link = f"{_host.rstrip('/')}{url_for('read', slug=self.slug)}"
+            self.link = _host.rstrip("/") + url_for("views.read", slug=self.slug)
 
     def make(self):
         """Make client response object."""

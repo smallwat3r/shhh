@@ -6,7 +6,7 @@
     action="{{ url_for('api.secret') }}"
     method="POST"
     autocomplete="off"
-    data-redirect="{{ url_for('created') }}"
+    data-redirect="{{ url_for('views.created') }}"
   >
     <fieldset id="createSecretFs">
       <p class="has-text-left">Write your secret</p>
@@ -23,7 +23,7 @@
             name="secret"
             id="inputSecret"
             rows="4"
-            maxlength="{{ shhh_secret_max_length }}"
+            maxlength="{{ secret_max_length }}"
             placeholder="Your secret..."
             autocomplete="off"
             required
