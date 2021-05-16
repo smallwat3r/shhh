@@ -26,7 +26,7 @@ def created():
     return rt("created.html", link=link, expires_on=expires_on)
 
 
-@app.get("/read/<slug>")
+@app.get("/secret/<slug>")
 def read(slug):
     """View to read a secret."""
     return rt("read.html", slug=slug)
