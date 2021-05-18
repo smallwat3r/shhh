@@ -62,19 +62,6 @@ copy the Shhh link to it with the passphrase._
 
 Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3r/shhh-api/1.0.0).  
 
-## What's the stack?
-
-* **[Flask](https://flask.palletsprojects.com/en/1.1.x/)** : web framework.  
-* **[Postgres](https://www.postgresql.org/)** : relational database management system.  
-* **[Bulma](https://bulma.io/)** : CSS framework.  
-
-## What are the dependencies?
-
-You can find the list of the Python dependencies 
-[here](https://github.com/smallwat3r/shhh/blob/master/requirements.txt), 
-and the list of the Js dependencies 
-[here](https://github.com/smallwat3r/shhh/blob/master/package.json).
-
 ## How to launch Shhh locally?
 
 These instructions are for development purpose only. For production 
@@ -136,7 +123,7 @@ The application will use the development env variables from [/environments/docke
 From the root of the repository, run
 
 ```sh
-make dc-start  # to start the app
+make dc-start  # to start the app (or dc-start-adminer to use adminer)
 make dc-stop   # to stop the app
 ```
 
@@ -144,10 +131,9 @@ Once the container image has finished building and has started, you
 can access:  
 
 * Shhh at http://localhost:5000
-* See the database records using Adminer at http://localhost:8080
+* (and access the database records using Adminer on port `8080` if you launched Shhh with adminer)
 
-Note: using docker-compose the application will be running with 
-Gunicorn.  
+Note: When started with the docker-compose set-up, the application is running with Gunicorn.
 
 </details>
 
@@ -170,16 +156,16 @@ make mypy    # run Mypy report
 
 ## Environment variables
 
-Here is the list of environment variables used by Shhh.  
+Bellow is the list of environment variables used by Shhh.  
 
 <details>
 <summary><b>Mandatory</b></summary>
 
-* `FLASK_ENV`: the environment config to load (testing, dev-local, dev-docker, heroku, production).
-* `POSTGRES_HOST`: the database hostname
-* `POSTGRES_USER`: the database username
-* `POSTGRES_PASSWORD`: the database password
-* `POSTGRES_DB`: the database name
+* `FLASK_ENV`: the environment config to load (`testing`, `dev-local`, `dev-docker`, `heroku`, `production`).
+* `POSTGRES_HOST`: Postgresql hostname
+* `POSTGRES_USER`: Postgresql username
+* `POSTGRES_PASSWORD`: Postgresql password
+* `POSTGRES_DB`: Database name
 
 </details>
 
@@ -187,7 +173,7 @@ Here is the list of environment variables used by Shhh.
 <summary><b>Optional</b></summary>
 
 * `SHHH_HOST`: This variable can be used to specify a custom hostname to use as the
-domain URL when Shhh creates a secret (ex: https://<domain-name.com>). If not set, the hostname 
+domain URL when Shhh creates a secret (ex: `https://<domain-name.com>`). If not set, the hostname 
 defaults to request.url_root, which should be fine in most cases.
 * `SHHH_SECRET_MAX_LENGTH`: This variable manages how long the secrets your share with Shhh can 
 be. It defaults to 250 characters.
@@ -199,24 +185,14 @@ liveness retries. The default value is 1 second.
 
 </details>
 
-## Credits
+## Acknowledgements
 
-#### Other cool OTS apps
-
-* [OneTimeSecret](https://github.com/onetimesecret/onetimesecret)
-* [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
-
-#### Thanks
-
-* [@AustinTSchaffer](https://github.com/AustinTSchaffer) for 
-contributing to set-up a Docker environment.
-* [@kleinfelter](https://github.com/kleinfelter) for finding bugs 
-and security issues.
+**Special thanks:** [@AustinTSchaffer](https://github.com/AustinTSchaffer), [@kleinfelter](https://github.com/kleinfelter)   
+**Other OTS apps:** [OneTimeSecret](https://github.com/onetimesecret/onetimesecret), [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
 
 ## License
 
-See [LICENSE](https://github.com/smallwat3r/shhh/blob/master/LICENSE)
-file.  
+See [LICENSE](https://github.com/smallwat3r/shhh/blob/master/LICENSE) file.  
 
 ## Contact
 
