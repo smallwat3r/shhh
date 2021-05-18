@@ -19,6 +19,7 @@ paths:
       tags:
         - read
       summary: Read a secret
+      description: Decrypt a secret using a passphrase
       operationId: readSecret
       produces:
         - application/json
@@ -26,24 +27,27 @@ paths:
         - in: query
           type: string
           name: slug
-          description: slug id of the secret
+          description: The secret Id
+          required: true
         - in: query
           name: passphrase
           type: string
-          description: passphrase to decrypt the secret
+          description: The passphrase to decrypt the secret
+          required: true
       responses:
         200:
-          description: valid response
+          description: OK
         401:
-          description: passphrase not valid
+          description: The passphrase is not valid
         404:
-          description: no secret not found
+          description: No secret found
         422:
-          description: error in request parameters
+          description: There is an error in the querystring parameters
     post:
       tags:
         - create
       summary: Create a secret
+      description: Encrypt a secret using a passphrase, and set up an expiration policy
       operationId: createSecret
       consumes:
         - application/json
@@ -57,9 +61,10 @@ paths:
             $ref: "#/definitions/createSecret"
       responses:
         201:
-          description: secret created
+          description: Created
         422:
-          description: error in request parameters
+          description: There is an error in the request parameters
+
 definitions:
   createSecret:
     type: object
@@ -69,24 +74,24 @@ definitions:
     properties:
       secret:
         type: string
-        description: secret message to encrypt (max. 150 chars)
+        description: The secret message to encrypt (max. 250 chars)
         example: "This is a secret message"
       passphrase:
         type: string
-        description: passphrase to open the secret (min. 8 chars, 1 uppercase, 1 number)
+        description: The passphrase to open the secret (min. 8 chars, 1 uppercase, 1 number)
         example: "HuDgde723g8f"
       days:
         type: integer
         default: 3
-        description: number of days to keep the secret alive (min. 1, max. 7)
-        example: 3
+        description: The number of days to keep the secret alive (min. 1, max. 7)
+        example: 5
       tries:
         type: integer
         default: 5
-        description: number of tries to open the secret before it gets deleted (min. 3, max. 10)
-        example: 5
+        description: The number of tries to open the secret before it gets deleted (min. 3, max. 10)
+        example: 3
       haveibeenpwned:
         type: boolean
         default: false
-        description: run a check of the passphrase against haveibeenpwned.com API
+        description: Run a check of the passphrase against haveibeenpwned.com
         example: true
