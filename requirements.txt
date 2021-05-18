@@ -29,4 +29,4 @@ tzlocal==2.1
 urllib3==1.26.4
 webargs==8.0.0
 webassets==2.0
-Werkzeug==2.0.0
+Werkzeug==2.0.1
