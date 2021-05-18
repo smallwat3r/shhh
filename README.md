@@ -187,8 +187,8 @@ liveness retries. The default value is 1 second.
 
 ## Acknowledgements
 
-**Special thanks:** [@AustinTSchaffer](https://github.com/AustinTSchaffer), [@kleinfelter](https://github.com/kleinfelter)   
-**Other OTS apps:** [OneTimeSecret](https://github.com/onetimesecret/onetimesecret), [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
+Special thanks: [@AustinTSchaffer](https://github.com/AustinTSchaffer), [@kleinfelter](https://github.com/kleinfelter)   
+Other OTS apps: [OneTimeSecret](https://github.com/onetimesecret/onetimesecret), [PasswordPusher](https://github.com/pglombardo/PasswordPusher)
 
 ## License
 
