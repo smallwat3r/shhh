@@ -112,6 +112,25 @@ class TestApplication(unittest.TestCase):
         # Resume the scheduler.
         self.scheduler.resume_job("delete_expired_links")
 
+    def test_repr_entry(self):
+        slug = "z6HNg2dCcvvaOXli1z3x"
+        encrypted_text = (
+            b"nKir73XhgyXxjwYyCG-QHQABhqCAAAAAAF6rPvPYX7OYFZRTzy"
+            b"PdIwvdo2SFwAN0VXrfosL54nGHr0MN1YtyoNjx4t5Y6058lFvDH"
+            b"zsnv_Q1KaGFL6adJgLLVreOZ9kt5HpwnEe_Lod5Or85Ig=="
+        )
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        expired_date = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") - timedelta(days=1)
+
+        entry = Entries.create(
+            slug_link=slug,
+            encrypted_text=encrypted_text,
+            date_created=now,
+            date_expires=expired_date,
+        )
+
+        self.assertEqual(repr(entry), f"<Entry {slug}>")
+
     def test_views(self):
         with self.app.test_request_context(), self.client as c:
             # 200
