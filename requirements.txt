@@ -16,7 +16,7 @@ idna==2.10
 itsdangerous==2.0.0
 Jinja2==3.0.0
 jsmin==2.2.2
-MarkupSafe==2.0.0
+MarkupSafe==2.0.1
 marshmallow==3.12.1
 psycopg2-binary==2.8.6
 pycparser==2.20
