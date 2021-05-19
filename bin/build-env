@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+#
 # Build virtual environment
+#
+
 set -e
 
 _init_env() {
@@ -12,6 +15,4 @@ _init_env() {
   }
 }
 
-if [[ -z $TRAVIS ]]; then
-  [[ $VIRTUAL_ENV == '' ]] && _init_env || exit 0
-fi
+[[ $VIRTUAL_ENV == '' ]] && _init_env || exit 0
