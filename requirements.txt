@@ -12,7 +12,7 @@ Flask-Assets==2.0
 Flask-SQLAlchemy==2.5.1
 gunicorn==20.1.0
 htmlmin==0.1.12
-idna==2.10
+idna==3.1
 itsdangerous==2.0.1
 Jinja2==3.0.1
 jsmin==2.2.2
