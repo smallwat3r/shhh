@@ -54,9 +54,7 @@ anywhere.
 _Encryption method used: Fernet with password, random salt value and
 strong iteration count (100 000)._  
 
-_Tip: For added security, avoid telling in Shhh what is the use of
-the secret you're sharing. Instead, explain this in your email, and 
-copy the Shhh link to it with the passphrase._  
+_Tip: for better security, avoid writing any info on how/where to use the secret you're sharing (like urls, websites or emails). Instead, explain this in your email or chat, with the link and passphrase generated from Shhh. So even if someone got access to your secret, there is no way for the attacker to know how and where to use it.___
 
 ## Is there an API?
 
