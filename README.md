@@ -43,9 +43,9 @@ in order to reveal the secret.
 The secret will be **permanently removed** from the database as soon 
 as one of these events happens:  
 
-* the expiration date has passed (max 7 days). 
+* the expiration date has passed. 
 * the receiver has decrypted the message. 
-* or the amount of tries to open the secret has exceeded (max 10). 
+* the amount of tries to open the secret has exceeded. 
 
 The secrets are encrypted in order to make the data anonymous, 
 especially in the database, and the passphrases are not stored 
