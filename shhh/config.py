@@ -46,7 +46,7 @@ class DefaultConfig:
 
     # Default max secret length
     try:
-        SHHH_SECRET_MAX_LENGTH = int(os.environ.get("SHHH_SECRET_MAX_LENGTH"))
+        SHHH_SECRET_MAX_LENGTH = int(os.environ.get("SHHH_SECRET_MAX_LENGTH", 250))
     except (ValueError, TypeError):
         SHHH_SECRET_MAX_LENGTH = 250
 
@@ -54,13 +54,15 @@ class DefaultConfig:
     # could happens that the database is not reachable or is asleep (for instance this happens
     # often on Heroku free plans). The default retry number is 5.
     try:
-        SHHH_DB_LIVENESS_RETRY_COUNT = int(os.environ.get("SHHH_DB_LIVENESS_RETRY_COUNT"))
+        SHHH_DB_LIVENESS_RETRY_COUNT = int(os.environ.get("SHHH_DB_LIVENESS_RETRY_COUNT", 5))
     except (ValueError, TypeError):
         SHHH_DB_LIVENESS_RETRY_COUNT = 5
 
     # Sleep interval in seconds between database liveness retries. The default value is 1 second.
     try:
-        SHHH_DB_LIVENESS_SLEEP_INTERVAL = float(os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL"))
+        SHHH_DB_LIVENESS_SLEEP_INTERVAL = float(
+            os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL", 1)
+        )
     except (ValueError, TypeError):
         SHHH_DB_LIVENESS_SLEEP_INTERVAL = 1
 
