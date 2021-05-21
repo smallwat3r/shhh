@@ -20,7 +20,7 @@ class LivenessClient(enum.Enum):
     TASK = "task"
 
 
-def db_liveness_ping(client):
+def db_liveness_ping(client: LivenessClient):
     """Database liveness ping decorator.
 
     Some database might go to sleep if no recent activity is recorded (for example this is
@@ -35,7 +35,7 @@ def db_liveness_ping(client):
         def wrapper(*args, **kwargs):
             """Wrapper function."""
 
-            if client == LivenessClient.TASK.value:
+            if client == LivenessClient.TASK:
                 scheduler_app = scheduler.app
                 with scheduler_app.app_context():
                     retry_count = app.config["SHHH_DB_LIVENESS_RETRY_COUNT"]
@@ -47,7 +47,7 @@ def db_liveness_ping(client):
             for _ in range(retry_count):
                 try:
                     # Check if we can reach the database and perform an operation against it.
-                    if client == LivenessClient.TASK.value:
+                    if client == LivenessClient.TASK:
                         with scheduler_app.app_context():
                             db.session.rollback()
                     else:
@@ -60,7 +60,7 @@ def db_liveness_ping(client):
             logger.critical("Database seems down and couldn't wake up.")
 
             # If liveness check is coming from the scheduler, ignore client response.
-            if client == LivenessClient.TASK.value:
+            if client == LivenessClient.TASK:
                 return None
 
             response = ErrorResponse(Message.UNEXPECTED.value)

@@ -13,7 +13,7 @@ from shhh.decorators import LivenessClient, db_liveness_ping
 from shhh.models import Entries
 
 
-@db_liveness_ping(LivenessClient.WEB.value)
+@db_liveness_ping(LivenessClient.WEB)
 def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
     """Read a secret.
 
@@ -75,7 +75,7 @@ def _generate_unique_slug() -> str:
     return _generate_unique_slug()
 
 
-@db_liveness_ping(LivenessClient.WEB.value)
+@db_liveness_ping(LivenessClient.WEB)
 def write_secret(
     passphrase: str, secret: str, expire: int, tries: int, haveibeenpwned: bool
 ) -> Tuple[WriteResponse, int]:

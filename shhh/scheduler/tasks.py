@@ -9,8 +9,8 @@ from shhh.models import Entries
 logger = logging.getLogger("tasks")
 
 
-@db_liveness_ping(LivenessClient.TASK.value)
-def delete_expired_links():
+@db_liveness_ping(LivenessClient.TASK)
+def delete_expired_links() -> None:
     """Delete expired links from the database."""
     app = scheduler.app
     with app.app_context():

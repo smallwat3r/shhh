@@ -20,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: alpine.Dockerfile
+    image: shhh
     depends_on:
       - db
     env_file:
