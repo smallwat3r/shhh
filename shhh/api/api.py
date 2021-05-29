@@ -37,7 +37,8 @@ class PostParams(Schema):
     @pre_load
     def standardize_newline_character(self, data, **kwargs):
         """Standardize newline character from secret."""
-        data["secret"] = "\n".join(data["secret"].splitlines())
+        if data.get("secret") and isinstance(data.get("secret"), str):
+            data["secret"] = "\n".join(data["secret"].splitlines())
         return data
 
     @validates_schema
