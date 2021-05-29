@@ -35,7 +35,7 @@ class PostParams(Schema):
     haveibeenpwned = fields.Bool()
 
     @pre_load
-    def standardize_newline_characters(self, data, **kwargs):
+    def standardize_newline_character(self, data, **kwargs):
         """Standardize newline character from secret."""
         data["secret"] = "\n".join(data["secret"].splitlines())
         return data
