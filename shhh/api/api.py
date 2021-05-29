@@ -3,7 +3,7 @@ import functools
 
 from flask import Blueprint, Response, make_response
 from flask.views import MethodView
-from marshmallow import Schema, fields, validates_schema
+from marshmallow import Schema, fields, pre_load, validates_schema
 from webargs.flaskparser import abort, parser, use_kwargs
 
 from shhh.api.handlers import parse_error, read_secret, write_secret
@@ -33,6 +33,12 @@ class PostParams(Schema):
     days = fields.Int(validate=Validator.days)
     tries = fields.Int(validate=Validator.tries)
     haveibeenpwned = fields.Bool()
+
+    @pre_load
+    def standardize_newline_characters(self, data, **kwargs):
+        """Standardize newline character from secret."""
+        data["secret"] = "\n".join(data["secret"].splitlines())
+        return data
 
     @validates_schema
     def haveibeenpwned_checker(self, data, **kwargs):
