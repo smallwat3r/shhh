@@ -1,6 +1,6 @@
 aniso8601==9.0.1
 APScheduler==3.7.0
-certifi==2020.12.5
+certifi==2021.5.30
 cffi==1.14.5
 chardet==4.0.0
 click==8.0.1
