@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!--
-  Author: Matthieu Petiteau <mpetiteau.pro@gmail.com>
-  Source code: https://github.com/smallwat3r/shhh
 
-  Please feel free to contribute to the project!
+  <!--
+  Source code: https://github.com/smallwat3r/shhh
+  Feel free to contribute to the project!
   -->
+
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="keywords"
-      content="passwords,secrets,password,secret,encrypt,secret sharing,password sharing,security,privacy,shhh"
+      content="passwords,secrets,password,secret,encrypt,sharing,security,privacy,shhh"
     />
     <meta
       name="description"
@@ -28,54 +28,42 @@
 
   <body>
     <section class="hero is-dark is-bold is-fullheight">
-      <div class="container has-text-centered">
-        <div class="hero-body">
+      <div class="hero-head">
+        <div class="container has-text-centered has-text-weight-bold">
+          <p class="is-size-5 mt-3">
+            <a class="has-text-primary" href="{{ url_for('views.create') }}">~/</a>
+            Shhh, keep secrets out of emails and chat logs.
+          </p>
+          <hr class="mt-3" />
+        </div>
+      </div>
+      <div class="hero-body">
+        <div class="container has-text-centered has-text-weight-bold">
           <div class="columns is-centered">
-            <div class="column is-half">
-
-              <a href="/">
-                <img width="15%" src="{{ url_for('static', filename='img/logo.png') }}" alt="shhh" />
-              </a>
-              <p class="mt-2 is-size-6">Keep secrets out of emails and chat logs.</p>
-
-              <hr />
-
-              {% block container %}
-              {% endblock %}
-
-              <hr />
-              <div class="has-text-right help">
-                <p class="has-text-justified mb-2">
-                  Secrets are stored using advanced encryption and are
-                  only available for a limited amount of time. Shhh
-                  doesn't store your passphrases, they are only used
-                  to encrypt your secrets. Encryption method used: Fernet
-                  with password, random salt value and strong iteration
-                  count (100 000).
-                </p>
-                <p class="has-text-justified mb-2">
-                  The project is open-source (MIT) and available
-                  <a class="has-text-weight-bold"
-                     target="_blank"
-                     rel="noreferrer noopener"
-                     href="https://github.com/smallwat3r/shhh">
-                    here
-                  </a>
-                  , so feel free to contribute, star, fork, spread love! There
-                  is everything you need to host this app on your own private
-                  / local server if you want even more security and privacy.
-                </p>
-                <p><strong>Shhh v{{ version }}</strong></p>
-              </div>
+            <div class="column is-three-fifths">
+              {% block container %}{% endblock %}
             </div>
           </div>
+        </div>
+      </div>
+      <div class="hero-footer">
+        <div class="container has-text-centered has-text-weight-bold">
+          <hr class="mb-3 mt-3" />
+          <p class="help mb-3">
+            <a class="has-text-primary"
+                target="_blank"
+                rel="noreferrer noopener"
+                href="https://github.com/smallwat3r/shhh">
+              source code
+            </a> - Shhh v{{ version }}
+          </p>
         </div>
       </div>
     </section>
 
     <script src="{{ url_for('static', filename='vendor/feather-icons/dist/feather.min.js') }}"></script>
     <script>feather.replace();</script>
-
     {% block js %}{% endblock %}
   </body>
+
 </html>

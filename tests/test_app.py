@@ -343,8 +343,8 @@ class TestApplication(unittest.TestCase):
         # Test secret has been created and expiricy date is correct.
         self.assertEqual(r.response.status, "created")
         self.assertEqual(
-            r.response.expires_on.split(" ")[0],
-            (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d"),
+            r.response.expires_on.split(" at ")[0],
+            (datetime.now() + timedelta(days=3)).strftime("%B %d, %Y"),
         )
 
         # Test the link generated is using the test SHHH_HOST variable

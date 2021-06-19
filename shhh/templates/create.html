@@ -2,19 +2,19 @@
 
 {% block container %}
   <form
-    id="createSecret"
+    id="createSecretForm"
     action="{{ url_for('api.secret') }}"
     method="POST"
     autocomplete="off"
     data-redirect="{{ url_for('views.created') }}"
   >
     <fieldset id="createSecretFs">
-      <p class="has-text-left">Write your secret</p>
+      <legend class="has-text-left is-size-5">Encrypt a secret</legend>
       <p class="has-text-justified help mb-2">
-        Tip: for better security, avoid writing any info on how/where to use the secret you're sharing
-        (like urls, websites or emails). Instead, explain this in your email or chat, with the link and passphrase
-        generated from Shhh. So even if someone got access to your secret, there is no way for the attacker
-        to know how and where to use it.
+        Tip: for better security, avoid writing any info on how/where to use the secret you're
+        sharing (like urls, websites or emails). Instead, write this in your email or chat,
+        with the link and passphrase generated from Shhh. So even if someone got access to your
+        secret, there is no way for the attacker to know how and where to use it.
       </p>
       <div class="field">
         <div class="control">
@@ -34,7 +34,7 @@
 
       <div class="columns is-mobile">
         <div class="column">
-          <p class="has-text-left mb-1">Destroy in</p>
+          <p class="has-text-left mb-1 is-size-5">Destroy in</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select id="expiresValue" name="days">
@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="column">
-          <p class="has-text-left mb-1">Destroy after</p>
+          <p class="has-text-left mb-1 is-size-5">Destroy after</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select id="maxTries" name="tries">
@@ -66,7 +66,12 @@
         </div>
       </div>
 
-      <p class="has-text-left mb-1">Passphrase to open secret (min 8 chars, 1 number, 1 uppercase)</p>
+      <p class="has-text-left mb-1 is-size-5">Passphrase to open secret</p>
+      <p class="has-text-justified help mb-2">
+        This is a random passphrase for the recipient to be able to decrypt your secret. Remember
+        and send this passphrase to your recipient with the link Shhh will generate (min. 8
+        characters, 1 number and 1 uppercase).
+      </p>
       <div class="field is-grouped">
         <p class="control is-expanded has-icons-left">
           <input
@@ -87,15 +92,21 @@
         </div>
       </div>
       <div class="field has-text-left help">
-        <input class="checkbox" name="haveibeenpwned" id="haveibeenpwned" type="checkbox" checked="checked">
-        <label for="haveibeenpwned">&nbsp;(optional) check passphrase with haveibeenpwned.com</label>
+        <input class="checkbox mr-2" name="haveibeenpwned"
+               id="haveibeenpwned" type="checkbox" checked="checked">
+        <label for="haveibeenpwned">(optional) check passphrase with haveibeenpwned.com</label>
       </div>
     </fieldset>
   </form>
 
-  <div id="response">
-    <strong><span id="msg"></span></strong>
-  </div>
+  <div id="notification"></div>
+
+  <template id="notificationTemplate">
+    <div class="notification has-text-weight-bold pop mt-4">
+      <button class="delete"></button>
+      <span id="notificationContent"></span>
+    </div>
+  </template>
 {% endblock %}
 
 {% block js %}
