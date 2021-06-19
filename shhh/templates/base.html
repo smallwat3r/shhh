@@ -26,25 +26,29 @@
 
   <body>
     <section class="hero is-dark is-bold is-fullheight">
+      <div class="hero-head">
+        <div class="container has-text-centered has-text-weight-bold">
+          <p class="is-size-5 mt-3">
+            <a class="has-text-primary" href="{{ url_for('views.create') }}">~/</a>
+            Shhh, keep secrets out of emails and chat logs.
+          </p>
+          <hr class="mt-3" />
+        </div>
+      </div>
       <div class="hero-body">
         <div class="container has-text-centered has-text-weight-bold">
           <div class="columns is-centered">
             <div class="column is-three-fifths">
-              <p class="has-text-left is-size-5 mb-5">
-                <a class="has-text-primary" href="{{ url_for('views.create') }}">~/</a>
-                Shhh, keep secrets out of emails and chat logs.
-              </p>
-
               {% block container %}{% endblock %}
 
             </div>
           </div>
         </div>
       </div>
-      <div class="hero-foot">
-        <div class="container">
-          <hr class="mb-2 mt-3" />
-          <p class="has-text-centered help has-text-weight-bold mb-3">
+      <div class="hero-footer">
+        <div class="container has-text-centered has-text-weight-bold">
+          <hr class="mb-3 mt-3" />
+          <p class="help mb-3">
             <a class="has-text-primary"
                 target="_blank"
                 rel="noreferrer noopener"

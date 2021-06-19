@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 
 {% block container %}
-  <p class="has-text-justified help mb-2">
-    Send this link and the passphrase you've previously created to your recipient so they
-    can read the secret. This link will expire on {{ expires_on }}. Bear in mind that as
-    soon as the secret gets decrypted, it gets deleted forever.
+  <p class="has-text-left is-size-5 mb-2">
+    <span class="feather mr-2" data-feather="share-2"></span>
+    Share this link and the passphrase
+  </p>
+  <p class="has-text-justified help mb-4">
+    Send this link and the passphrase you've previously created to your recipient. Bear in mind
+    that as soon as the secret gets decrypted, it gets deleted forever. This link will expire
+    on {{ expires_on }}.
   </p>
   <div class="field has-addons">
     <div class="control is-expanded">
