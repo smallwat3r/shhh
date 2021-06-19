@@ -104,7 +104,7 @@ def write_secret(
 
     app.logger.info(f"{slug} created and expires on {exp_date}")
     timez = datetime.now(timezone.utc).astimezone().tzname()
-    expires_on = f"{exp_date.strftime('%Y-%m-%d at %H:%M')} {timez}"
+    expires_on = f"{exp_date.strftime('%d %B %Y at %H:%M')} {timez}"
 
     return (WriteResponse(slug, expires_on), HTTPStatus.CREATED.value)
 

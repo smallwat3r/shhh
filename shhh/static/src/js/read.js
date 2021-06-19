@@ -1,65 +1,70 @@
-const form = document.getElementById("readSecret");
-const formFs = document.getElementById("readSecretFs");
-const resp = document.getElementById("response");
-const msg = document.getElementById("msg");
-const copy = document.getElementById("copy");
+const status = {
+  INVALID: "invalid",
+  EXPIRED: "expired",
+  SUCCESS: "success"
+}
 
-form.addEventListener("submit", (e) => {
+readSecretForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  decryptBtn.className = "button is-primary is-loading";
+  decryptBtn.classList.add("is-loading");
 
-  resp.className = "";
-  msg.textContent = "";
+  let endpoint = readSecretForm.getAttribute("action");
+  let params = new URLSearchParams(new FormData(readSecretForm)).toString();
 
-  let endpoint = form.getAttribute("action");
-  let params = new URLSearchParams(new FormData(form)).toString();
-
-  formFs.setAttribute("disabled", "disabled");
+  readSecretFs.setAttribute("disabled", "disabled");  // lock form
 
   fetch(`${endpoint}?${params}`, {
-    method: form.getAttribute("method"),
+    method: readSecretForm.getAttribute("method"),
     cache: "no-store",
   })
-    .then((res) => {
-      return res.json();
-    })
+    .then((res) => res.json())
     .then((data) => {
       switch (data.response.status) {
-        case "invalid":
-          resp.className = "notification is-danger pop mt-4";
-          msg.innerHTML = data.response.msg;
-          decryptBtn.className = "button is-primary";
-          formFs.removeAttribute("disabled");
-          return;
-        case "expired":
-          resp.className = "notification is-warning pop mt-4";
+        case status.INVALID:
+          errorResponseHandler(data, "is-danger");
+          readSecretFs.removeAttribute("disabled");  // let user retry
           break;
-        case "success":
-          msg.className = "secret-message";
-          resp.className =
-            "notification has-text-left is-family-monospace is-success is-light pop mt-1";
-          copy.textContent = "Copy to clipboard";
-          copy.className = "has-text-left help has-text-success mt-4 clickable";
+        case status.EXPIRED:
+          errorResponseHandler(data, "is-warning");
+          break;
+        case status.SUCCESS:
+          successResponseHandler(data);
+          makeCopyable();
           break;
       }
-
-      decryptBtn.className = "button is-primary";
-      document.getElementById("passphrase").value = "";
-
-      msg.innerHTML = data.response.msg;
     });
 });
 
-copy.addEventListener("click", (e) => {
-  e.preventDefault();
-  let range = document.createRange();
-  range.selectNode(msg);
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(range);
-  document.execCommand("copy");
-  window.getSelection().removeAllRanges();
-  copy.textContent = "Copied to clipboard";
-  copy.className = "has-text-left help has-text-success-dark mt-4 clickable";
+function successResponseHandler(data) {
+  let content = notificationSecretTemplate.content.cloneNode(true);
+  notification.innerHTML = "";
+  notification.appendChild(content);
+  decryptBtn.classList.remove("is-loading");
+  passphrase.value = "";
+  notificationSecretContent.textContent = data.response.msg;
   feather.replace();
-});
+}
+
+function errorResponseHandler(data, notification_type) {
+  let content = notificationTemplate.content.cloneNode(true);
+  notification.innerHTML = "";
+  notification.appendChild(content);
+  notificationContent.parentNode.classList.add(notification_type);
+  decryptBtn.classList.remove("is-loading");
+  passphrase.value = "";
+  notificationContent.textContent = data.response.msg;
+}
+
+function makeCopyable() {
+  copy.addEventListener("click", (e) => {
+    e.preventDefault();
+    copy.classList.remove("pop");
+    let range = document.createRange();
+    range.selectNode(notificationSecretContent);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand("copy");
+    copy.classList.add("pop");
+  });
+}

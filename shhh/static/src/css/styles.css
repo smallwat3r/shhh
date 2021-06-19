@@ -12,10 +12,6 @@ body {
   font-family: "Work Sans", sans-serif;
 }
 
-a {
-  color: #fff;
-}
-
 hr {
   border: 0;
   height: 1px;
@@ -27,6 +23,10 @@ hr {
   );
 }
 
+.help {
+  font-size: 0.85rem;
+}
+
 .hidden {
   visibility: hidden;
 }
@@ -35,15 +35,11 @@ hr {
   font-family: "Hack", monospace !important;
 }
 
-.clickable {
+.notification>.copy {
+  right: .5em;
+  position: absolute;
   cursor: pointer;
-}
-
-.secret-message {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  top: .5em;
 }
 
 /* Icons */

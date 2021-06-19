@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 
 {% block container %}
-  <h2 class="subtitle">Decrypt a secret</h2>
   <form
-    id="readSecret"
+    id="readSecretForm"
     action="{{ url_for('api.secret') }}"
     method="GET"
     autocomplete="off"
   >
     <fieldset id="readSecretFs">
+      <legend class="has-text-left is-size-5">Decrypt a secret</legend>
+      <p class="has-text-justified help mb-2">
+        As soon as the message gets decrypted, it gets deleted forever, please make sure to save
+        it in a secure place before leaving this page.
+      </p>
       <div class="field is-grouped">
         <p class="control is-expanded has-icons-left">
           <input
@@ -32,16 +36,20 @@
     </fieldset>
   </form>
 
-  <p class="mt-3">
-    As soon as the message gets decrypted, <strong>it is deleted forever</strong>,
-    make sure to <strong>save it in a secure place</strong> before leaving this page.
-  </p>
+  <div id="notification"></div>
 
-  <p href="#" class="hidden" id="copy"></p>
+  <template id="notificationSecretTemplate">
+    <div class="notification has-text-left is-primary is-family-monospace pop mt-4">
+      <span id="copy" class="feather copy" data-feather="copy"></span>
+      <span id="notificationSecretContent"></span>
+    </div>
+  </template>
 
-  <div id="response">
-    <strong><span id="msg"></span></strong>
-  </div>
+  <template id="notificationTemplate">
+    <div class="notification has-text-weight-bold pop mt-4">
+      <span id="notificationContent"></span>
+    </div>
+  </template>
 {% endblock %}
 
 {% block js %}
