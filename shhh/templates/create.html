@@ -9,7 +9,7 @@
     data-redirect="{{ url_for('views.created') }}"
   >
     <fieldset id="createSecretFs">
-      <legend class="has-text-left is-size-5">Encrypt a secret</legend>
+      <legend class="has-text-left is-size-4">Encrypt a secret</legend>
       <p class="has-text-justified help mb-2">
         Tip: for better security, avoid writing any info on how/where to use the secret you're
         sharing (like urls, websites or emails). Instead, write this in your email or chat,
@@ -34,7 +34,7 @@
 
       <div class="columns is-mobile">
         <div class="column">
-          <p class="has-text-left mb-1 is-size-5">Destroy in</p>
+          <p class="has-text-left mb-1 is-size-4">Destroy in</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select id="expiresValue" name="days">
@@ -50,7 +50,7 @@
           </div>
         </div>
         <div class="column">
-          <p class="has-text-left mb-1 is-size-5">Destroy after</p>
+          <p class="has-text-left mb-1 is-size-4">Destroy after</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select id="maxTries" name="tries">
@@ -66,7 +66,7 @@
         </div>
       </div>
 
-      <p class="has-text-left mb-1 is-size-5">Passphrase to open secret</p>
+      <p class="has-text-left mb-1 is-size-4">Passphrase to open secret</p>
       <p class="has-text-justified help mb-2">
         This is a random passphrase for the recipient to be able to decrypt your secret. Remember
         and send this passphrase to your recipient with the link Shhh will generate (min. 8
