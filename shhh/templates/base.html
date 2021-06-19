@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <!--
   Source code: https://github.com/smallwat3r/shhh
   Feel free to contribute to the project!
   -->
+
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="keywords"
-      content="passwords,secrets,password,secret,encrypt,secret sharing,password sharing,security,privacy,shhh"
+      content="passwords,secrets,password,secret,encrypt,sharing,security,privacy,shhh"
     />
     <meta
       name="description"
@@ -40,7 +42,6 @@
           <div class="columns is-centered">
             <div class="column is-three-fifths">
               {% block container %}{% endblock %}
-
             </div>
           </div>
         </div>
@@ -54,8 +55,7 @@
                 rel="noreferrer noopener"
                 href="https://github.com/smallwat3r/shhh">
               source code
-            </a>
-            - Shhh v{{ version }}
+            </a> - Shhh v{{ version }}
           </p>
         </div>
       </div>
@@ -63,7 +63,7 @@
 
     <script src="{{ url_for('static', filename='vendor/feather-icons/dist/feather.min.js') }}"></script>
     <script>feather.replace();</script>
-
     {% block js %}{% endblock %}
   </body>
+
 </html>
