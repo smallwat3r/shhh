@@ -1,7 +1,8 @@
+from flask import Blueprint
 from flask import current_app as app
-from flask import Blueprint, redirect
+from flask import redirect
 from flask import render_template as rt
-from flask import request, url_for, send_from_directory
+from flask import request, send_from_directory, url_for
 
 views = Blueprint("views", __name__, url_prefix="/")
 

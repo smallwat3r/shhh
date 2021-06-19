@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from enum import Enum
 
 from flask import current_app as app
@@ -29,19 +29,33 @@ class Message(Enum):
 
 
 @dataclass
-class ReadResponse:
+class BaseResponse:
+    """Base Response dataclass."""
+
+    def make(self):
+        """Make a standard response from the dataclass fields."""
+        return jsonify(
+            {
+                "response": {
+                    f.name: getattr(self, f.name).value
+                    if isinstance(getattr(self, f.name), Enum)
+                    else getattr(self, f.name)
+                    for f in fields(self)
+                }
+            }
+        )
+
+
+@dataclass
+class ReadResponse(BaseResponse):
     """Read client response schema."""
 
     status: Status
     msg: str
 
-    def make(self):
-        """Make client response object."""
-        return jsonify({"response": {"status": self.status.value, "msg": self.msg}})
-
 
 @dataclass
-class WriteResponse:
+class WriteResponse(BaseResponse):
     """Write client response schema."""
 
     slug: str
@@ -55,28 +69,10 @@ class WriteResponse:
         if _host := app.config["SHHH_HOST"]:
             self.link = _host.rstrip("/") + url_for("views.read", slug=self.slug)
 
-    def make(self):
-        """Make client response object."""
-        return jsonify(
-            {
-                "response": {
-                    "status": self.status.value,
-                    "details": self.details.value,
-                    "slug": self.slug,
-                    "link": self.link,
-                    "expires_on": self.expires_on,
-                }
-            }
-        )
-
 
 @dataclass
-class ErrorResponse:
+class ErrorResponse(BaseResponse):
     """Error client response schema."""
 
     details: str
     status: Status = Status.ERROR
-
-    def make(self):
-        """Make error response object."""
-        return jsonify({"response": {"status": self.status.value, "details": self.details}})
