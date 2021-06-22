@@ -74,7 +74,7 @@ definitions:
       expire:
         type: string
         default: 3d
-        description: How long to keep the secret alive (10m, 30m, 1h, 3h, 6h, 1d, 2d, 3h, 5d or 7d)
+        description: How long to keep the secret alive (10m, 30m, 1h, 3h, 6h, 1d, 2d, 3d, 5d or 7d)
         example: 30m
       tries:
         type: integer
