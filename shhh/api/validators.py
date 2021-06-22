@@ -117,4 +117,4 @@ class Validator:
         """Tries validation handler."""
         allowed = set(i.value for i in ReadTriesValues)
         if not tries in allowed:
-            raise ValidationError(f"The expiry value must be in: {allowed}")
+            raise ValidationError(f"The number of allowed tries must be in: {allowed}")
