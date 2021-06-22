@@ -37,11 +37,11 @@
           <p class="has-text-left mb-1 is-size-5">Destroy in</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select id="expiresValue" name="days">
-                <option value="1">1 day</option>
-                <option value="2">2 days</option>
-                <option value="3">3 days</option>
-                <option value="7">1 week</option>
+              <select id="expiresValue" name="expire"
+                      data-default="{{ SecretExpirationValues.default() }}">
+                {% for name, value in SecretExpirationValues.dict().items() %}
+                  <option value="{{ value }}">{{ name }}</option>
+                {% endfor %}
               </select>
             </div>
             <div class="icon is-small is-left">
@@ -53,10 +53,10 @@
           <p class="has-text-left mb-1 is-size-5">Destroy after</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select id="maxTries" name="tries">
-                <option value="3">3 tries</option>
-                <option value="5">5 tries</option>
-                <option value="10">10 tries</option>
+              <select id="maxTries" name="tries" data-default="{{ ReadTriesValues.default() }}">
+                {% for try in ReadTriesValues %}
+                  <option value="{{ try.value }}">{{ try.value }} tries</option>
+                {% endfor %}
               </select>
             </div>
             <div class="icon is-small is-left">

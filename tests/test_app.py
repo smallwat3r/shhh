@@ -13,6 +13,7 @@ from shhh.entrypoint import create_app
 from shhh.extensions import db, scheduler
 from shhh.models import Entries
 from shhh.scheduler import tasks
+from shhh.config import SecretExpirationValues, ReadTriesValues
 
 
 class Parse(SimpleNamespace):
@@ -184,7 +185,7 @@ class TestApplication(unittest.TestCase):
         payload = {
             "secret": "secret message",
             "passphrase": "SuperSecret123",
-            "days": 12,
+            "expires": "12d",
         }
         with self.app.test_request_context(), self.client as c:
             response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
@@ -195,7 +196,7 @@ class TestApplication(unittest.TestCase):
 
     @responses.activate
     def test_api_post_wrong_formats(self):
-        payload = {"secret": 1, "passphrase": 1, "days": "not an integer"}
+        payload = {"secret": 1, "passphrase": 1, "expire": "do not exists"}
         with self.app.test_request_context(), self.client as c:
             response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 
@@ -334,7 +335,7 @@ class TestApplication(unittest.TestCase):
 
     @responses.activate
     def test_api_post_created(self):
-        payload = {"secret": "secret message", "passphrase": "PhduiGUI12d", "days": 3}
+        payload = {"secret": "secret message", "passphrase": "PhduiGUI12d", "expire": "3d"}
         with self.app.test_request_context(), self.client as c:
             response = json.loads(c.post(url_for("api.secret"), json=payload).get_data())
 

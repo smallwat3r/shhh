@@ -1,5 +1,5 @@
-expiresValue.value = 3;
-maxTries.value = 5;
+expiresValue.value = expiresValue.getAttribute("data-default");
+maxTries.value = maxTries.getAttribute("data-default");
 
 inputSecret.onkeyup = (_) =>
   (document.getElementById("counter").textContent =

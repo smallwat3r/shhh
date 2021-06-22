@@ -1,23 +1,52 @@
+import enum
 import os
 from typing import Optional
 
 from shhh.scheduler import delete_expired_links
 
 
+class ReadTriesValues(enum.IntEnum):
+    """Enum of allowed number of tries to read secrets."""
+
+    THREE = 3
+    FIVE = 5
+    TEN = 10
+
+    @classmethod
+    def default(cls):
+        """Default value."""
+        return cls.FIVE.value  # Need value as IntEnum not supported by Jinja
+
+
+class SecretExpirationValues(enum.Enum):
+    """Enum of allowed expiration values."""
+
+    _10_MINUTES = "10m"
+    _30_MINUTES = "30m"
+    _AN_HOUR = "1h"
+    _3_HOURS = "3h"
+    _6_HOURS = "6h"
+    _A_DAY = "1d"
+    _2_DAYS = "2d"
+    _3_DAYS = "3d"
+    _5_DAYS = "5d"
+    _A_WEEK = "7d"
+
+    @classmethod
+    def default(cls):
+        """Default value."""
+        return cls._3_DAYS.value
+
+    @classmethod
+    def dict(cls) -> dict:
+        """Return a dict of human friendly data."""
+        return {i.name[1:].replace("_", " ").capitalize(): i.value for i in cls}
+
+
 class DefaultConfig:
     """Default config values (dev-local)."""
 
     DEBUG = True
-
-    # Scheduled jobs. Delete expired database records every 60 seconds.
-    JOBS = [
-        {
-            "id": "delete_expired_links",
-            "func": delete_expired_links,
-            "trigger": "interval",
-            "seconds": 60,
-        }
-    ]
 
     # Postgres connection.
     POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
@@ -35,7 +64,21 @@ class DefaultConfig:
     )
 
     #
-    # Shhh optional configurations
+    # Shhh specifics
+    #
+
+    # Scheduled jobs. Delete expired database records every 60 seconds.
+    JOBS = [
+        {
+            "id": "delete_expired_links",
+            "func": delete_expired_links,
+            "trigger": "interval",
+            "seconds": 60,
+        }
+    ]
+
+    #
+    # Shhh optional custom configurations
     #
 
     # This variable can be used to specify a custom hostname to use as the
@@ -72,9 +115,11 @@ class TestConfig(DefaultConfig):
 
     DEBUG = False
     TESTING = True
+
     SQLALCHEMY_DATABASE_URI = (
         f"sqlite:///{os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.db')}"
     )
+
     SHHH_HOST = "http://test.test"
     SHHH_DB_LIVENESS_RETRY_COUNT = 1
     SHHH_DB_LIVENESS_SLEEP_INTERVAL = 0.1
