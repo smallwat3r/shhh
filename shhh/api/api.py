@@ -31,11 +31,8 @@ class PostParams(Schema):
         validate=(Validator.passphrase, Validator.strength),
     )
     secret = fields.Str(required=True, validate=Validator.secret)
-    expire = fields.Str(
-        default=SecretExpirationValues.default(),
-        choice=set(i.value for i in SecretExpirationValues),
-    )
-    tries = fields.Int(default=ReadTriesValues.default(), choice=set(i for i in ReadTriesValues))
+    expire = fields.Str(default=SecretExpirationValues.default(), validate=Validator.expire)
+    tries = fields.Int(default=ReadTriesValues.default(), validate=Validator.tries)
     haveibeenpwned = fields.Bool(default=False)
 
     @pre_load

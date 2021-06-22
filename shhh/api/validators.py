@@ -7,6 +7,8 @@ import requests
 from flask import current_app as app
 from marshmallow import ValidationError
 
+from shhh.config import ReadTriesValues, SecretExpirationValues
+
 
 def pwned_password(passphrase: str) -> Union[int, bool]:
     """Check passphrase with Troy's Hunt haveibeenpwned API.
@@ -96,3 +98,23 @@ class Validator:
         """Passphrase validation handler."""
         if not passphrase:
             raise ValidationError("Missing a passphrase.")
+
+    @classmethod
+    def slug(cls, slug: str) -> None:
+        """Link validation handler."""
+        if not slug:
+            raise ValidationError("Missing a secret link.")
+
+    @classmethod
+    def expire(cls, expire: str) -> None:
+        """Expire validation handler."""
+        allowed = set(i.value for i in SecretExpirationValues)
+        if not expire in allowed:
+            raise ValidationError(f"The expiry value must be in: {allowed}")
+
+    @classmethod
+    def tries(cls, tries: str) -> None:
+        """Tries validation handler."""
+        allowed = set(i.value for i in ReadTriesValues)
+        if not tries in allowed:
+            raise ValidationError(f"The expiry value must be in: {allowed}")

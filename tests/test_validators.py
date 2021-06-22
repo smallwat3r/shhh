@@ -56,6 +56,18 @@ class TestValidators(unittest.TestCase):
         mock_pwned.return_value = False
         self.assertIsNone(Validator.haveibeenpwned("cjHeW9ihf9u43f9u4b3"))
 
+    def test_expire(self):
+        not_valid = ("80d", "3.5m", "1y", "0", "i do not exist", 23)
+        for expire in not_valid:
+            with self.assertRaises(ValidationError):
+                Validator.expire(expire)
+
+    def test_tries(self):
+        not_valid = (0, -1, 15)
+        for tries in not_valid:
+            with self.assertRaises(ValidationError):
+                Validator.tries(tries)
+
 
 if __name__ == "__main__":
     unittest.main()
