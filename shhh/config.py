@@ -13,9 +13,8 @@ class ReadTriesValues(enum.IntEnum):
     TEN = 10
 
     @classmethod
-    def default(cls):
-        """Default value."""
-        return cls.FIVE.value  # Need value as IntEnum not supported by Jinja
+    def default(cls):  # pylint: disable=missing-function-docstring
+        return cls.FIVE.value  # Needs .value as its being passed to Jinja
 
 
 class SecretExpirationValues(enum.Enum):
@@ -33,14 +32,23 @@ class SecretExpirationValues(enum.Enum):
     _A_WEEK = "7d"
 
     @classmethod
-    def default(cls):
-        """Default value."""
+    def default(cls):  # pylint: disable=missing-function-docstring
         return cls._3_DAYS.value
 
     @classmethod
     def dict(cls) -> dict:
         """Return a dict of human friendly data."""
         return {i.name[1:].replace("_", " ").capitalize(): i.value for i in cls}
+
+
+class EnvConfig(enum.Enum):
+    """Environment config values."""
+
+    TESTING = "testing"
+    DEV_LOCAL = "dev-local"
+    DEV_DOCKER = "dev-docker"
+    HEROKU = "heroku"
+    PRODUCTION = "production"
 
 
 class DefaultConfig:
