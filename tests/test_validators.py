@@ -29,30 +29,6 @@ class TestValidators(unittest.TestCase):
             with self.assertRaises(ValidationError):
                 Validator.passphrase(s)
 
-    def test_days(self):
-        not_valid = (-1, 0, 8, 10)
-        for d in not_valid:
-            with self.assertRaises(ValidationError):
-                Validator.days(d)
-
-        for d in range(1, 8):
-            self.assertIsNone(Validator.days(d))
-
-    def test_tries(self):
-        not_valid = (-1, 0, 2, 11)
-        for t in not_valid:
-            with self.assertRaises(ValidationError):
-                Validator.tries(t)
-
-        for t in range(3, 11):
-            self.assertIsNone(Validator.tries(t))
-
-    def test_slug(self):
-        not_valid = (None, "")
-        for s in not_valid:
-            with self.assertRaises(ValidationError):
-                Validator.slug(s)
-
     def test_strength(self):
         not_valid = (
             "weak",

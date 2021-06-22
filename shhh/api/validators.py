@@ -96,25 +96,3 @@ class Validator:
         """Passphrase validation handler."""
         if not passphrase:
             raise ValidationError("Missing a passphrase.")
-
-    @classmethod
-    def days(cls, days: int) -> None:
-        """Expiration validation handler."""
-        if days <= 0:
-            raise ValidationError("The minimum number of days to keep the secret alive is 1.")
-        if days > 7:
-            raise ValidationError("The maximum number of days to keep the secret alive is 7.")
-
-    @classmethod
-    def tries(cls, tries: int) -> None:
-        """Maximum tries validation handler."""
-        if tries < 3:
-            raise ValidationError("The minimum number of tries to decrypt the secret is 3.")
-        if tries > 10:
-            raise ValidationError("The maximum number of tries to decrypt the secret is 10.")
-
-    @classmethod
-    def slug(cls, slug: str) -> None:
-        """Link validation handler."""
-        if not slug:
-            raise ValidationError("Missing a secret link.")

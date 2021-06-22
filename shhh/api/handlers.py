@@ -72,27 +72,40 @@ def _generate_unique_slug() -> str:
     if not Entries.query.filter_by(slug_link=slug).first():
         return slug
 
-    return _generate_unique_slug()
+    return _generate_unique_slug()  # Edge case
+
+
+def _build_expiry_date(now: str, expire: str) -> datetime:
+    """Builds secret expiry date."""
+    units = {"m": "minutes", "h": "hours", "d": "days"}
+
+    timedelta_parameters = {}
+    for unit, parameter in units.items():
+        if expire.endswith(unit):
+            timedelta_parameters = {parameter: int(expire.split(unit)[0])}
+            break
+
+    return datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(**timedelta_parameters)
 
 
 @db_liveness_ping(LivenessClient.WEB)
 def write_secret(
-    passphrase: str, secret: str, expire: int, tries: int, haveibeenpwned: bool
+    passphrase: str, secret: str, expire: str, tries: int, haveibeenpwned: bool
 ) -> Tuple[WriteResponse, int]:
     """Write a secret.
 
     Args:
         passphrase (str): Passphrase needed to encrypt the secret.
         secret (str): Secret to encrypt.
-        expire (int): Number of days the secret will be stored.
+        expire (int): How long the secret will be stored.
         tries (int): Number of tries to read the secret before it gets deleted.
         haveibeenpwned (bool): Passphrase has been checked with haveibeenpwned.
 
     """
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    exp_date = datetime.strptime(now, "%Y-%m-%d %H:%M:%S") + timedelta(days=expire)
-
+    exp_date = _build_expiry_date(now, expire)
     slug = _generate_unique_slug()
+
     Entries.create(
         slug_link=slug,
         encrypted_text=Secret(secret.encode(), passphrase).encrypt(),

@@ -1,6 +1,5 @@
 import gzip
 import logging
-from enum import Enum
 from http import HTTPStatus
 from io import BytesIO
 
@@ -13,18 +12,9 @@ from webassets.env import RegisterError
 
 from shhh import __version__
 from shhh.api import api
+from shhh.config import EnvConfig
 from shhh.extensions import assets, db, scheduler
 from shhh.views import views
-
-
-class EnvConfig(Enum):
-    """Environment config values."""
-
-    TESTING = "testing"
-    DEV_LOCAL = "dev-local"
-    DEV_DOCKER = "dev-docker"
-    HEROKU = "heroku"
-    PRODUCTION = "production"
 
 
 def create_app(env):

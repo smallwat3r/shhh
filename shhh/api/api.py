@@ -8,6 +8,7 @@ from webargs.flaskparser import abort, parser, use_kwargs
 
 from shhh.api.handlers import parse_error, read_secret, write_secret
 from shhh.api.validators import Validator
+from shhh.config import ReadTriesValues, SecretExpirationValues
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -18,7 +19,7 @@ query = functools.partial(use_kwargs, location="query")
 class GetParams(Schema):
     """GET parameters."""
 
-    slug = fields.Str(required=True, validate=Validator.slug)
+    slug = fields.Str(required=True)
     passphrase = fields.Str(required=True, validate=Validator.passphrase)
 
 
@@ -30,9 +31,12 @@ class PostParams(Schema):
         validate=(Validator.passphrase, Validator.strength),
     )
     secret = fields.Str(required=True, validate=Validator.secret)
-    days = fields.Int(validate=Validator.days)
-    tries = fields.Int(validate=Validator.tries)
-    haveibeenpwned = fields.Bool()
+    expire = fields.Str(
+        default=SecretExpirationValues.default(),
+        choice=set(i.value for i in SecretExpirationValues),
+    )
+    tries = fields.Int(default=ReadTriesValues.default(), choice=set(i for i in ReadTriesValues))
+    haveibeenpwned = fields.Bool(default=False)
 
     @pre_load
     def standardize_newline_character(self, data, **kwargs):
@@ -69,12 +73,12 @@ class Api(MethodView):
         self,
         passphrase: str,
         secret: str,
-        days: int = 3,
-        tries: int = 5,
+        expire: str = SecretExpirationValues.default(),
+        tries: int = ReadTriesValues.default(),
         haveibeenpwned: bool = False,
     ) -> Response:
         """Create secret request handler."""
-        response, code = write_secret(passphrase, secret, days, tries, haveibeenpwned)
+        response, code = write_secret(passphrase, secret, expire, tries, haveibeenpwned)
         return make_response(response.make(), code)
 
 

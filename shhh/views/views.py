@@ -4,13 +4,20 @@ from flask import redirect
 from flask import render_template as rt
 from flask import request, send_from_directory, url_for
 
+from shhh.config import ReadTriesValues, SecretExpirationValues
+
 views = Blueprint("views", __name__, url_prefix="/")
 
 
 @views.get("/")
 def create():
     """View to create a secret."""
-    return rt("create.html", secret_max_length=app.config["SHHH_SECRET_MAX_LENGTH"])
+    return rt(
+        "create.html",
+        secret_max_length=app.config["SHHH_SECRET_MAX_LENGTH"],
+        SecretExpirationValues=SecretExpirationValues,
+        ReadTriesValues=ReadTriesValues,
+    )
 
 
 @views.get("/secret")

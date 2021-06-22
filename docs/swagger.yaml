@@ -71,15 +71,15 @@ definitions:
         type: string
         description: The passphrase to open the secret (min. 8 chars, 1 uppercase, 1 number)
         example: "HuDgde723g8f"
-      days:
-        type: integer
-        default: 3
-        description: The number of days to keep the secret alive (min. 1, max. 7)
-        example: 5
+      expire:
+        type: string
+        default: 3d
+        description: How long to keep the secret alive (10m, 30m, 1h, 3h, 6h, 1d, 2d, 3d, 5d or 7d)
+        example: 30m
       tries:
         type: integer
         default: 5
-        description: The number of tries to open the secret before it gets deleted (min. 3, max. 10)
+        description: The number of tries to open the secret before it gets deleted (3, 5 or 10)
         example: 3
       haveibeenpwned:
         type: boolean
