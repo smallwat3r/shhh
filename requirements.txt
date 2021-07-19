@@ -24,7 +24,7 @@ python-dateutil==2.8.2
 pytz==2021.1
 requests==2.26.0
 six==1.16.0
-SQLAlchemy==1.4.20
+SQLAlchemy==1.4.21
 tzlocal==2.1
 urllib3==1.26.6
 webargs==8.0.0
