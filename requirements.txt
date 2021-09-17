@@ -15,7 +15,7 @@ htmlmin==0.1.12
 idna==2.10
 itsdangerous==2.0.1
 Jinja2==3.0.1
-jsmin==2.2.2
+jsmin==3.0.0
 MarkupSafe==2.0.1
 marshmallow==3.13.0
 psycopg2-binary==2.9.1
