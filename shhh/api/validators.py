@@ -64,7 +64,7 @@ class Validator:
             regex = re.compile(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$")
             if not regex.search(passphrase) is not None:
                 raise ValidationError(
-                    "Passphrase too weak. Minimun 8 characters, including 1 number and 1 uppercase."
+                    "Passphrase too weak. Minimum 8 characters, including 1 number and 1 uppercase."
                 )
 
     @classmethod
