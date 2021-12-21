@@ -13,7 +13,6 @@ from shhh.entrypoint import create_app
 from shhh.extensions import db, scheduler
 from shhh.models import Entries
 from shhh.scheduler import tasks
-from shhh.config import SecretExpirationValues, ReadTriesValues
 
 
 class Parse(SimpleNamespace):
