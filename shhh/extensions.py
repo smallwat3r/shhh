@@ -6,7 +6,7 @@ from flask_assets import Environment
 from flask_sqlalchemy import Model, SQLAlchemy
 
 
-class CRUDMixin(Model):
+class _CRUDMixin(Model):
     """Add convenience methods for CRUD operations with SQLAlchemy."""
 
     @classmethod
@@ -34,6 +34,6 @@ class CRUDMixin(Model):
         return commit and db.session.commit()
 
 
-db = SQLAlchemy(model_class=CRUDMixin)
+db = SQLAlchemy(model_class=_CRUDMixin)
 assets = Environment()
 scheduler = APScheduler()

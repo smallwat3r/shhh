@@ -2,8 +2,8 @@
 import logging
 from datetime import datetime
 
-from shhh.decorators import LivenessClient, db_liveness_ping
 from shhh.extensions import scheduler
+from shhh.liveness import LivenessClient, db_liveness_ping
 from shhh.models import Entries
 
 logger = logging.getLogger("tasks")

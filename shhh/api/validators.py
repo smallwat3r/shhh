@@ -10,7 +10,7 @@ from marshmallow import ValidationError
 from shhh.config import ReadTriesValues, SecretExpirationValues
 
 
-def pwned_password(passphrase: str) -> Union[int, bool]:
+def _pwned_password(passphrase: str) -> Union[int, bool]:
     """Check passphrase with Troy's Hunt haveibeenpwned API.
 
     Query the API to check if the passphrase has already been pwned in the
@@ -71,7 +71,7 @@ class Validator:
     def haveibeenpwned(cls, passphrase: str) -> None:
         """Validate passphrase against haveibeenpwned API."""
         try:
-            times_pwned = pwned_password(passphrase)
+            times_pwned = _pwned_password(passphrase)
         except Exception as err:  # pylint: disable=broad-except
             app.logger.error(err)
             times_pwned = False  # don't break if service isn't reachable.

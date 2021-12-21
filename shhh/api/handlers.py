@@ -9,7 +9,7 @@ from flask import current_app as app
 
 from shhh.api.encryption import Secret
 from shhh.api.responses import ErrorResponse, Message, ReadResponse, Status, WriteResponse
-from shhh.decorators import LivenessClient, db_liveness_ping
+from shhh.liveness import LivenessClient, db_liveness_ping
 from shhh.models import Entries
 
 
