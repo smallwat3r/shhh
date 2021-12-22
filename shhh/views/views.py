@@ -4,7 +4,7 @@ from flask import redirect
 from flask import render_template as rt
 from flask import request, send_from_directory, url_for
 
-from shhh.config import ReadTriesValues, SecretExpirationValues
+from shhh.enums import ReadTriesValues, SecretExpirationValues
 
 views = Blueprint("views", __name__, url_prefix="/")
 

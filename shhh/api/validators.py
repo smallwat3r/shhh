@@ -7,7 +7,7 @@ import requests
 from flask import current_app as app
 from marshmallow import ValidationError
 
-from shhh.config import ReadTriesValues, SecretExpirationValues
+from shhh.enums import ReadTriesValues, SecretExpirationValues
 
 
 def _pwned_password(passphrase: str) -> Union[int, bool]:

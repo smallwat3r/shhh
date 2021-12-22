@@ -8,7 +8,7 @@ from webargs.flaskparser import abort, parser, use_kwargs
 
 from shhh.api.handlers import parse_error, read_secret, write_secret
 from shhh.api.validators import Validator
-from shhh.config import ReadTriesValues, SecretExpirationValues
+from shhh.enums import ReadTriesValues, SecretExpirationValues
 
 api = Blueprint("api", __name__, url_prefix="/api")
 

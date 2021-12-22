@@ -8,16 +8,10 @@ from flask import current_app as app
 from sqlalchemy.exc import OperationalError
 
 from shhh.api.responses import ErrorResponse, Message
+from shhh.enums import LivenessClient
 from shhh.extensions import db, scheduler
 
 logger = logging.getLogger(__name__)
-
-
-class LivenessClient(enum.Enum):
-    """Liveness client type."""
-
-    WEB = "web"
-    TASK = "task"
 
 
 def db_liveness_ping(client: LivenessClient):

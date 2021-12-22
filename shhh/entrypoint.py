@@ -12,7 +12,7 @@ from webassets.env import RegisterError
 
 from shhh import __version__
 from shhh.api import api
-from shhh.config import EnvConfig
+from shhh.enums import EnvConfig
 from shhh.extensions import assets, db, scheduler
 from shhh.views import views
 
