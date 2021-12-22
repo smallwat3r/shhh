@@ -14,7 +14,7 @@ from shhh.models import Entries
 
 
 @db_liveness_ping(LivenessClient.WEB)
-def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
+def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, HTTPStatus]:
     """Read a secret.
 
     Args:
@@ -27,7 +27,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
         app.logger.info(f"{slug} tried to read but do not exists in database")
         return (
             ReadResponse(Status.EXPIRED, Message.NOT_FOUND.value),
-            HTTPStatus.NOT_FOUND.value,
+            HTTPStatus.NOT_FOUND,
         )
 
     try:
@@ -40,7 +40,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
             secret.delete()
             return (
                 ReadResponse(Status.INVALID, Message.EXCEEDED.value),
-                HTTPStatus.UNAUTHORIZED.value,
+                HTTPStatus.UNAUTHORIZED,
             )
 
         secret.update(tries=remaining)
@@ -50,14 +50,14 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, int]:
                 Status.INVALID,
                 Message.INVALID.value.format(remaining=remaining),
             ),
-            HTTPStatus.UNAUTHORIZED.value,
+            HTTPStatus.UNAUTHORIZED,
         )
 
     secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
     return (
         ReadResponse(Status.SUCCESS, html.escape(msg)),
-        HTTPStatus.OK.value,
+        HTTPStatus.OK,
     )
 
 
@@ -91,7 +91,7 @@ def _build_expiry_date(now: str, expire: str) -> datetime:
 @db_liveness_ping(LivenessClient.WEB)
 def write_secret(
     passphrase: str, secret: str, expire: str, tries: int, haveibeenpwned: bool
-) -> Tuple[WriteResponse, int]:
+) -> Tuple[WriteResponse, HTTPStatus]:
     """Write a secret.
 
     Args:
@@ -119,14 +119,14 @@ def write_secret(
     timez = datetime.now(timezone.utc).astimezone().tzname()
     expires_on = f"{exp_date.strftime('%B %d, %Y at %H:%M')} {timez}"
 
-    return (WriteResponse(slug, expires_on), HTTPStatus.CREATED.value)
+    return (WriteResponse(slug, expires_on), HTTPStatus.CREATED)
 
 
-def parse_error(errors) -> Tuple[ErrorResponse, int]:
+def parse_error(errors) -> Tuple[ErrorResponse, HTTPStatus]:
     """Parse API errors."""
     error = ""
     for source in ("json", "query"):
         for _, message in errors.messages.get(source, {}).items():
             error += f"{message[0]} "
 
-    return (ErrorResponse(error), HTTPStatus.UNPROCESSABLE_ENTITY.value)
+    return (ErrorResponse(error), HTTPStatus.UNPROCESSABLE_ENTITY)

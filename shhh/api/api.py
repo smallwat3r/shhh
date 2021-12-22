@@ -53,7 +53,7 @@ class PostParams(Schema):
 def handle_parsing_error(err, req, schema, *, error_status_code, error_headers):
     """Handle request parsing errors."""
     response, code = parse_error(err)
-    return abort(response.make(), code)
+    return abort(response.make(), code.value)
 
 
 class Api(MethodView):
@@ -63,7 +63,7 @@ class Api(MethodView):
     def get(self, slug: str, passphrase: str) -> Response:
         """Get secret request handler."""
         response, code = read_secret(slug, passphrase)
-        return make_response(response.make(), code)
+        return make_response(response.make(), code.value)
 
     @json(PostParams())
     def post(
@@ -76,7 +76,7 @@ class Api(MethodView):
     ) -> Response:
         """Create secret request handler."""
         response, code = write_secret(passphrase, secret, expire, tries, haveibeenpwned)
-        return make_response(response.make(), code)
+        return make_response(response.make(), code.value)
 
 
 api.add_url_rule("/secret", view_func=Api.as_view("secret"))
