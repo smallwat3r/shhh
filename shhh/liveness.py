@@ -1,4 +1,3 @@
-import enum
 import logging
 import time
 from http import HTTPStatus
