@@ -57,7 +57,7 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, HTTPStatus]:
     secret.delete()  # Delete message after it's read
     app.logger.info(f"{slug} was decrypted and deleted")
     return (
-        ReadResponse(Status.SUCCESS, html.escape(msg)),
+        ReadResponse(Status.SUCCESS, html.escape(msg, quote=False)),
         HTTPStatus.OK,
     )
 
