@@ -1,4 +1,3 @@
-import html
 import secrets
 from datetime import datetime, timedelta, timezone
 from http import HTTPStatus
@@ -54,12 +53,10 @@ def read_secret(slug: str, passphrase: str) -> Tuple[ReadResponse, HTTPStatus]:
             HTTPStatus.UNAUTHORIZED,
         )
 
-    secret.delete()  # Delete message after it's read
+    secret.delete()  # Delete message after it's been read
     app.logger.info(f"{slug} was decrypted and deleted")
-    return (
-        ReadResponse(Status.SUCCESS, html.escape(msg, quote=False)),
-        HTTPStatus.OK,
-    )
+
+    return ReadResponse(Status.SUCCESS, msg), HTTPStatus.OK
 
 
 def _generate_unique_slug() -> str:
@@ -120,7 +117,7 @@ def write_secret(
     timez = datetime.now(timezone.utc).astimezone().tzname()
     expires_on = f"{exp_date.strftime('%B %d, %Y at %H:%M')} {timez}"
 
-    return (WriteResponse(slug, expires_on), HTTPStatus.CREATED)
+    return WriteResponse(slug, expires_on), HTTPStatus.CREATED
 
 
 def parse_error(errors) -> Tuple[ErrorResponse, HTTPStatus]:
@@ -130,4 +127,4 @@ def parse_error(errors) -> Tuple[ErrorResponse, HTTPStatus]:
         for _, message in errors.messages.get(source, {}).items():
             error += f"{message[0]} "
 
-    return (ErrorResponse(error), HTTPStatus.UNPROCESSABLE_ENTITY)
+    return ErrorResponse(error), HTTPStatus.UNPROCESSABLE_ENTITY
