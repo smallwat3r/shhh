@@ -16,10 +16,10 @@
 them securely with people. The goal of this application is to get rid
 of plain text sensitive information into emails or chat logs.  
 
-Shhh is deployed [here](https://shhh-encrypt.herokuapp.com/), but
-**it's better for organisations and people to deploy it on their own
-personal / private server** for even better security. You can find
-in this repo everything you need to host the app yourself.  
+Shhh is deployed [here](https://www.shhh-encrypt.com) (_!! temporary unavailable
+until new deployment solution !!_), but **it's better for organisations and people 
+to deploy it on their own personal / private server** for even better security. 
+You can find in this repo everything you need to host the app yourself.  
 
 Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
