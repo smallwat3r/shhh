@@ -16,8 +16,8 @@
 them securely with people. The goal of this application is to get rid
 of plain text sensitive information into emails or chat logs.  
 
-Shhh is deployed [here](https://www.shhh-encrypt.com) (_!! temporary unavailable
-until new deployment solution !!_), but **it's better for organisations and people 
+Shhh is deployed [here](https://www.shhh-encrypt.com) (_temporary unavailable
+until new deployment solution_), but **it's better for organisations and people 
 to deploy it on their own personal / private server** for even better security. 
 You can find in this repo everything you need to host the app yourself.  
 
