@@ -1,6 +1,6 @@
 bandit
 black
 mypy
-pylint==2.11.1
+pylint==2.16.2
 responses
 types-requests
