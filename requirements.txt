@@ -27,6 +27,6 @@ six==1.16.0
 SQLAlchemy==1.4.45
 tzlocal<4.0
 urllib3==1.26.13
-webargs==8.0.1
+webargs==8.2.0
 webassets==2.0
 Werkzeug==2.0.2
