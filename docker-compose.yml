@@ -7,12 +7,11 @@ version: '3.2'
 
 services:
   db:
-    image: postgres:13.2-alpine
+    image: postgres:15.4-alpine3.18
     env_file:
       - ./environments/docker.dev
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-      # - postgres:/data/postgres
     ports:
       - 5432:5432
 
@@ -26,7 +25,7 @@ services:
     env_file:
       - ./environments/docker.dev
     ports:
-      - 5000:5000
+      - 5001:5001
 
   adminer:
     image: adminer

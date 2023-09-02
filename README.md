@@ -4,7 +4,6 @@
 <p align="center">Keep secrets out of emails and chat logs.</p>
 
 <p align="center">
-  <a href="https://travis-ci.com/smallwat3r/shhh" rel="nofollow"><img src="https://travis-ci.com/smallwat3r/shhh.svg?branch=master" style="max-width:100%;"></a>
   <a href="https://codecov.io/gh/smallwat3r/shhh" rel="nofollow"><img src="https://codecov.io/gh/smallwat3r/shhh/branch/master/graph/badge.svg" style="max-width:100%;"></a>
   <a href="https://codeclimate.com/github/smallwat3r/shhh/maintainability" rel="nofollow"><img src="https://api.codeclimate.com/v1/badges/f7c33b1403dd719407c8/maintainability" style="max-width:100%;"></a>
   <a href="https://github.com/smallwat3r/shhh/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/badge/License-MIT-green.svg" style="max-width:100%;"></a>
@@ -65,54 +64,9 @@ Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3
 These instructions are for development purpose only. For production 
 use you might want to use a more secure configuration.
 
-<details>
-<summary><b>Launch it natively</b></summary>
-
-#### Deps  
-
-Make sure you have `make`, `yarn`, and obviously `python@3.8` 
-installed on your machine.  
-
-#### Postgres  
-
-You will need a Postgres server running locally in the background. 
-Create a database named `shhh`.  
-
-```sql
-CREATE DATABASE shhh;
-```
-
-#### Flask  
-
-You will need to set up a few environment variables. We use them to 
-configure Flask, as well as the application connection to the 
-database.  
-
-Rename the file `/environments/local.dev.template` to
-`/environments/local.dev` and fill in the missing variables 
-(these are the variables needed to connect to your local Postgres database).  
-
-Once done, from the root of the repository, run:  
-
-```
-make local
-```
-
-This command will make sure a virtual environment is created and that
-all the needed dependencies are installed, and finally launch a flask
-local server.  
-
-You can now access the app at http://localhost:5000  
-
-</details>
-
-<details>
-<summary><b>Launch it with docker-compose</b></summary>
-
 #### Deps
 
-Make sure you have `make`, `docker` and `docker-compose` installed on
-your machine.  
+Make sure you have `make`, `docker` and a version of Python 3.10 installed on your machine.  
 
 The application will use the development env variables from [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev).  
 
@@ -128,48 +82,39 @@ make dc-stop   # to stop the app
 Once the container image has finished building and has started, you 
 can access:  
 
-* Shhh at http://localhost:5000
-* (and access the database records using Adminer on port `8080` if you launched Shhh with adminer)
+* Shhh at <http://localhost:5001>
+* Adminer at <http://localhost:8080> (if launched with `dc-start-adminer`)
 
-Note: When started with the docker-compose set-up, the application is running with Gunicorn.
+#### Development
 
-</details>
+You can run tests and linting / security reports using the Makefile.  
 
-<details>
-<summary><b>Run development checks</b></summary>
-<br>
+* Sanity checks
+  ```sh
+  make checks  # run all checks
+  make tests   # run tests
+  make pylint  # run Pylint report
+  make bandit  # run Bandit report
+  make mypy    # run Mypy report
+  ```
 
-You can run tests and linting / security reports using the Makefile:  
-
-```sh
-make checks  # run all checks
-
-make tests   # run tests
-make pylint  # run Pylint report
-make bandit  # run Bandit report
-make mypy    # run Mypy report
-```
-
-</details>
+* Code style
+  ```sh
+  make yapf    # format code using Yapf
+  ```
 
 ## Environment variables
 
 Bellow is the list of environment variables used by Shhh.  
 
-<details>
-<summary><b>Mandatory</b></summary>
-
+#### Mandatory
 * `FLASK_ENV`: the environment config to load (`testing`, `dev-local`, `dev-docker`, `heroku`, `production`).
 * `POSTGRES_HOST`: Postgresql hostname
 * `POSTGRES_USER`: Postgresql username
 * `POSTGRES_PASSWORD`: Postgresql password
 * `POSTGRES_DB`: Database name
 
-</details>
-
-<details>
-<summary><b>Optional</b></summary>
-
+#### Optional
 * `SHHH_HOST`: This variable can be used to specify a custom hostname to use as the
 domain URL when Shhh creates a secret (ex: `https://<domain-name.com>`). If not set, the hostname 
 defaults to request.url_root, which should be fine in most cases.
@@ -180,8 +125,6 @@ before performing a read or write operation. It could happens that the database 
 asleep (for instance this happens often on Heroku free plans). The default retry number is 5.
 * `SHHH_DB_LIVENESS_SLEEP_INTERVAL`: This variable manages the interval in seconds between the database
 liveness retries. The default value is 1 second.
-
-</details>
 
 ## Acknowledgements
 

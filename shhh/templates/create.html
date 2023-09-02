@@ -6,7 +6,7 @@
     action="{{ url_for('api.secret') }}"
     method="POST"
     autocomplete="off"
-    data-redirect="{{ url_for('views.created') }}"
+    data-redirect="{{ url_for('web.created') }}"
   >
     <fieldset id="createSecretFs">
       <legend class="has-text-left is-size-5">Encrypt a secret</legend>
@@ -38,8 +38,8 @@
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
               <select id="expiresValue" name="expire"
-                      data-default="{{ SecretExpirationValues.default() }}">
-                {% for name, value in SecretExpirationValues.dict().items() %}
+                      data-default="{{ default_expiration_time_value }}">
+                {% for name, value in expiration_time_values.items() %}
                   <option value="{{ value }}">{{ name }}</option>
                 {% endfor %}
               </select>
@@ -53,9 +53,9 @@
           <p class="has-text-left mb-1 is-size-5">Destroy after</p>
           <div class="control has-icons-left">
             <div class="select is-fullwidth">
-              <select id="maxTries" name="tries" data-default="{{ ReadTriesValues.default() }}">
-                {% for try in ReadTriesValues %}
-                  <option value="{{ try.value }}">{{ try.value }} tries</option>
+              <select id="maxTries" name="tries" data-default="{{ default_read_tries_value }}">
+                {% for value in read_tries_values %}
+                  <option value="{{ value }}">{{ value }} tries</option>
                 {% endfor %}
               </select>
             </div>
@@ -90,11 +90,6 @@
         <div class="control">
           <button type="submit" class="button is-primary" id="createBtn">Go</button>
         </div>
-      </div>
-      <div class="field has-text-left help">
-        <input class="checkbox mr-2" name="haveibeenpwned"
-               id="haveibeenpwned" type="checkbox" checked="checked">
-        <label for="haveibeenpwned">(optional) check passphrase with haveibeenpwned.com</label>
       </div>
     </fieldset>
   </form>

@@ -1,6 +1,7 @@
 bandit
-black
+yapf
 mypy
-pylint==2.11.1
+pylint
+pytest
 responses
 types-requests

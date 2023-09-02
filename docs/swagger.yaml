@@ -81,8 +81,3 @@ definitions:
         default: 5
         description: The number of tries to open the secret before it gets deleted (3, 5 or 10)
         example: 3
-      haveibeenpwned:
-        type: boolean
-        default: false
-        description: Run a check of the passphrase against haveibeenpwned.com
-        example: true

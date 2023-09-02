@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-#
-# Install dev / tests requirements
-#
-
-set -e
-
-source env/bin/activate
-pip3 install -r test-requirements.txt >/dev/null 2>&1
