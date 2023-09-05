@@ -47,7 +47,7 @@ def test_api_post_create_secret(app, post_payload):
     # test the record is persisted
     external_id = data["response"]["external_id"]
     record = db.session.query(model.Secret).filter(
-        model.Secret.external_id == external_id).one_or_none()
+        model.Secret.has_external_id(external_id)).one_or_none()
     assert record is not None
 
 
@@ -113,7 +113,7 @@ def test_api_get_exceeded_tries(app, secret):
     assert data["response"]["msg"] == Message.EXCEEDED
 
     secret = db.session.query(model.Secret).filter(
-        model.Secret.external_id == external_id).one_or_none()
+        model.Secret.has_external_id(external_id)).one_or_none()
 
     # the secret should have been deleted
     assert secret is None
@@ -131,7 +131,7 @@ def test_api_read_secret(app, secret, post_payload):
     assert data["response"]["msg"] == post_payload["secret"]
 
     secret = db.session.query(model.Secret).filter(
-        model.Secret.external_id == external_id).one_or_none()
+        model.Secret.has_external_id(external_id)).one_or_none()
 
     # the secret should have been deleted
     assert secret is None

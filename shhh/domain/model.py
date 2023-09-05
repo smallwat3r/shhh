@@ -2,6 +2,8 @@ import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime, timedelta
 
+from sqlalchemy.ext.hybrid import hybrid_method
+
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
@@ -87,3 +89,11 @@ class Secret:
     def expires_on_text(self) -> str:
         timez = datetime.utcnow().astimezone().tzname()
         return f"{self.date_expires.strftime('%B %d, %Y at %H:%M')} {timez}"
+
+    @hybrid_method
+    def has_expired(self) -> bool:
+        return self.date_expires <= datetime.now()
+
+    @hybrid_method
+    def has_external_id(self, external_id: str) -> bool:
+        return self.external_id == external_id

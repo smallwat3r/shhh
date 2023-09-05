@@ -20,7 +20,7 @@ def read_secret(external_id: str,
                 passphrase: str) -> tuple[ReadResponse, HTTPStatus]:
     try:
         secret = db.session.query(model.Secret).filter(
-            model.Secret.external_id == external_id).one()  # type: ignore
+            model.Secret.has_external_id(external_id)).one()
     except NoResultFound:
         return (ReadResponse(Status.EXPIRED, Message.NOT_FOUND),
                 HTTPStatus.NOT_FOUND)
@@ -43,7 +43,7 @@ def read_secret(external_id: str,
             remaining)
         return (ReadResponse(
             Status.INVALID,
-            Message.INVALID.format(remaining=remaining)),  # type: ignore
+            Message.INVALID.value.format(remaining=remaining)),
                 HTTPStatus.UNAUTHORIZED)
 
     db.session.delete(secret)

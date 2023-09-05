@@ -37,7 +37,7 @@ def test_scheduler_job():
     tasks.delete_expired_links()
 
     secret = db.session.query(model.Secret).filter(
-        model.Secret.external_id == external_id).one_or_none()
+        model.Secret.has_external_id(external_id)).one_or_none()
 
     # the secret should have been deleted
     assert secret is None

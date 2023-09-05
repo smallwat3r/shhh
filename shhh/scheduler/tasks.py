@@ -15,7 +15,7 @@ def delete_expired_links() -> None:
     app = scheduler.app
     with app.app_context():
         expired_secrets = db.session.query(model.Secret).filter(
-            model.Secret.date_expires <= datetime.now()).all()  # type: ignore
+            model.Secret.has_expired()).all()
         _delete_records(expired_secrets)
         logger.info("%s expired records have been deleted.",
                     len(expired_secrets))
