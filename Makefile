@@ -11,15 +11,15 @@ help:  ## Show this help menu
 
 .PHONY: dc-start
 dc-start: dc-stop  ## Start dev docker server
-	@docker-compose -f docker-compose.yml up --build --scale adminer=0 -d;
+	@docker compose -f docker-compose.yml up --build --scale adminer=0 -d;
 
 .PHONY: dc-start-adminer
 dc-start-adminer: dc-stop  ## Start dev docker server (with adminer)
-	@docker-compose -f docker-compose.yml up --build -d;
+	@docker compose -f docker-compose.yml up --build -d;
 
 .PHONY: dc-stop
 dc-stop:  ## Stop dev docker server
-	@docker-compose -f docker-compose.yml stop;
+	@docker compose -f docker-compose.yml stop;
 
 VENV          = venv
 VENV_PYTHON   = $(VENV)/bin/python
