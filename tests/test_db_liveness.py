@@ -6,9 +6,9 @@ from sqlalchemy.exc import OperationalError
 from flask import url_for
 
 
-@mock.patch("shhh.liveness._perform_dummy_query",
+@mock.patch("shhh.liveness._perform_dummy_db_query",
             side_effect=OperationalError(None, None, None))
-def test_db_liveness_retries(mock_perform_dummy_query, app):
+def test_db_liveness_retries(mock_perform_dummy_db_query, app):
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.post(url_for("api.secret"),
                                     json={

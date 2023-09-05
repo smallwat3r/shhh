@@ -61,10 +61,10 @@ def _check_web_liveness(f: Callable[..., RT], *args,
                                HTTPStatus.SERVICE_UNAVAILABLE))
 
 
-def _get_liveness(client_type: ClientType,
-                  f: Callable[..., Callable[..., RT]],
-                  *args,
-                  **kwargs) -> Callable[..., RT] | Response | None:
+def _check_liveness(client_type: ClientType,
+                    f: Callable[..., Callable[..., RT]],
+                    *args,
+                    **kwargs) -> Callable[..., RT] | Response | None:
 
     def raise_no_implementation(*args, **kwargs) -> NoReturn:
         raise RuntimeError(f"No implementation found for {client_type}")
@@ -92,7 +92,7 @@ def db_liveness_ping(
     def inner(f):
 
         def wrapper(*args, **kwargs):
-            return _get_liveness(client, f, *args, **kwargs)
+            return _check_liveness(client, f, *args, **kwargs)
 
         return wrapper
 
