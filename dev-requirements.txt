@@ -3,4 +3,5 @@ yapf
 mypy
 ruff
 pytest
+pytest-cov
 types-requests
