@@ -8,11 +8,11 @@
 
 environments/
 !environments/docker.dev
-!environments/local.dev.template
 
 .coverage
 tags
 
+.ruff_cache/
 .mypy_cache/
 .vscode/
 __pycache__/

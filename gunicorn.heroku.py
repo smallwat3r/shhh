@@ -1,7 +1,7 @@
 import multiprocessing
 
 
-def when_ready(server):  # pylint: disable=unused-argument
+def when_ready(server):
     """Called just after the server is started."""
     open("/tmp/app-initialized", "w").close()
 

@@ -10,7 +10,6 @@
 .coverage
 .coveragerc
 .gitignore
-.pylintrc
 .whitesource
 app.json
 docker-compose.yml
@@ -20,7 +19,9 @@ Procfile
 README.md
 run-local.sh
 runtime.txt
+pyproject.toml
 
+.ruff_cache/
 .mypy_cache/
 .git/
 .github/

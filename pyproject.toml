@@ -1,0 +1,33 @@
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.ruff]
+select = ["E", "F"]
+fixable = ["ALL"]
+exclude = [".eggs", ".git", ".mypy_cache", ".ruff_cache", "venv"]
+per-file-ignores = {}
+line-length = 79
+target-version = "py310"
+
+[tool.yapf]
+split_before_logical_operator = true
+allow_multiline_dictionary_keys = true
+allow_split_before_default_or_named_assigns = true
+allow_split_before_dict_value = true
+blank_line_before_nested_class_or_def = true
+coalesce_brackets = true
+column_limit = 79
+disable_ending_comma_heuristic = true
+each_dict_entry_on_separate_line = true
+indent_dictionary_value = true
+indent_closing_brackets = false
+join_multiple_lines = false
+spaces_before_comment = 2
+split_all_comma_separated_values = false
+split_all_top_level_comma_separated_values = true
+split_before_dict_set_generator = true
+split_before_dot = true
+split_complex_comprehension = true

@@ -3,124 +3,124 @@ import logging
 from http import HTTPStatus
 from io import BytesIO
 
-from apscheduler.schedulers import SchedulerAlreadyRunningError
-from flask import Flask
-from flask import render_template as rt
+from flask import Flask, Response, render_template as rt
+from flask_apscheduler import APScheduler
 from flask_assets import Bundle
 from htmlmin.main import minify
-from webassets.env import RegisterError
 
-from shhh import __version__
-from shhh.api import api
-from shhh.enums import EnvConfig
+from shhh import __version__, config
+from shhh.adapters import orm
+from shhh.api.api import api
+from shhh.constants import EnvConfig
 from shhh.extensions import assets, db, scheduler
-from shhh.views import views
+from shhh.scheduler import tasks
+from shhh.web import web
 
 
-def create_app(env):
+def create_app(env: EnvConfig) -> Flask:
     """Application factory."""
     logging.basicConfig(
         level=logging.INFO,
-        format="[%(asctime)s] [sev %(levelno)s] [%(levelname)s] [%(name)s]> %(message)s",
+        format=("[%(asctime)s] [sev %(levelno)s] [%(levelname)s] "
+                "[%(name)s]> %(message)s"),
         datefmt="%a, %d %b %Y %H:%M:%S",
     )
-
-    if env == EnvConfig.TESTING.value:
-        logging.getLogger("shhh").setLevel(logging.CRITICAL)
-        logging.getLogger("apscheduler").setLevel(logging.CRITICAL)
-        logging.getLogger("tasks").setLevel(logging.CRITICAL)
-
     app = Flask(__name__)
-
-    configurations = {
-        EnvConfig.TESTING.value: "shhh.config.TestConfig",
-        EnvConfig.DEV_LOCAL.value: "shhh.config.DefaultConfig",
-        EnvConfig.DEV_DOCKER.value: "shhh.config.DockerConfig",
-        EnvConfig.HEROKU.value: "shhh.config.HerokuConfig",
-        EnvConfig.PRODUCTION.value: "shhh.config.ProductionConfig",
-    }
-    app.config.from_object(configurations.get(env, "shhh.config.ProductionConfig"))
-
-    register_extensions(app)
+    config_obj = _get_config(env)
+    app.config.from_object(config_obj)
+    _register_extensions(app)
 
     with app.app_context():
-        register_blueprints(app)
-        db.create_all()
-        try:
-            scheduler.start()
-        except SchedulerAlreadyRunningError:
-            pass
+        _register_blueprints(app)
+        orm.start_mappers()
+
+        scheduler._scheduler.start()
+        _add_scheduler_jobs(scheduler)
+
         assets.manifest = False
         assets.cache = False
-        try:
-            compile_assets(assets)
-        except RegisterError:
-            pass
+        _compile_static_assets(assets)
 
-    app.context_processor(inject_global_vars)
-    app.after_request(optimize_response)
-    app.after_request(security_headers)
-
-    app.register_error_handler(HTTPStatus.NOT_FOUND.value, not_found_error)
-    app.register_error_handler(HTTPStatus.INTERNAL_SERVER_ERROR.value, internal_server_error)
-
+    app.context_processor(_inject_global_vars)
+    _register_after_request_handlers(app)
+    _register_error_handlers(app)
     return app
 
 
-def register_blueprints(app):
-    """Register application blueprints."""
+def _get_config(env: EnvConfig) -> type[config.DefaultConfig]:
+    configurations = {
+        EnvConfig.TESTING: config.TestConfig,
+        EnvConfig.DEV_DOCKER: config.DevelopmentConfig,
+        EnvConfig.HEROKU: config.HerokuConfig,
+        EnvConfig.PRODUCTION: config.ProductionConfig,
+    }
+    configuration = configurations.get(env)
+    if not configuration:
+        raise RuntimeError(f"{env} specified in FLASK_ENV is not supported")
+    return configuration
+
+
+def _register_after_request_handlers(app: Flask) -> None:
+    app.after_request(_optimize_response)
+    app.after_request(_add_required_security_headers)
+
+
+def _register_error_handlers(app: Flask) -> None:
+    app.register_error_handler(HTTPStatus.NOT_FOUND, _not_found_error)
+    app.register_error_handler(HTTPStatus.INTERNAL_SERVER_ERROR,
+                               _internal_server_error)
+
+
+def _register_blueprints(app: Flask) -> None:
     app.register_blueprint(api)
-    app.register_blueprint(views)
+    app.register_blueprint(web)
 
 
-def register_extensions(app):
-    """Register application extensions."""
+def _register_extensions(app: Flask) -> None:
     assets.init_app(app)
     db.init_app(app)
-    try:
-        scheduler.init_app(app)
-    except SchedulerAlreadyRunningError:
-        pass
+    scheduler.init_app(app)
 
 
-def compile_assets(app_assets):
-    """Configure and build asset bundles."""
-    js_assets = ("create", "created", "read")
-    css_assets = ("styles",)
-    for code in js_assets:
-        bundle = Bundle(f"src/js/{code}.js", filters="jsmin", output=f"dist/js/{code}.min.js")
-        app_assets.register(code, bundle)
-        bundle.build()
-    for style in css_assets:
-        bundle = Bundle(
-            f"src/css/{style}.css", filters="cssmin", output=f"dist/css/{style}.min.css"
-        )
-        app_assets.register(style, bundle)
-        bundle.build()
+def _add_scheduler_jobs(scheduler: APScheduler) -> None:
+    scheduler.add_job(id="delete_expired_records",
+                      func=tasks.delete_expired_records,
+                      trigger="interval",
+                      seconds=60)
 
 
-def inject_global_vars():
-    """Global Jinja variables."""
+def _compile_static_assets(app_assets) -> None:
+    assets_to_compile = (("js", ("create", "created", "read")),
+                         (("css", ("styles", ))))
+    for k, v in assets_to_compile:
+        for file in v:
+            bundle = Bundle(f"src/{k}/{file}.{k}",
+                            filters=f"{k}min",
+                            output=f"dist/{k}/{file}.min.{k}")
+            app_assets.register(file, bundle)
+            bundle.build()
+
+
+def _inject_global_vars() -> dict[str, str]:
     return {"version": __version__}
 
 
-def not_found_error(error):
-    """Not found error handler."""
-    return rt("error.html", error=error), HTTPStatus.NOT_FOUND.value
+def _not_found_error(error) -> tuple[str, HTTPStatus]:
+    return rt("error.html", error=error), HTTPStatus.NOT_FOUND
 
 
-def internal_server_error(error):
-    """Internal server error handler."""
-    return rt("error.html", error=error), HTTPStatus.INTERNAL_SERVER_ERROR.value
+def _internal_server_error(error) -> tuple[str, HTTPStatus]:
+    return rt("error.html", error=error), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
-def optimize_response(response):
+def _optimize_response(response: Response) -> Response:
     """Minify HTML and use gzip compression."""
     if response.mimetype == "text/html":
         response.set_data(minify(response.get_data(as_text=True)))
 
-    # Do not gzip below 500 bytes or on JSON content
-    if response.content_length < 500 or response.mimetype == "application/json":
+    # do not gzip below 500 bytes or on JSON content
+    if (response.content_length < 500
+            or response.mimetype == "application/json"):
         return response
 
     response.direct_passthrough = False
@@ -135,22 +135,21 @@ def optimize_response(response):
     return response
 
 
-# pylint: disable=line-too-long
-def security_headers(response):
-    """Add required security headers."""
+def _add_required_security_headers(response: Response) -> Response:
     response.headers.add("X-Frame-Options", "SAMEORIGIN")
     response.headers.add("X-Content-Type-Options", "nosniff")
     response.headers.add("X-XSS-Protection", "1; mode=block")
     response.headers.add("Referrer-Policy", "no-referrer-when-downgrade")
-    response.headers.add(
-        "Strict-Transport-Security", "max-age=63072000; includeSubdomains; preload"
-    )
+    response.headers.add("Strict-Transport-Security",
+                         "max-age=63072000; includeSubdomains; preload")
     response.headers.add(
         "Content-Security-Policy",
-        "default-src 'self'; img-src 'self'; object-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'",
-    )
+        ("default-src 'self'; img-src 'self'; object-src 'self'; "
+         "script-src 'self' 'unsafe-inline'; "
+         "style-src 'self' 'unsafe-inline'"))
     response.headers.add(
         "feature-policy",
-        "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none'",
-    )
+        ("accelerometer 'none'; camera 'none'; geolocation 'none'; "
+         "gyroscope 'none'; magnetometer 'none'; microphone 'none'; "
+         "payment 'none'; usb 'none'"))
     return response

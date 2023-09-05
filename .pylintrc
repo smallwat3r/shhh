@@ -1,4 +1,0 @@
-[MESSAGES CONTROL]
-disable=bad-continuation,missing-module-docstring,invalid-name,too-few-public-methods,import-error,import-outside-toplevel,no-member,inconsistent-return-statements
-ignored-argument-names=arg|args|kw|kwargs
-max-line-length=100

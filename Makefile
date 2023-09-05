@@ -1,10 +1,9 @@
-SHELL=/bin/bash
-
-SRC_DIR=shhh
-TESTS_DIR=tests
+SHELL    = /bin/bash
+SRC_DIR  = shhh
+TEST_DIR = tests
 
 .PHONY: help
-help: ## Show this help menu
+help:  ## Show this help menu
 	@echo "Usage: make [TARGET ...]"
 	@echo ""
 	@grep --no-filename -E '^[a-zA-Z_%-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -19,56 +18,67 @@ dc-start-adminer: dc-stop  ## Start dev docker server (with adminer)
 	@docker-compose -f docker-compose.yml up --build -d;
 
 .PHONY: dc-stop
-dc-stop: ## Stop dev docker server
+dc-stop:  ## Stop dev docker server
 	@docker-compose -f docker-compose.yml stop;
 
-.PHONY: local
-local: yarn env ## Run a local flask server (needs environments/local.env setup)
-	@echo "Starting local server ..."
-	@./bin/local
+VENV          = venv
+VENV_PYTHON   = $(VENV)/bin/python
+SYSTEM_PYTHON = $(or $(shell which python3.10), $(shell which python))
+PYTHON        = $(or $(wildcard $(VENV_PYTHON)), $(SYSTEM_PYTHON))
+
+$(VENV_PYTHON):
+	rm -rf $(VENV)
+	$(SYSTEM_PYTHON) -m venv $(VENV)
+
+.PHONY: venv
+venv: $(VENV_PYTHON)  ## Create a Python virtual environment
+
+.PHONY: deps
+deps:  ## Install Python requirements in virtual environment
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install -r requirements.txt -r dev-requirements.txt
 
 .PHONY: checks
-checks: tests pylint mypy bandit  ## Run all checks (unit tests, pylint, mypy, bandit)
+checks: tests ruff mypy bandit  ## Run all checks (unit tests, ruff, mypy, bandit)
 
 .PHONY: tests
-tests: env test-env ## Run unit tests
-	@echo "Running tests ..."
-	@./bin/run-tests
+tests:  ## Run unit tests
+	@echo "Running tests..."
+	$(PYTHON) -m pytest tests
 
-.PHONY: fmt
-fmt: test-env ## Format python code with black
-	@echo "Running Black ..."
-	@source env/bin/activate \
-		&& black --line-length 100 --target-version py38 $(SRC_DIR) \
-		&& black --line-length 100 --target-version py38 $(TESTS_DIR)
+.PHONY: yapf
+yapf:  ## Format python code with yapf
+	@echo "Running Yapf..."
+	$(PYTHON) -m yapf --recursive --in-place $(SRC_DIR) $(TEST_DIR)
 
-.PHONY: pylint
-pylint: test-env ## Run pylint
-	@echo "Running Pylint report ..."
-	@source env/bin/activate || true \
-		&& pylint --rcfile=.pylintrc $(SRC_DIR)
+.PHONY: ruff
+ruff:  ## Run ruff
+	@echo "Running Ruff report..."
+	$(PYTHON) -m ruff $(SRC_DIR) $(TEST_DIR)
 
 .PHONY: mypy
-mypy: env test-env ## Run mypy
-	@echo "Running Mypy report ..."
-	@source env/bin/activate || true \
-		&& mypy --ignore-missing-imports $(SRC_DIR)
+mypy:  ## Run mypy
+	@echo "Running Mypy report..."
+	$(PYTHON) -m mypy $(SRC_DIR)
 
 .PHONY: bandit
-bandit: env test-env ## Run bandit
-	@echo "Running Bandit report ..."
-	@source env/bin/activate || true \
-		&& bandit -r $(SRC_DIR) -x $(SRC_DIR)/static
-
-.PHONY: env
-env:
-	@./bin/build-env
-
-.PHONY: test-env
-test-env:
-	@./bin/test-deps
+bandit:  ## Run bandit
+	@echo "Running Bandit report..."
+	$(PYTHON) -m bandit -r $(SRC_DIR) -x $(SRC_DIR)/static
 
 .PHONY: yarn
-yarn:
-	@echo "Installing yarn deps ..."
+yarn:  ## Install frontend deps using Yarn
+	@echo "Installing yarn deps..."
 	@yarn install >/dev/null
+
+.PHONY: shell
+shell:  ## Pop up a Flask shell in Shhh
+	docker exec -it shhh-app-1 flask shell
+
+.PHONY: logs
+logs:  ## Follow Flask logs
+	docker logs shhh-app-1 -f -n 10
+
+.PHONY: db-logs
+db-logs:  ## Follow Postgre logs
+	docker logs shhh-db-1 -f -n 10

@@ -1,6 +1,0 @@
-bandit
-black
-mypy
-pylint==2.11.1
-responses
-types-requests

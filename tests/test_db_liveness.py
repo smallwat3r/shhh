@@ -1,57 +1,19 @@
-import os
-import unittest
 from http import HTTPStatus
+from unittest import mock
+
+from sqlalchemy.exc import OperationalError
 
 from flask import url_for
 
-from shhh.entrypoint import create_app
-from shhh.extensions import db
 
+@mock.patch("shhh.liveness._perform_dummy_db_query",
+            side_effect=OperationalError(None, None, None))
+def test_db_liveness_retries(mock_perform_dummy_db_query, app):
+    with app.test_request_context(), app.test_client() as test_client:
+        response = test_client.post(url_for("api.secret"),
+                                    json={
+                                        "secret": "secret message",
+                                        "passphrase": "Hello123"
+                                    })
 
-class TestDbLiveness(unittest.TestCase):
-    """DB liveness testing."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.app = create_app(env="testing")
-        cls.db = db
-        cls.db.app = cls.app
-        cls.db.create_all()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.db.drop_all()
-
-    def setUp(self):
-        self.client = self.app.test_client()
-        self.app_context = self.app.app_context()
-        self.app_context.push()
-        for table in reversed(self.db.metadata.sorted_tables):
-            self.db.session.execute(table.delete())
-
-    def tearDown(self):
-        self.db.session.rollback()
-        self.app_context.pop()
-
-    def test_db_liveness_retries(self):
-        # Kill database connection by deleting the test sqlite local file
-        sqlite_connection_file = self.app.config["SQLALCHEMY_DATABASE_URI"].replace(
-            "sqlite:///", ""
-        )
-        os.remove(sqlite_connection_file)
-
-        # Make a request
-        payload = {
-            "secret": "secret message",
-            "passphrase": "heeHk3h3i0o",
-            "haveibeenpwned": True,
-        }
-        with self.app.test_request_context(), self.client as c:
-            response = c.post(url_for("api.secret"), json=payload)
-
-        # Request returns 503
-        self.assertEqual(response.status_code, HTTPStatus.SERVICE_UNAVAILABLE.value)
-
-
-if __name__ == "__main__":
-    unittest.main()
+    assert response.status_code == HTTPStatus.SERVICE_UNAVAILABLE  # 503
