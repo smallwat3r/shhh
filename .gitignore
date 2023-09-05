@@ -13,6 +13,7 @@ environments/
 .coverage
 tags
 
+.ruff_cache/
 .mypy_cache/
 .vscode/
 __pycache__/

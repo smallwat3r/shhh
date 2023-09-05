@@ -58,7 +58,6 @@ class _CreateSchema(Schema):
         return data
 
 
-# pylint: disable=unused-argument
 @parser.error_handler
 def handle_parsing_error(err, req, schema, *, error_status_code,
                          error_headers):

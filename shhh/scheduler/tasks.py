@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from shhh.constants import ClientType
 from shhh.domain import model
@@ -12,8 +11,7 @@ logger = logging.getLogger("tasks")
 @db_liveness_ping(ClientType.TASK)
 def delete_expired_links() -> None:
     """Delete expired secrets from the database."""
-    app = scheduler.app
-    with app.app_context():
+    with scheduler.app.app_context():
         expired_secrets = db.session.query(model.Secret).filter(
             model.Secret.has_expired()).all()
         _delete_records(expired_secrets)

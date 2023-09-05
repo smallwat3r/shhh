@@ -1,1 +1,1 @@
-from .web import web
+from .web import web  # noqa: F401

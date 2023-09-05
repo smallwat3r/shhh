@@ -93,7 +93,7 @@ You can run tests and linting / security reports using the Makefile.
   ```sh
   make checks  # run all checks
   make tests   # run tests
-  make pylint  # run Pylint report
+  make ruff    # run Ruff report
   make bandit  # run Bandit report
   make mypy    # run Mypy report
   ```

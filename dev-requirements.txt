@@ -1,7 +1,6 @@
 bandit
 yapf
 mypy
-pylint
+ruff
 pytest
-responses
 types-requests

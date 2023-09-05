@@ -15,7 +15,6 @@ from shhh.constants import DEFAULT_READ_TRIES_VALUE
 class Secret:
     """Domain model for secrets."""
 
-    # pylint: disable=too-many-arguments
     def __init__(self,
                  encrypted_text: bytes,
                  date_created: datetime,
