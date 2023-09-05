@@ -3,17 +3,17 @@ import logging
 from http import HTTPStatus
 from io import BytesIO
 
-from apscheduler.schedulers import SchedulerAlreadyRunningError
 from flask import Flask, Response, render_template as rt
+from flask_apscheduler import APScheduler
 from flask_assets import Bundle
 from htmlmin.main import minify
-from webassets.env import RegisterError
 
 from shhh import __version__, config
 from shhh.adapters import orm
 from shhh.api.api import api
 from shhh.constants import EnvConfig
 from shhh.extensions import assets, db, scheduler
+from shhh.scheduler import tasks
 from shhh.web import web
 
 
@@ -33,18 +33,13 @@ def create_app(env: EnvConfig) -> Flask:
     with app.app_context():
         _register_blueprints(app)
         orm.start_mappers()
-        if EnvConfig == config.DevelopmentConfig:
-            orm.metadata.create_all(db.get_engine())
-        try:
-            scheduler.start()
-        except SchedulerAlreadyRunningError:
-            pass
+
+        scheduler._scheduler.start()
+        _add_scheduler_jobs(scheduler)
+
         assets.manifest = False
         assets.cache = False
-        try:
-            _compile_static_assets(assets)
-        except RegisterError:
-            pass
+        _compile_static_assets(assets)
 
     app.context_processor(_inject_global_vars)
     _register_after_request_handlers(app)
@@ -61,7 +56,7 @@ def _get_config(env: EnvConfig) -> type[config.DefaultConfig]:
     }
     configuration = configurations.get(env)
     if not configuration:
-        raise RuntimeError("No supported config specified in FLASK_ENV")
+        raise RuntimeError(f"{env} specified in FLASK_ENV is not supported")
     return configuration
 
 
@@ -84,10 +79,14 @@ def _register_blueprints(app: Flask) -> None:
 def _register_extensions(app: Flask) -> None:
     assets.init_app(app)
     db.init_app(app)
-    try:
-        scheduler.init_app(app)
-    except SchedulerAlreadyRunningError:
-        pass
+    scheduler.init_app(app)
+
+
+def _add_scheduler_jobs(scheduler: APScheduler) -> None:
+    scheduler.add_job(id="delete_expired_records",
+                      func=tasks.delete_expired_records,
+                      trigger="interval",
+                      seconds=60)
 
 
 def _compile_static_assets(app_assets) -> None:

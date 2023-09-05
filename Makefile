@@ -65,3 +65,20 @@ mypy:  ## Run mypy
 bandit:  ## Run bandit
 	@echo "Running Bandit report..."
 	$(PYTHON) -m bandit -r $(SRC_DIR) -x $(SRC_DIR)/static
+
+.PHONY: yarn
+yarn:  ## Install frontend deps using Yarn
+	@echo "Installing yarn deps..."
+	@yarn install >/dev/null
+
+.PHONY: shell
+shell:  ## Pop up a Flask shell in Shhh
+	docker exec -it shhh-app-1 flask shell
+
+.PHONY: logs
+logs:  ## Follow Flask logs
+	docker logs shhh-app-1 -f -n 10
+
+.PHONY: db-logs
+db-logs:  ## Follow Postgre logs
+	docker logs shhh-db-1 -f -n 10

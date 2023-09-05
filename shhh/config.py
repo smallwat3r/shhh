@@ -1,8 +1,6 @@
 import os
 from typing import Optional
 
-from shhh.scheduler import delete_expired_links
-
 
 class DefaultConfig:
     """Default config values (dev-local)."""
@@ -23,18 +21,6 @@ class DefaultConfig:
     SQLALCHEMY_DATABASE_URI: Optional[str] = (
         f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
-
-    #
-    # Shhh specifics
-    #
-
-    # Scheduled jobs. Delete expired database records every 60 seconds.
-    JOBS = [{
-        "id": "delete_expired_links",
-        "func": delete_expired_links,
-        "trigger": "interval",
-        "seconds": 60,
-    }]
 
     #
     # Shhh optional custom configurations

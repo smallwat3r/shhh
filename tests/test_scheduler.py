@@ -9,7 +9,7 @@ def test_scheduler_setup():
     jobs = scheduler.get_jobs()
 
     # check task name
-    assert jobs[0].name == "delete_expired_links"
+    assert jobs[0].name == "delete_expired_records"
 
     # check that the task will run before the next minute
     scheduled = jobs[0].next_run_time.strftime("%Y-%m-%d %H:%M:%S")
@@ -20,7 +20,7 @@ def test_scheduler_setup():
 
 def test_scheduler_job():
     # pause the scheduler so we can trigger it on demand
-    scheduler.pause_job("delete_expired_links")
+    scheduler.pause_job("delete_expired_records")
 
     # create a secret, and make it outdated
     secret = model.Secret.encrypt(message="hello",
@@ -34,7 +34,7 @@ def test_scheduler_job():
     external_id = secret.external_id
 
     # run scheduler task
-    tasks.delete_expired_links()
+    tasks.delete_expired_records()
 
     secret = db.session.query(model.Secret).filter(
         model.Secret.has_external_id(external_id)).one_or_none()

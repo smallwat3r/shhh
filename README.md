@@ -66,7 +66,7 @@ use you might want to use a more secure configuration.
 
 #### Deps
 
-Make sure you have `make`, `docker` and a version of Python 3.10 installed on your machine.  
+Make sure you have `make`, `docker`, `yarn`, and a version of Python 3.10 installed on your machine.  
 
 The application will use the development env variables from [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev).  
 
@@ -75,32 +75,64 @@ The application will use the development env variables from [/environments/docke
 From the root of the repository, run
 
 ```sh
-make dc-start  # to start the app (or dc-start-adminer to use adminer)
-make dc-stop   # to stop the app
+make dc-start          # to start the app 
+make dc-start-adminer  # to start the app with adminer (SQL editor)
+make dc-stop           # to stop the app
 ```
 
 Once the container image has finished building and has started, you 
 can access:  
 
-* Shhh at <http://localhost:5001>
-* Adminer at <http://localhost:8080> (if launched with `dc-start-adminer`)
+* Shhh at <http://localhost:8081>
+* Adminer at <http://localhost:8082/?pgsql=db&username=shhh&db=shhh> (if launched with `dc-start-adminer`)
 
-#### Development
+_You can find the development database credentials from the env file at [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev)._
+
+##### Create the database tables
+
+Enter a Flask shell in running container with:
+``` sh
+make shell
+```
+
+From the Python Flask shell, run:
+``` python
+>>> from shhh.adapters import orm
+>>> from shhh.extensions import db
+>>> orm.metadata.create_all(db.get_engine())
+>>> exit()
+```
+
+#### Development tools
 
 You can run tests and linting / security reports using the Makefile.  
 
-* Sanity checks
+The following command will display all the commands available from the Makefile:
+``` sh
+make help
+```
+
+* Enter a Flask shell
+  ``` sh
+  make shell 
+  ```
+
+* Run sanity checks
   ```sh
-  make checks  # run all checks
   make tests   # run tests
   make ruff    # run Ruff report
   make bandit  # run Bandit report
   make mypy    # run Mypy report
   ```
 
-* Code style
+* Run code formatter
   ```sh
   make yapf    # format code using Yapf
+  ```
+
+* Generate frontend lockfile
+  ```sh
+  make yarn    # install the frontend deps using Yarn
   ```
 
 ## Environment variables

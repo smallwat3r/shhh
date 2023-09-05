@@ -8,7 +8,6 @@
 
 environments/
 !environments/docker.dev
-!environments/local.dev.template
 
 .coverage
 tags

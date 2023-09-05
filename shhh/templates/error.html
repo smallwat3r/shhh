@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
 {% block container %}
-  <p class="has-text-justified mb-6">{{ error }}</p>
-  <a class="button is-primary" href="{{ url_for('web.create') }}">Take me home</a>
+  <a class="button is-primary mb-5" href="{{ url_for('web.create') }}">Take me home</a>
+  <p class="has-text-centered">{{ error }}</p>
 {% endblock %}

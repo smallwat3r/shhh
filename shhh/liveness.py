@@ -4,11 +4,10 @@ from http import HTTPStatus
 from typing import Callable, NoReturn, TypeVar
 
 from flask import Flask, Response, abort, current_app as app, make_response
-from sqlalchemy.exc import OperationalError
-from sqlalchemy.sql import text
 
 from shhh.api.responses import ErrorResponse, Message
 from shhh.constants import ClientType
+from shhh.domain import model
 from shhh.extensions import db, scheduler
 
 logger = logging.getLogger(__name__)
@@ -19,22 +18,24 @@ def _get_retries_configs(flask_app: Flask) -> tuple[int, float]:
             flask_app.config["SHHH_DB_LIVENESS_SLEEP_INTERVAL"])
 
 
-def _perform_dummy_query() -> None:
-    db.session.execute(text("SELECT 1;")).first()
+def _perform_dummy_db_query() -> None:
+    _ = db.session.query(model.Secret).first()
 
 
-def _can_connect(flask_app: Flask) -> bool:
+def _can_reach_db(flask_app: Flask) -> bool:
     retry_count, retry_sleep_interval_sec = _get_retries_configs(flask_app)
 
     for _ in range(retry_count):
         try:
-            _perform_dummy_query()
+            _perform_dummy_db_query()
             return True
-        except OperationalError:
+        except Exception as err:
             logger.info("Retrying to reach database...")
             time.sleep(retry_sleep_interval_sec)
+            exception = err
 
-    logger.critical("Database seems down and couldn't wake up.")
+    logger.critical("There seems to be an issue with reaching the database")
+    logger.exception(exception)
     return False
 
 
@@ -44,7 +45,7 @@ RT = TypeVar('RT')
 def _check_task_liveness(f: Callable[..., RT], *args, **kwargs) -> RT | None:
     scheduler_app = scheduler.app
     with scheduler_app.app_context():
-        if _can_connect(scheduler_app):
+        if _can_reach_db(scheduler_app):
             return f(*args, **kwargs)
 
     return None
@@ -52,7 +53,7 @@ def _check_task_liveness(f: Callable[..., RT], *args, **kwargs) -> RT | None:
 
 def _check_web_liveness(f: Callable[..., RT], *args,
                         **kwargs) -> RT | Response:
-    if _can_connect(app):
+    if _can_reach_db(app):
         return f(*args, **kwargs)
 
     response = ErrorResponse(Message.UNEXPECTED)

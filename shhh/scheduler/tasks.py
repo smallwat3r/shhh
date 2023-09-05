@@ -9,7 +9,7 @@ logger = logging.getLogger("tasks")
 
 
 @db_liveness_ping(ClientType.TASK)
-def delete_expired_links() -> None:
+def delete_expired_records() -> None:
     """Delete expired secrets from the database."""
     with scheduler.app.app_context():
         expired_secrets = db.session.query(model.Secret).filter(

@@ -42,8 +42,7 @@ def read_secret(external_id: str,
             str(secret),
             remaining)
         return (ReadResponse(
-            Status.INVALID,
-            Message.INVALID.value.format(remaining=remaining)),
+            Status.INVALID, Message.INVALID.value.format(remaining=remaining)),
                 HTTPStatus.UNAUTHORIZED)
 
     db.session.delete(secret)
