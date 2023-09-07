@@ -48,16 +48,16 @@ def create_app(env: EnvConfig) -> Flask:
 
 
 def _get_config(env: EnvConfig) -> type[config.DefaultConfig]:
+    if env not in set(EnvConfig):
+        raise RuntimeError(f"{env=} specified in FLASK_ENV is not supported")
+
     configurations = {
         EnvConfig.TESTING: config.TestConfig,
         EnvConfig.DEV_DOCKER: config.DevelopmentConfig,
         EnvConfig.HEROKU: config.HerokuConfig,
         EnvConfig.PRODUCTION: config.ProductionConfig,
     }
-    configuration = configurations.get(env)
-    if not configuration:
-        raise RuntimeError(f"{env} specified in FLASK_ENV is not supported")
-    return configuration
+    return configurations[env]
 
 
 def _register_after_request_handlers(app: Flask) -> None:
