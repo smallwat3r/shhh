@@ -49,7 +49,7 @@ def create_app(env: EnvConfig) -> Flask:
 
 def _get_config(env: EnvConfig) -> type[config.DefaultConfig]:
     if env not in set(EnvConfig):
-        raise RuntimeError(f"{env=} is not supported")
+        raise RuntimeError(f"{env=} specified in FLASK_ENV is not supported")
 
     configurations = {
         EnvConfig.TESTING: config.TestConfig,
