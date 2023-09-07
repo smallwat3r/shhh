@@ -1,7 +1,7 @@
 import logging
 import time
 from http import HTTPStatus
-from typing import Callable, NoReturn, TypeVar
+from typing import Callable, TypeVar
 
 from flask import Flask, Response, abort, current_app as app, make_response
 
@@ -66,15 +66,14 @@ def _check_liveness(client_type: ClientType,
                     *args,
                     **kwargs) -> Callable[..., RT] | Response | None:
 
-    def raise_no_implementation(*args, **kwargs) -> NoReturn:
-        raise RuntimeError(f"No implementation found for {client_type}")
+    if client_type not in set(ClientType):
+        raise RuntimeError(f"No implementation found for {client_type=}")
 
     factory = {
         ClientType.WEB: _check_web_liveness,
         ClientType.TASK: _check_task_liveness,
     }
-
-    func = factory.get(client_type, raise_no_implementation)
+    func = factory[client_type]
     return func(f, *args, **kwargs)
 
 
