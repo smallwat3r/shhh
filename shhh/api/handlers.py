@@ -47,7 +47,6 @@ def read_secret(external_id: str,
 
     db.session.delete(secret)
     app.logger.info("%s was decrypted and deleted", str(secret))
-
     return ReadResponse(Status.SUCCESS, message), HTTPStatus.OK
 
 

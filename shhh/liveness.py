@@ -4,13 +4,21 @@ from http import HTTPStatus
 from typing import Callable, TypeVar
 
 from flask import Flask, Response, abort, current_app as app, make_response
+from sqlalchemy import text
 
 from shhh.api.responses import ErrorResponse, Message
 from shhh.constants import ClientType
-from shhh.domain import model
 from shhh.extensions import db, scheduler
 
 logger = logging.getLogger(__name__)
+
+
+def _perform_db_connectivity_query() -> None:
+    db.session.execute(text("SELECT 1;"))
+
+
+def _check_table_exists(table_name: str) -> bool:
+    return bool(db.inspect(db.engine).has_table(table_name))
 
 
 def _get_retries_configs(flask_app: Flask) -> tuple[int, float]:
@@ -18,25 +26,34 @@ def _get_retries_configs(flask_app: Flask) -> tuple[int, float]:
             flask_app.config["SHHH_DB_LIVENESS_SLEEP_INTERVAL"])
 
 
-def _perform_dummy_db_query() -> None:
-    _ = db.session.query(model.Secret).first()
-
-
-def _can_reach_db(flask_app: Flask) -> bool:
+def _is_db_awake(flask_app: Flask) -> bool:
     retry_count, retry_sleep_interval_sec = _get_retries_configs(flask_app)
 
     for _ in range(retry_count):
         try:
-            _perform_dummy_db_query()
+            _perform_db_connectivity_query()
             return True
-        except Exception as err:
+        except Exception as exc:
             logger.info("Retrying to reach database...")
             time.sleep(retry_sleep_interval_sec)
-            exception = err
+            exception = exc
 
-    logger.critical("There seems to be an issue with reaching the database")
+    logger.critical("Could not reach the database, something is wrong "
+                    "with the database connection")
     logger.exception(exception)
     return False
+
+
+def _is_db_table_up(flask_app: Flask) -> bool:
+    if _check_table_exists("secret"):
+        return True
+    logger.critical("Could not query required table 'secret', make sure it "
+                    "has been created on the database")
+    return False
+
+
+def _is_db_healthy(flask_app: Flask) -> bool:
+    return _is_db_awake(flask_app) and _is_db_table_up(flask_app)
 
 
 RT = TypeVar('RT')
@@ -45,7 +62,7 @@ RT = TypeVar('RT')
 def _check_task_liveness(f: Callable[..., RT], *args, **kwargs) -> RT | None:
     scheduler_app = scheduler.app
     with scheduler_app.app_context():
-        if _can_reach_db(scheduler_app):
+        if _is_db_healthy(scheduler_app):
             return f(*args, **kwargs)
 
     return None
@@ -53,7 +70,7 @@ def _check_task_liveness(f: Callable[..., RT], *args, **kwargs) -> RT | None:
 
 def _check_web_liveness(f: Callable[..., RT], *args,
                         **kwargs) -> RT | Response:
-    if _can_reach_db(app):
+    if _is_db_healthy(app):
         return f(*args, **kwargs)
 
     response = ErrorResponse(Message.UNEXPECTED)
