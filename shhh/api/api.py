@@ -62,7 +62,7 @@ class _CreateSchema(Schema):
 def handle_parsing_error(err, req, schema, *, error_status_code,
                          error_headers):
     response, code = handlers.parse_error(err)
-    return abort(response.make(), code)
+    return abort(make_response(response.make(), code))
 
 
 class Api(MethodView):
