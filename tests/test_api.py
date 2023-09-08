@@ -1,12 +1,13 @@
 from datetime import datetime, timedelta
+from http import HTTPStatus
 from urllib.parse import urlparse
 
 import pytest
 from flask import url_for
 
-from shhh.extensions import db
-from shhh.domain import model
 from shhh.api.responses import Message, Status
+from shhh.domain import model
+from shhh.extensions import db
 
 
 @pytest.fixture
@@ -28,6 +29,7 @@ def test_api_post_create_secret(app, post_payload):
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.post(url_for("api.secret"), json=post_payload)
     data = response.get_json()
+    assert response.status_code == HTTPStatus.CREATED
 
     # ensure all the keys are present in the response
     for field in ("status", "details", "external_id", "link", "expires_on"):
@@ -55,6 +57,7 @@ def test_api_post_wrong_expire_value(app, post_payload):
     post_payload["expire"] = "12m"
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.post(url_for("api.secret"), json=post_payload)
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     data = response.get_json()
     assert data["response"]["status"] == Status.ERROR
     assert data["response"]["details"] == ("Must be one of: 10m, 30m, 1h, "
@@ -66,6 +69,7 @@ def test_api_post_missing_required_field(app, post_payload, field):
     post_payload.pop(field)
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.post(url_for("api.secret"), json=post_payload)
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     data = response.get_json()
     assert data["response"]["status"] == Status.ERROR
     assert data["response"]["details"] == "Missing data for required field."
@@ -77,6 +81,7 @@ def test_api_post_weak_passphrase(app, post_payload, passphrase):
     post_payload["passphrase"] = passphrase
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.post(url_for("api.secret"), json=post_payload)
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     data = response.get_json()
     assert data["response"]["status"] == Status.ERROR
     assert data["response"]["details"] == (
@@ -90,6 +95,7 @@ def test_api_get_wrong_passphrase(app, secret):
             url_for("api.secret",
                     external_id=secret.external_id,
                     passphrase="wrong!"))
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
     data = response.get_json()
     assert data["response"]["status"] == Status.INVALID
     assert data["response"]["msg"] == Message.INVALID.format(
@@ -108,6 +114,7 @@ def test_api_get_exceeded_tries(app, secret):
             url_for("api.secret",
                     external_id=secret.external_id,
                     passphrase="wrong!"))
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
     data = response.get_json()
     assert data["response"]["status"] == Status.INVALID
     assert data["response"]["msg"] == Message.EXCEEDED
@@ -125,6 +132,7 @@ def test_api_message_expired(app):
             url_for("api.secret",
                     external_id="123456",
                     passphrase="Hello123"))
+    assert response.status_code == HTTPStatus.NOT_FOUND
     data = response.get_json()
     assert data["response"]["status"] == Status.EXPIRED
     assert data["response"]["msg"] == Message.NOT_FOUND
@@ -137,6 +145,7 @@ def test_api_read_secret(app, secret, post_payload):
             url_for("api.secret",
                     external_id=external_id,
                     passphrase=post_payload["passphrase"]))
+    assert response.status_code == HTTPStatus.OK
     data = response.get_json()
     assert data["response"]["status"] == Status.SUCCESS
     assert data["response"]["msg"] == post_payload["secret"]
