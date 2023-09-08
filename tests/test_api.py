@@ -119,7 +119,7 @@ def test_api_get_exceeded_tries(app, secret):
     assert secret is None
 
 
-def test_api_message_expired(app, secret):
+def test_api_message_expired(app):
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.get(
             url_for("api.secret",
