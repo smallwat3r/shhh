@@ -1,9 +1,8 @@
 from http import HTTPStatus
 from unittest import mock
 
-from sqlalchemy.exc import OperationalError
-
 from flask import url_for
+from sqlalchemy.exc import OperationalError
 
 
 @mock.patch("shhh.liveness._perform_db_connectivity_query",
