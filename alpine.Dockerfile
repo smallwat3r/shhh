@@ -33,7 +33,7 @@ COPY --chown=$USER:$GROUP . .
 
 RUN yarn install --modules-folder=shhh/static/vendor
 
-# When using Gunicorn in a more prod like config, multilple
+# When using Gunicorn in a more prod like config, multiple
 # workers would require to use the --preload option, else
 # the scheduler would spawn multiple scheduler instances.
 # Note it would not be comptatible with Gunicorn --reload
