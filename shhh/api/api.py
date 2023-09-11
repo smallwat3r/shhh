@@ -45,10 +45,10 @@ def _secret_validator(secret: str) -> None:
 class _CreateSchema(Schema):
     passphrase = fields.Str(required=True, validate=_passphrase_validator)
     secret = fields.Str(required=True, validate=_secret_validator)
-    expire = fields.Str(default=DEFAULT_EXPIRATION_TIME_VALUE,
+    expire = fields.Str(dump_default=DEFAULT_EXPIRATION_TIME_VALUE,
                         validate=validate.OneOf(
                             EXPIRATION_TIME_VALUES.values()))
-    tries = fields.Int(default=DEFAULT_READ_TRIES_VALUE,
+    tries = fields.Int(dump_default=DEFAULT_READ_TRIES_VALUE,
                        validate=validate.OneOf(READ_TRIES_VALUES))
 
     @pre_load

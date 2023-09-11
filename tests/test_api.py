@@ -97,6 +97,9 @@ def test_api_get_wrong_passphrase(app, secret):
                     passphrase="wrong!"))
     assert response.status_code == HTTPStatus.UNAUTHORIZED
     data = response.get_json()
+
+    db.session.refresh(secret)
+
     assert data["response"]["status"] == Status.INVALID
     assert data["response"]["msg"] == Message.INVALID.format(
         remaining=secret.tries)

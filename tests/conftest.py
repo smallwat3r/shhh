@@ -12,12 +12,12 @@ def app():
     db.app = flask_app
 
     with flask_app.app_context():
-        orm.metadata.create_all(db.get_engine())
+        orm.metadata.create_all(db.engine)
 
     yield flask_app
 
     with flask_app.app_context():
-        orm.metadata.drop_all(db.get_engine())
+        orm.metadata.drop_all(db.engine)
 
 
 @pytest.fixture(autouse=True)

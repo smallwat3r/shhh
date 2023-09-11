@@ -99,7 +99,7 @@ From the Python Flask shell, run:
 ``` python
 >>> from shhh.adapters import orm
 >>> from shhh.extensions import db
->>> orm.metadata.create_all(db.get_engine())
+>>> orm.metadata.create_all(db.engine)
 >>> exit()
 ```
 
