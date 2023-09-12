@@ -70,6 +70,11 @@ class ReadResponse(CallableResponse):
     msg: str
 
 
+def _build_link_url(external_id: str) -> str:
+    root_host = app.config.get("SHHH_HOST") or request.url_root
+    return urljoin(root_host, url_for("web.read", external_id=external_id))
+
+
 @dataclass
 class WriteResponse(CallableResponse):
     """Schema for outbound write responses."""
@@ -80,11 +85,7 @@ class WriteResponse(CallableResponse):
     details: Message = Message.CREATED
 
     def __post_init__(self):
-        self.link = urljoin(request.url_root,
-                            url_for("web.read", external_id=self.external_id))
-        if host_config := app.config["SHHH_HOST"]:
-            self.link = urljoin(
-                host_config, url_for("web.read", external_id=self.external_id))
+        self.link = _build_link_url(self.external_id)
 
 
 @dataclass
