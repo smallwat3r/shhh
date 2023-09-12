@@ -95,12 +95,12 @@ Enter a Flask shell in running container with:
 make shell
 ```
 
-From the Python Flask shell, run:
+From the Flask shell, copy and run:
 ``` python
->>> from shhh.adapters import orm
->>> from shhh.extensions import db
->>> orm.metadata.create_all(db.get_engine())
->>> exit()
+from shhh.adapters import orm
+from shhh.extensions import db
+orm.metadata.create_all(db.engine)
+exit()
 ```
 
 #### Development tools

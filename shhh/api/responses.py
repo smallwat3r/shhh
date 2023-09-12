@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, fields
 from enum import Enum
 from urllib.parse import urljoin
 
-from flask import current_app as app, jsonify, request, url_for
+from flask import Response, current_app as app, jsonify, request, url_for
 
 
 class Status(str, Enum):
@@ -27,7 +27,7 @@ class Message(str, Enum):
 @dataclass
 class BaseResponse:
 
-    def make(self):
+    def make(self) -> Response:
         return jsonify(
             {"response": {
                 f.name: getattr(self, f.name)

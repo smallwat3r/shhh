@@ -1,11 +1,14 @@
-import re
 import functools
+import re
+from typing import Mapping
 
-from flask import Blueprint, Response, make_response
-from flask import current_app as app
+from flask import (Blueprint,
+                   Request,
+                   Response,
+                   current_app as app,
+                   make_response)
 from flask.views import MethodView
-from marshmallow import Schema, fields, pre_load, validate
-from marshmallow import ValidationError
+from marshmallow import Schema, ValidationError, fields, pre_load, validate
 from webargs.flaskparser import abort, parser, use_kwargs
 
 from shhh.api import handlers
@@ -45,22 +48,26 @@ def _secret_validator(secret: str) -> None:
 class _CreateSchema(Schema):
     passphrase = fields.Str(required=True, validate=_passphrase_validator)
     secret = fields.Str(required=True, validate=_secret_validator)
-    expire = fields.Str(default=DEFAULT_EXPIRATION_TIME_VALUE,
+    expire = fields.Str(dump_default=DEFAULT_EXPIRATION_TIME_VALUE,
                         validate=validate.OneOf(
                             EXPIRATION_TIME_VALUES.values()))
-    tries = fields.Int(default=DEFAULT_READ_TRIES_VALUE,
+    tries = fields.Int(dump_default=DEFAULT_READ_TRIES_VALUE,
                        validate=validate.OneOf(READ_TRIES_VALUES))
 
     @pre_load
-    def secret_sanitise_newline(self, data: dict, **kwargs) -> dict[str, str]:
+    def secret_sanitise_newline(self, data, **kwargs):
         if isinstance(data.get("secret"), str):
             data["secret"] = "\n".join(data["secret"].splitlines())
         return data
 
 
 @parser.error_handler
-def handle_parsing_error(err, req, schema, *, error_status_code,
-                         error_headers):
+def handle_parsing_error(err: ValidationError,
+                         req: Request,
+                         schema: Schema,
+                         *,
+                         error_status_code: int,
+                         error_headers: Mapping[str, str]):
     response, code = handlers.parse_error(err)
     return abort(make_response(response.make(), code))
 

@@ -1,4 +1,5 @@
 import logging
+from typing import Iterable
 
 from shhh.constants import ClientType
 from shhh.domain import model
@@ -19,7 +20,7 @@ def delete_expired_records() -> None:
                     len(expired_secrets))
 
 
-def _delete_records(records: list[model.Secret]) -> None:
+def _delete_records(records: Iterable[model.Secret]) -> None:
     for record in records:
         db.session.delete(record)
         db.session.commit()

@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from cryptography.fernet import InvalidToken
 from flask import current_app as app
+from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
 
 from shhh.api.responses import (ErrorResponse,
@@ -33,10 +34,12 @@ def read_secret(external_id: str,
             # number of tries exceeded, delete secret
             app.logger.info("%s tries to open secret exceeded", str(secret))
             db.session.delete(secret)
+            db.session.commit()
             return (ReadResponse(Status.INVALID, Message.EXCEEDED),
                     HTTPStatus.UNAUTHORIZED)
 
         secret.tries = remaining
+        db.session.commit()
         app.logger.info(
             "%s wrong passphrase used. Number of tries remaining: %s",
             str(secret),
@@ -46,6 +49,7 @@ def read_secret(external_id: str,
                 HTTPStatus.UNAUTHORIZED)
 
     db.session.delete(secret)
+    db.session.commit()
     app.logger.info("%s was decrypted and deleted", str(secret))
     return ReadResponse(Status.SUCCESS, message), HTTPStatus.OK
 
@@ -58,14 +62,17 @@ def write_secret(passphrase: str, message: str, expire_code: str,
                                   expire_code=expire_code,
                                   tries=tries)
     db.session.add(secret)
+    db.session.commit()
     app.logger.info("%s created", str(secret))
     return (WriteResponse(secret.external_id, secret.expires_on_text),
             HTTPStatus.CREATED)
 
 
-def parse_error(errors) -> tuple[ErrorResponse, HTTPStatus]:
+def parse_error(
+        error_exc: ValidationError) -> tuple[ErrorResponse, HTTPStatus]:
+    messages = error_exc.normalized_messages()
     error = ""
     for source in ("json", "query"):
-        for _, message in errors.messages.get(source, {}).items():
+        for _, message in messages.get(source, {}).items():
             error += f"{message[0]} "
     return ErrorResponse(error.strip()), HTTPStatus.UNPROCESSABLE_ENTITY
