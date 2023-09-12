@@ -6,8 +6,8 @@ from typing import Callable, TypeVar
 from flask import Flask, Response, abort, current_app as app, make_response
 from sqlalchemy import text
 
-from shhh.api.responses import ErrorResponse, Message
-from shhh.constants import ClientType
+from shhh.api.schemas import ErrorResponse
+from shhh.constants import ClientType, Message
 from shhh.extensions import db, scheduler
 
 logger = logging.getLogger(__name__)
@@ -74,8 +74,7 @@ def _check_web_liveness(f: Callable[..., RT], *args,
         return f(*args, **kwargs)
 
     response = ErrorResponse(Message.UNEXPECTED)
-    return abort(make_response(response.make(),
-                               HTTPStatus.SERVICE_UNAVAILABLE))
+    abort(make_response(response(), HTTPStatus.SERVICE_UNAVAILABLE))
 
 
 def _check_liveness(client_type: ClientType,
