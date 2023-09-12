@@ -67,6 +67,7 @@ class TestConfig(DefaultConfig):
     SQLALCHEMY_DATABASE_URI = "sqlite://"
 
     SHHH_HOST = "http://test.test"
+    SHHH_SECRET_MAX_LENGTH = 20
     SHHH_DB_LIVENESS_RETRY_COUNT = 1
     SHHH_DB_LIVENESS_SLEEP_INTERVAL = 0.1
 

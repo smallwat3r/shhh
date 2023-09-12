@@ -31,7 +31,7 @@ def _secret_validator(secret: str) -> None:
     max_length = app.config["SHHH_SECRET_MAX_LENGTH"]
     if len(secret) > max_length:
         raise ValidationError(f"The secret should not exceed {max_length} "
-                              "characters")
+                              "characters.")
 
 
 class WriteRequest(Schema):

@@ -89,6 +89,17 @@ def test_api_post_weak_passphrase(app, post_payload, passphrase):
         "characters, with 1 number and 1 uppercase.")
 
 
+def test_api_post_secret_too_long(app, post_payload):
+    post_payload["secret"] = "MoreThan20Characters!"
+    with app.test_request_context(), app.test_client() as test_client:
+        response = test_client.post(url_for("api.secret"), json=post_payload)
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+    data = response.get_json()
+    assert data["response"]["status"] == Status.ERROR
+    assert data["response"]["details"] == ("The secret should not exceed "
+                                           "20 characters.")
+
+
 def test_api_get_wrong_passphrase(app, secret):
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.get(
