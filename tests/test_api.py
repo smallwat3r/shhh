@@ -132,9 +132,7 @@ def test_api_get_exceeded_tries(app, secret):
 def test_api_message_expired(app):
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.get(
-            url_for("api.secret",
-                    external_id="123456",
-                    passphrase="Hello123"))
+            url_for("api.secret", external_id="123456", passphrase="Hello123"))
     assert response.status_code == HTTPStatus.NOT_FOUND
     data = response.get_json()
     assert data["response"]["status"] == Status.EXPIRED

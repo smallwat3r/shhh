@@ -2,6 +2,7 @@ from http import HTTPStatus
 
 from cryptography.fernet import InvalidToken
 from flask import current_app as app
+from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
 
 from shhh.api.responses import (ErrorResponse,
@@ -67,9 +68,11 @@ def write_secret(passphrase: str, message: str, expire_code: str,
             HTTPStatus.CREATED)
 
 
-def parse_error(errors) -> tuple[ErrorResponse, HTTPStatus]:
+def parse_error(
+        error_exc: ValidationError) -> tuple[ErrorResponse, HTTPStatus]:
+    messages = error_exc.normalized_messages()
     error = ""
     for source in ("json", "query"):
-        for _, message in errors.messages.get(source, {}).items():
+        for _, message in messages.get(source, {}).items():
             error += f"{message[0]} "
     return ErrorResponse(error.strip()), HTTPStatus.UNPROCESSABLE_ENTITY
