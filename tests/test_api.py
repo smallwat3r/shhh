@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 import pytest
 from flask import url_for
 
-from shhh.api.responses import Message, Status
+from shhh.constants import Message, Status
 from shhh.domain import model
 from shhh.extensions import db
 

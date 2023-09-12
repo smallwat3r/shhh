@@ -23,3 +23,22 @@ class EnvConfig(str, Enum):
     DEV_DOCKER = "dev-docker"
     HEROKU = "heroku"
     PRODUCTION = "production"
+
+
+class Status(str, Enum):
+    CREATED = "created"
+    SUCCESS = "success"
+    EXPIRED = "expired"
+    INVALID = "invalid"
+    ERROR = "error"
+
+
+class Message(str, Enum):
+    NOT_FOUND = ("Sorry, we can't find a secret, it has expired, been deleted "
+                 "or has already been read.")
+    EXCEEDED = ("The passphrase is not valid. You've exceeded the number of "
+                "tries and the secret has been deleted.")
+    INVALID = ("Sorry, the passphrase is not valid. Number of tries "
+               "remaining: {remaining}")
+    CREATED = "Secret successfully created."
+    UNEXPECTED = "An unexpected error has occurred, please try again."

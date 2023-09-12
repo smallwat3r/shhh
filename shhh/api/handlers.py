@@ -5,11 +5,11 @@ from flask import current_app as app
 from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
 
-from shhh.api.responses import (ErrorResponse,
-                                Message,
-                                ReadResponse,
-                                Status,
-                                WriteResponse)
+from shhh.api.schemas import (ErrorResponse,
+                              Message,
+                              ReadResponse,
+                              Status,
+                              WriteResponse)
 from shhh.constants import ClientType
 from shhh.domain import model
 from shhh.extensions import db
@@ -17,8 +17,7 @@ from shhh.liveness import db_liveness_ping
 
 
 @db_liveness_ping(ClientType.WEB)
-def read_secret(external_id: str,
-                passphrase: str) -> tuple[ReadResponse, HTTPStatus]:
+def read(external_id: str, passphrase: str) -> tuple[ReadResponse, HTTPStatus]:
     try:
         secret = db.session.query(model.Secret).filter(
             model.Secret.has_external_id(external_id)).one()
@@ -55,16 +54,17 @@ def read_secret(external_id: str,
 
 
 @db_liveness_ping(ClientType.WEB)
-def write_secret(passphrase: str, message: str, expire_code: str,
-                 tries: int) -> tuple[WriteResponse, HTTPStatus]:
-    secret = model.Secret.encrypt(message=message,
-                                  passphrase=passphrase,
-                                  expire_code=expire_code,
-                                  tries=tries)
-    db.session.add(secret)
+def write(passphrase: str, secret: str, expire: str,
+          tries: int) -> tuple[WriteResponse, HTTPStatus]:
+    encrypted_secret = model.Secret.encrypt(message=secret,
+                                            passphrase=passphrase,
+                                            expire_code=expire,
+                                            tries=tries)
+    db.session.add(encrypted_secret)
     db.session.commit()
-    app.logger.info("%s created", str(secret))
-    return (WriteResponse(secret.external_id, secret.expires_on_text),
+    app.logger.info("%s created", str(encrypted_secret))
+    return (WriteResponse(encrypted_secret.external_id,
+                          encrypted_secret.expires_on_text),
             HTTPStatus.CREATED)
 
 
