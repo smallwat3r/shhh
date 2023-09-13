@@ -5,12 +5,8 @@ from flask import current_app as app
 from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
 
-from shhh.api.schemas import (ErrorResponse,
-                              Message,
-                              ReadResponse,
-                              Status,
-                              WriteResponse)
-from shhh.constants import ClientType
+from shhh.api.schemas import ErrorResponse, ReadResponse, WriteResponse
+from shhh.constants import ClientType, Message, Status
 from shhh.domain import model
 from shhh.extensions import db
 from shhh.liveness import db_liveness_ping
