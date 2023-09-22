@@ -9,7 +9,7 @@ cssmin==0.2.0
 Flask==2.3.3
 Flask-APScheduler==1.12.4
 Flask-Assets==2.0
-Flask-SQLAlchemy==3.0.5
+Flask-SQLAlchemy==3.1.1
 gunicorn==21.2.0
 htmlmin==0.1.12
 idna==3.4
