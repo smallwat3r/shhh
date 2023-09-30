@@ -1,14 +1,23 @@
-import functools
-from http import HTTPStatus
-from typing import NoReturn
+from __future__ import annotations
 
-from flask import Blueprint, Response, make_response
+import functools
+from typing import TYPE_CHECKING
+
+from flask import Blueprint, make_response
 from flask.views import MethodView
-from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser, use_kwargs
 
 from shhh.api import handlers
-from shhh.api.schemas import CallableResponse, ReadRequest, WriteRequest
+from shhh.api.schemas import ReadRequest, WriteRequest
+
+if TYPE_CHECKING:
+    from http import HTTPStatus
+    from typing import NoReturn
+
+    from flask import Response
+    from marshmallow import ValidationError
+
+    from shhh.api.schemas import CallableResponse
 
 
 def _handle(response: CallableResponse, code: HTTPStatus) -> Response:

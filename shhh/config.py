@@ -1,5 +1,7 @@
 import os
-from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class DefaultConfig:
@@ -17,7 +19,7 @@ class DefaultConfig:
     # SqlAlchemy
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI: Optional[str] = (
+    SQLALCHEMY_DATABASE_URI = (
         f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
         f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
 
@@ -37,6 +39,10 @@ class DefaultConfig:
             os.environ.get("SHHH_SECRET_MAX_LENGTH", 250))
     except (ValueError, TypeError):
         SHHH_SECRET_MAX_LENGTH = 250
+        logger.warning(
+            "Provided value for SHHH_SECRET_MAX_LENGTH is not "
+            "valid, using default value of %s",
+            SHHH_SECRET_MAX_LENGTH)
 
     # Number of tries to reach the database before performing a read or write
     # operation. It could happens that the database is not reachable or is
@@ -47,6 +53,10 @@ class DefaultConfig:
             os.environ.get("SHHH_DB_LIVENESS_RETRY_COUNT", 5))
     except (ValueError, TypeError):
         SHHH_DB_LIVENESS_RETRY_COUNT = 5
+        logger.warning(
+            "Provided value for SHHH_DB_LIVENESS_RETRY_COUNT is not "
+            "valid, using default value of %s",
+            SHHH_DB_LIVENESS_RETRY_COUNT)
 
     # Sleep interval in seconds between database liveness retries. The default
     # value is 1 second.
@@ -56,6 +66,10 @@ class DefaultConfig:
             os.environ.get("SHHH_DB_LIVENESS_SLEEP_INTERVAL", 1))
     except (ValueError, TypeError):
         SHHH_DB_LIVENESS_SLEEP_INTERVAL = 1
+        logger.warning(
+            "Provided value for SHHH_DB_LIVENESS_SLEEP_INTERVAL is not "
+            "valid, using default value of %s",
+            SHHH_DB_LIVENESS_SLEEP_INTERVAL)
 
 
 class TestConfig(DefaultConfig):

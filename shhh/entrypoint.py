@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import gzip
 import logging
 from http import HTTPStatus
 from io import BytesIO
+from typing import TYPE_CHECKING
 
 from flask import Flask, Response, render_template as rt
-from flask_apscheduler import APScheduler
 from flask_assets import Bundle
 from htmlmin.main import minify
 
@@ -15,6 +17,11 @@ from shhh.constants import EnvConfig
 from shhh.extensions import assets, db, scheduler
 from shhh.scheduler import tasks
 from shhh.web import web
+
+if TYPE_CHECKING:
+    from flask_apscheduler import APScheduler
+    from flask_assets import Environment
+    from werkzeug.exceptions import NotFound, InternalServerError
 
 
 def create_app(env: EnvConfig) -> Flask:
@@ -89,7 +96,7 @@ def _add_scheduler_jobs(scheduler: APScheduler) -> None:
                       seconds=60)
 
 
-def _compile_static_assets(app_assets) -> None:
+def _compile_static_assets(app_assets: Environment) -> None:
     assets_to_compile = (("js", ("create", "created", "read")),
                          (("css", ("styles", ))))
     for k, v in assets_to_compile:
@@ -105,11 +112,12 @@ def _inject_global_vars() -> dict[str, str]:
     return {"version": __version__}
 
 
-def _not_found_error(error) -> tuple[str, HTTPStatus]:
+def _not_found_error(error: NotFound) -> tuple[str, HTTPStatus]:
     return rt("error.html", error=error), HTTPStatus.NOT_FOUND
 
 
-def _internal_server_error(error) -> tuple[str, HTTPStatus]:
+def _internal_server_error(
+        error: InternalServerError) -> tuple[str, HTTPStatus]:
     return rt("error.html", error=error), HTTPStatus.INTERNAL_SERVER_ERROR
 
 

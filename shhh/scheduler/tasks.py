@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 import logging
-from typing import Iterable
+from typing import TYPE_CHECKING
 
 from shhh.constants import ClientType
 from shhh.domain import model
 from shhh.extensions import db, scheduler
 from shhh.liveness import db_liveness_ping
+
+if TYPE_CHECKING:
+    from typing import Iterable
 
 logger = logging.getLogger("tasks")
 

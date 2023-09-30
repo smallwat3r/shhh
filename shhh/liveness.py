@@ -1,14 +1,23 @@
+from __future__ import annotations
+
 import logging
 import time
 from http import HTTPStatus
-from typing import Callable, TypeVar
+from typing import TYPE_CHECKING
 
-from flask import Flask, Response, abort, current_app as app, make_response
+from flask import abort, current_app as app, make_response
 from sqlalchemy import text
 
 from shhh.api.schemas import ErrorResponse
 from shhh.constants import ClientType, Message
 from shhh.extensions import db, scheduler
+
+if TYPE_CHECKING:
+    from typing import Callable, TypeVar
+
+    from flask import Flask, Response
+
+    RT = TypeVar('RT')
 
 logger = logging.getLogger(__name__)
 
@@ -54,9 +63,6 @@ def _is_db_table_up(flask_app: Flask) -> bool:
 
 def _is_db_healthy(flask_app: Flask) -> bool:
     return _is_db_awake(flask_app) and _is_db_table_up(flask_app)
-
-
-RT = TypeVar('RT')
 
 
 def _check_task_liveness(f: Callable[..., RT], *args, **kwargs) -> RT | None:
