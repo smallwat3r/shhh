@@ -1,23 +1,25 @@
-import functools
-from http import HTTPStatus
-from typing import NoReturn
+from __future__ import annotations
 
-from flask import Blueprint, Response, make_response
+import functools
+from typing import TYPE_CHECKING
+
+from flask import Blueprint
 from flask.views import MethodView
-from marshmallow import ValidationError
 from webargs.flaskparser import abort, parser, use_kwargs
 
-from shhh.api import handlers
-from shhh.api.schemas import CallableResponse, ReadRequest, WriteRequest
+from shhh.api.handlers import ErrorHandler, ReadHandler, WriteHandler
+from shhh.api.schemas import ReadRequest, WriteRequest
 
+if TYPE_CHECKING:
+    from typing import NoReturn
 
-def _handle(response: CallableResponse, code: HTTPStatus) -> Response:
-    return make_response(response(), code)
+    from flask import Response
+    from marshmallow import ValidationError
 
 
 @parser.error_handler
 def handle_parsing_error(err: ValidationError, *args, **kwargs) -> NoReturn:
-    abort(_handle(*handlers.parse_error(err)))
+    abort(ErrorHandler(err).make_response())
 
 
 body = functools.partial(use_kwargs, location="json")
@@ -28,11 +30,11 @@ class Api(MethodView):
 
     @query(ReadRequest())
     def get(self, *args, **kwargs) -> Response:
-        return _handle(*handlers.read(*args, **kwargs))
+        return ReadHandler(*args, **kwargs).make_response()
 
     @body(WriteRequest())
     def post(self, *args, **kwargs) -> Response:
-        return _handle(*handlers.write(*args, **kwargs))
+        return WriteHandler(*args, **kwargs).make_response()
 
 
 api = Blueprint("api", __name__, url_prefix="/api")

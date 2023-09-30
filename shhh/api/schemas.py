@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import re
 from dataclasses import dataclass, field, fields as dfields
 from urllib.parse import urljoin
+from typing import TYPE_CHECKING
 
-from flask import Response, current_app as app, jsonify, request, url_for
+from flask import current_app as app, jsonify, request, url_for
 from marshmallow import Schema, ValidationError, fields, pre_load, validate
 
 from shhh.constants import (DEFAULT_EXPIRATION_TIME_VALUE,
@@ -11,6 +14,9 @@ from shhh.constants import (DEFAULT_EXPIRATION_TIME_VALUE,
                             READ_TRIES_VALUES,
                             Message,
                             Status)
+
+if TYPE_CHECKING:
+    from flask import Response
 
 
 class ReadRequest(Schema):
