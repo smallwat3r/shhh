@@ -31,3 +31,13 @@ split_all_top_level_comma_separated_values = true
 split_before_dict_set_generator = true
 split_before_dot = true
 split_complex_comprehension = true
+
+[tool.coverage.report]
+fail_under = 80
+exclude_also = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:"
+]
+
+[tool.coverage.run]
+source = ["."]

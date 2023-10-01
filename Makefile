@@ -44,7 +44,7 @@ checks: tests ruff mypy bandit  ## Run all checks (unit tests, ruff, mypy, bandi
 .PHONY: tests
 tests:  ## Run unit tests
 	@echo "Running tests..."
-	$(PYTHON) -m pytest tests
+	$(PYTHON) -m pytest --cov=shhh tests
 
 .PHONY: yapf
 yapf:  ## Format python code with yapf
