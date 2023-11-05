@@ -25,7 +25,7 @@ class Handler(ABC):
 
     @abstractmethod
     def handle(self) -> tuple[CallableResponse, HTTPStatus]:
-        pass
+        pass  # pragma: no cover
 
     def make_response(self) -> Response:
         response, code = self.handle()
