@@ -23,9 +23,12 @@ You can find in this repo everything you need to host the app yourself.
 Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
 immediately (using your own server running Flask behind Gunicorn and Nginx, 
-and your own Postgres database, **for free**).
+and your own Postgres database).
 
 [![Deploy][heroku-shield]][heroku]
+
+(see [here](#initiate-the-database-tables) to initiate the db table after 
+deploying on Heroku)
 
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
 a Go client to interact with the Shhh API from the command line.
@@ -59,7 +62,7 @@ _Tip: for better security, avoid writing any info on how/where to use the secret
 
 Yes, you can find some doc [here](https://app.swaggerhub.com/apis-docs/smallwat3r/shhh-api/1.0.0).
 
-## How to launch Shhh locally?
+## How to launch Shhh?
 
 These instructions are for development purpose only. For production 
 use you might want to use a more secure configuration.
@@ -86,11 +89,16 @@ can access:
 
 _You can find the development database credentials from the env file at [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev)._
 
-##### Create the database tables
+#### Initiate the database tables
 
 Enter a Flask shell in running container with:
 ``` sh
 make shell
+```
+
+If deployed on Heroku, you can access the Flask shell with:
+``` sh
+heroku run --app=<heroku-app-name> python3 -m flask shell
 ```
 
 From the Flask shell, copy and run:
@@ -100,6 +108,9 @@ from shhh.extensions import db
 orm.metadata.create_all(db.engine)
 exit()
 ```
+
+This will ensure the necessary tables are create in the database, and make sure your
+deployed Shhh application works as expected.
 
 #### Development tools
 
