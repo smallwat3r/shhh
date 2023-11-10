@@ -18,7 +18,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: alpine.Dockerfile
+      dockerfile: alpine.dev.Dockerfile
     image: shhh
     depends_on:
       - db

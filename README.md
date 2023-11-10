@@ -66,7 +66,7 @@ use you might want to use a more secure configuration.
 
 #### Deps
 
-Make sure you have `make`, `docker`, `yarn`, and a version of Python 3.10 installed on your machine.  
+Make sure you have `make`, `docker`, `yarn`, and a version of Python 3.12 installed on your machine.  
 
 The application will use the development env variables from [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev).  
 

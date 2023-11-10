@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.18
+FROM python:3.12-alpine3.18
 
 RUN apk update \
   && apk add --no-cache \
@@ -33,11 +33,4 @@ COPY --chown=$USER:$GROUP . .
 
 RUN yarn install --modules-folder=shhh/static/vendor
 
-# When using Gunicorn in a more prod like config, multiple
-# workers would require to use the --preload option, else
-# the scheduler would spawn multiple scheduler instances.
-# Note it would not be comptatible with Gunicorn --reload
-# flag, which is useful to reload the app on change, for
-# development purposes.
-# Example: CMD gunicorn -b :8080 -w 3 wsgi:app --preload
-CMD flask run --host=0.0.0.0 --port 8081 --reload
+CMD gunicorn -b :8081 -w 3 wsgi:app --preload

@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import secrets
 from base64 import urlsafe_b64decode, urlsafe_b64encode
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy.ext.hybrid import hybrid_method
 
@@ -10,6 +13,9 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from shhh.constants import DEFAULT_READ_TRIES_VALUE
+
+if TYPE_CHECKING:
+    from typing import Self
 
 
 class Secret:
@@ -57,7 +63,7 @@ class Secret:
                 passphrase: str,
                 expire_code: str,
                 tries: int = DEFAULT_READ_TRIES_VALUE,
-                iterations: int = 100_000) -> "Secret":
+                iterations: int = 100_000) -> Self:
         salt = secrets.token_bytes(16)
         key = cls._derive_key(passphrase, salt, iterations)
         encrypted_text = urlsafe_b64encode(
@@ -65,7 +71,7 @@ class Secret:
             (salt,
              iterations.to_bytes(4, "big"),
              urlsafe_b64decode(Fernet(key).encrypt(message.encode()))))
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         return cls(encrypted_text=encrypted_text,
                    date_created=now,
                    date_expires=cls._set_expiry_date(from_date=now,
@@ -86,7 +92,7 @@ class Secret:
 
     @property
     def expires_on_text(self) -> str:
-        timez = datetime.utcnow().astimezone().tzname()
+        timez = datetime.now(timezone.utc).astimezone().tzname()
         return f"{self.date_expires.strftime('%B %d, %Y at %H:%M')} {timez}"
 
     @hybrid_method

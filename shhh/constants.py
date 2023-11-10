@@ -1,5 +1,5 @@
 from collections import OrderedDict
-from enum import Enum
+from enum import StrEnum
 
 READ_TRIES_VALUES = (3, 5, 10)
 DEFAULT_READ_TRIES_VALUE = 5
@@ -12,12 +12,12 @@ EXPIRATION_TIME_VALUES = OrderedDict([
 DEFAULT_EXPIRATION_TIME_VALUE = EXPIRATION_TIME_VALUES["3 days"]
 
 
-class ClientType(str, Enum):
+class ClientType(StrEnum):
     WEB = "web"
     TASK = "task"
 
 
-class EnvConfig(str, Enum):
+class EnvConfig(StrEnum):
     TESTING = "testing"
     DEV_LOCAL = "dev-local"
     DEV_DOCKER = "dev-docker"
@@ -25,7 +25,7 @@ class EnvConfig(str, Enum):
     PRODUCTION = "production"
 
 
-class Status(str, Enum):
+class Status(StrEnum):
     CREATED = "created"
     SUCCESS = "success"
     EXPIRED = "expired"
@@ -33,7 +33,7 @@ class Status(str, Enum):
     ERROR = "error"
 
 
-class Message(str, Enum):
+class Message(StrEnum):
     NOT_FOUND = ("Sorry, we can't find a secret, it has expired, been deleted "
                  "or has already been read.")
     EXCEEDED = ("The passphrase is not valid. You've exceeded the number of "
