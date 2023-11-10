@@ -25,10 +25,8 @@ It will generate a fully configured private instance of Shhh
 immediately (using your own server running Flask behind Gunicorn and Nginx, 
 and your own Postgres database).
 
-[![Deploy][heroku-shield]][heroku]
-
-(see [here](#initiate-the-database-tables) to initiate the db table after 
-deploying on Heroku)
+[![Deploy][heroku-shield]][heroku] (see [here](#initiate-the-database-tables) to 
+initiate the db tables after deploying on Heroku)
 
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
 a Go client to interact with the Shhh API from the command line.
