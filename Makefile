@@ -21,10 +21,10 @@ dc-start-adminer: dc-stop  ## Start dev docker server (with adminer)
 dc-stop:  ## Stop dev docker server
 	@docker compose -f docker-compose.yml stop;
 
-VENV          = venv
-VENV_PYTHON   = $(VENV)/bin/python
-SYSTEM_PYTHON = $(or $(shell which python3.10), $(shell which python))
-PYTHON        = $(or $(wildcard $(VENV_PYTHON)), $(SYSTEM_PYTHON))
+VENV           = venv
+VENV_PYTHON    = $(VENV)/bin/python
+SYSTEM_PYTHON  = $(shell which python3.12)
+PYTHON         = $(wildcard $(VENV_PYTHON))
 
 $(VENV_PYTHON):
 	rm -rf $(VENV)
@@ -36,7 +36,7 @@ venv: $(VENV_PYTHON)  ## Create a Python virtual environment
 .PHONY: deps
 deps:  ## Install Python requirements in virtual environment
 	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -r requirements.txt -r dev-requirements.txt
+	$(PYTHON) -m pip install --no-cache-dir -r requirements.txt -r dev-requirements.txt
 
 .PHONY: checks
 checks: tests ruff mypy bandit  ## Run all checks (unit tests, ruff, mypy, bandit)
