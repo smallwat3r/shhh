@@ -92,21 +92,18 @@ class DevelopmentConfig(DefaultConfig):
     SQLALCHEMY_ECHO = False
 
 
-class HerokuConfig(DefaultConfig):
-    """Heroku configuration (heroku)."""
+class ProductionConfig(DefaultConfig):
+    """Production configuration (production)."""
 
     DEBUG = False
     SQLALCHEMY_ECHO = False
+
+
+class HerokuConfig(ProductionConfig):
+    """Heroku configuration (heroku)."""
 
     # SQLAlchemy 1.4 removed the deprecated postgres dialect name, the name
     # postgresql must be used instead. This URL is automatically set on
     # Heroku, so change it from the code directly.
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "").replace(
         "postgres://", "postgresql://", 1)
-
-
-class ProductionConfig(DefaultConfig):
-    """Production configuration (production)."""
-
-    DEBUG = False
-    SQLALCHEMY_ECHO = False
