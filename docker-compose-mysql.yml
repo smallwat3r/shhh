@@ -1,0 +1,29 @@
+version: '3.2'
+services:
+  db:
+    image: mysql:8.2
+    env_file:
+      - ./environments/dev-docker-mysql.env
+    ports:
+      - 3306:3306
+  app:
+    build:
+      context: .
+      dockerfile: dockerfiles/alpine.dev.mysql.Dockerfile
+    image: shhh
+    depends_on:
+      - db
+    env_file:
+      - ./environments/dev-docker-mysql.env
+    ports:
+      - 8081:8081
+    volumes:
+      - .:/opt/shhh:delegated
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - 8082:8080
+volumes:
+  mysql:

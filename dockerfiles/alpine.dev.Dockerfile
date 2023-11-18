@@ -29,13 +29,13 @@ ENV TZ UTC
 
 WORKDIR /opt/shhh
 
-ENV GROUP=app USER=shhh UID=12345 GID=23456
+ARG GROUP=app USER=shhh UID=1001 GID=1001
 
 RUN addgroup --gid "$GID" "$GROUP" \
     && adduser --uid "$UID" --disabled-password --gecos "" \
         --ingroup "$GROUP" "$USER"
 
-USER "$USER"
+USER $USER
 ENV PATH="/home/$USER/.local/bin:${PATH}"
 
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1

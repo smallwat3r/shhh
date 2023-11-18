@@ -9,19 +9,19 @@ class DefaultConfig:
 
     DEBUG = True
 
-    # Postgres connection.
-    POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "localhost")
-    POSTGRES_USER = os.environ.get("POSTGRES_USER")
-    POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-    POSTGRES_PORT = os.environ.get("POSTGRES_PORT", 5432)
-    POSTGRES_DB = os.environ.get("POSTGRES_DB", "shhh")
+    DB_HOST = os.environ.get("DB_HOST", "localhost")
+    DB_USER = os.environ.get("DB_USER")
+    DB_PASSWORD = os.environ.get("DB_PASSWORD")
+    DB_PORT = os.environ.get("DB_PORT", 5432)
+    DB_NAME = os.environ.get("DB_NAME", "shhh")
+    DB_ENGINE = os.environ.get("DB_ENGINE", "postgresql+psycopg2")
 
     # SqlAlchemy
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = (
-        f"postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-        f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
+        f"{DB_ENGINE}://{DB_USER}:{DB_PASSWORD}"
+        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
     #
     # Shhh optional custom configurations
@@ -78,7 +78,7 @@ class TestConfig(DefaultConfig):
     DEBUG = False
     TESTING = True
 
-    SQLALCHEMY_DATABASE_URI = "sqlite://"
+    SQLALCHEMY_DATABASE_URI = "sqlite://"  # in memory
 
     SHHH_HOST = "http://test.test"
     SHHH_SECRET_MAX_LENGTH = 20
@@ -100,7 +100,7 @@ class ProductionConfig(DefaultConfig):
 
 
 class HerokuConfig(ProductionConfig):
-    """Heroku configuration (heroku)."""
+    """Heroku configuration (heroku). Only support PostgreSQL."""
 
     # SQLAlchemy 1.4 removed the deprecated postgres dialect name, the name
     # postgresql must be used instead. This URL is automatically set on
