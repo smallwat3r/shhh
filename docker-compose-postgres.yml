@@ -1,0 +1,29 @@
+version: '3.2'
+services:
+  db:
+    image: postgres:15.4-alpine3.18
+    env_file:
+      - ./environments/dev-docker-postgres.env
+    ports:
+      - 5432:5432
+  app:
+    build:
+      context: .
+      dockerfile: dockerfiles/alpine.dev.Dockerfile
+    image: shhh
+    depends_on:
+      - db
+    env_file:
+      - ./environments/dev-docker-postgres.env
+    ports:
+      - 8081:8081
+    volumes:
+      - .:/opt/shhh:delegated
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - 8082:8080
+volumes:
+  postgres:

@@ -23,7 +23,7 @@ You can find in this repo everything you need to host the app yourself.
 Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
 immediately (using your own server running Flask behind Gunicorn and Nginx, 
-and your own Postgres database).
+and your own PostgreSQL database).
 
 [![Deploy][heroku-shield]][heroku] (see [here](#initiate-the-database-tables) to 
 initiate the db tables after deploying on Heroku)
@@ -83,9 +83,16 @@ Once the container image has finished building and has started, you
 can access: 
 
 * Shhh at <http://localhost:8081>
-* Adminer at <http://localhost:8082/?pgsql=db&username=shhh&db=shhh> (if launched with `dc-start-adminer`)
+* Adminer at <http://localhost:8082> (if launched with `dc-start-adminer`)
 
-_You can find the development database credentials from the env file at [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev)._
+_You can find the development database credentials from the env file at [/environments/dev-docker-postgres.env](https://github.com/smallwat3r/shhh/blob/master/environments/dev-docker-postgres.env)._
+
+You have also the option to use `MySQL` instead of `PostgreSQL`, using these commands:
+```sh
+make dc-start-mysql          # to start the app
+make dc-start-adminer-mysql  # to start the app with adminer (SQL editor)
+make dc-stop-mysql           # to stop the app
+```
 
 #### Initiate the database tables
 
@@ -158,10 +165,24 @@ Bellow is the list of environment variables used by Shhh.
 
 #### Mandatory
 * `FLASK_ENV`: the environment config to load (`testing`, `dev-local`, `dev-docker`, `heroku`, `production`).
-* `POSTGRES_HOST`: Postgresql hostname
+* `DB_HOST`: Database hostname
+* `DB_USER`: Database username
+* `DB_PASSWORD`: Database password
+* `DB_NAME`: Database name
+* `DB_ENGINE`: Database engine to use (ex: `postgresql+psycopg2`, `mysql+pymysql`)
+
+Depending if you can use PostgreSQL or MySQL you might also need to set (these need to match the values
+you've specified as `DB_NAME`, `DB_PASSWORD` and `DB_NAME` above):
+
 * `POSTGRES_USER`: Postgresql username
 * `POSTGRES_PASSWORD`: Postgresql password
-* `POSTGRES_DB`: Database name
+* `POSTGRES_DB`: Postgresql database name
+
+or
+
+* `MYSQLUSER`: MySQL username
+* `MYSQL_PASSWORD`: MySQL password
+* `MYSQL_DATABASE`: MySQL database name
 
 #### Optional
 * `SHHH_HOST`: This variable can be used to specify a custom hostname to use as the
@@ -174,10 +195,6 @@ before performing a read or write operation. It could happens that the database 
 asleep (for instance this happens often on Heroku free plans). The default retry number is 5.
 * `SHHH_DB_LIVENESS_SLEEP_INTERVAL`: This variable manages the interval in seconds between the database
 liveness retries. The default value is 1 second.
-
-## Acknowledgements
-
-Special thanks: [@AustinTSchaffer](https://github.com/AustinTSchaffer), [@kleinfelter](https://github.com/kleinfelter)  
 
 ## License
 

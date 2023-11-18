@@ -7,7 +7,8 @@
 *.rdb
 
 environments/
-!environments/docker.dev
+!environments/dev-docker-postgres.env
+!environments/dev-docker-mysql.env
 
 .coverage
 tags
