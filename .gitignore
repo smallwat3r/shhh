@@ -6,10 +6,6 @@
 *.pid
 *.rdb
 
-environments/
-!environments/dev-docker-postgres.env
-!environments/dev-docker-mysql.env
-
 .coverage
 tags
 
