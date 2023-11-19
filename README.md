@@ -213,4 +213,4 @@ Please report issues or questions
 [buymeacoffee]: https://www.buymeacoffee.com/smallwat3r
 
 [heroku-shield]: https://www.herokucdn.com/deploy/button.svg
-[heroku]: https://heroku.com/deploy?template=https://github.com/smallwat3r/shhh
+[heroku]: https://heroku.com/deploy?template=https://github.com/smallwat3r/shhh-heroku-deploy
