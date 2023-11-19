@@ -28,6 +28,8 @@ and your own PostgreSQL database).
 [![Deploy][heroku-shield]][heroku] (see [here](#initiate-the-database-tables) to 
 initiate the db tables after deploying on Heroku)
 
+You can see the Heroku configuration files [here](https://github.com/smallwat3r/shhh-heroku-deploy/tree/main)
+
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
 a Go client to interact with the Shhh API from the command line.
 
@@ -67,7 +69,7 @@ use you might want to use a more secure configuration.
 
 #### Deps
 
-The application will use the development env variables from [/environments/docker.dev](https://github.com/smallwat3r/shhh/blob/master/environments/docker.dev).
+The application will use the development env variables from [/environments/dev-docker-postgres.env](https://github.com/smallwat3r/shhh/blob/master/environments/dev-docker-postgres.env).
 
 #### Docker
 
