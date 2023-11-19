@@ -23,12 +23,10 @@ You can find in this repo everything you need to host the app yourself.
 Or you can **one-click deploy to Heroku** using the below button.
 It will generate a fully configured private instance of Shhh 
 immediately (using your own server running Flask behind Gunicorn and Nginx, 
-and your own PostgreSQL database).
+and your own PostgreSQL database). You can see the Heroku configuration files [here](https://github.com/smallwat3r/shhh-heroku-deploy/tree/main).
 
 [![Deploy][heroku-shield]][heroku] (see [here](#initiate-the-database-tables) to 
 initiate the db tables after deploying on Heroku)
-
-You can see the Heroku configuration files [here](https://github.com/smallwat3r/shhh-heroku-deploy/tree/main)
 
 Also, checkout [shhh-cli](https://github.com/smallwat3r/shhh-cli), 
 a Go client to interact with the Shhh API from the command line.
