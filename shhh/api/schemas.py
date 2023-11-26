@@ -77,7 +77,7 @@ class ReadResponse(CallableResponse):
 
 
 def _build_link_url(external_id: str) -> str:
-    root_host = app.config.get("SHHH_HOST") or request.url_root
+    root_host = app.config.get("SHHH_HOST", request.url_root)
     return urljoin(root_host, url_for("web.read", external_id=external_id))
 
 
