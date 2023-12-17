@@ -33,7 +33,7 @@ dc-start-adminer-mysql: dc-stop  ## Start dev docker server using MySQL (with ad
 dc-stop-mysql:  ## Stop dev docker server using MySQL
 	@docker compose -f docker-compose-mysql.yml stop;
 
-VENV           = venv
+VENV           = .venv
 VENV_PYTHON    = $(VENV)/bin/python
 SYSTEM_PYTHON  = $(shell which python3.12)
 PYTHON         = $(wildcard $(VENV_PYTHON))
