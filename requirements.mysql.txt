@@ -1,6 +1,6 @@
 APScheduler==3.10.4
 blinker==1.7.0
-certifi==2023.11.17
+certifi==2024.2.2
 cffi==1.16.0
 charset-normalizer==3.3.2
 click==8.1.7
