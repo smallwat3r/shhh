@@ -20,7 +20,7 @@ MarkupSafe==2.1.5
 marshmallow==3.21.1
 packaging==24.0
 psycopg2-binary==2.9.9
-pycparser==2.21
+pycparser==2.22
 python-dateutil==2.9.0.post0
 pytz==2024.1
 requests==2.31.0
