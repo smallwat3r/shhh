@@ -1,5 +1,5 @@
 APScheduler==3.10.4
-blinker==1.8.1
+blinker==1.8.2
 certifi==2024.2.2
 cffi==1.16.0
 charset-normalizer==3.3.2
