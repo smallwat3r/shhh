@@ -23,7 +23,7 @@ psycopg2-binary==2.9.9
 pycparser==2.22
 python-dateutil==2.9.0.post0
 pytz==2024.1
-requests==2.32.2
+requests==2.32.3
 six==1.16.0
 SQLAlchemy==2.0.30
 typing_extensions==4.11.0
