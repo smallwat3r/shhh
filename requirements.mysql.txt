@@ -26,7 +26,7 @@ pytz==2024.1
 requests==2.32.3
 six==1.16.0
 SQLAlchemy==2.0.30
-typing_extensions==4.11.0
+typing_extensions==4.12.2
 tzlocal==5.2
 urllib3==2.2.1
 webargs==8.4.0
