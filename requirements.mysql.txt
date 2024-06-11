@@ -18,7 +18,7 @@ Jinja2==3.1.4
 jsmin==3.0.1
 MarkupSafe==2.1.5
 marshmallow==3.21.3
-packaging==24.0
+packaging==24.1
 pycparser==2.22
 PyMySQL==1.1.1
 python-dateutil==2.9.0.post0
