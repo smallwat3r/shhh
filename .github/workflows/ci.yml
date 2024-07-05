@@ -23,7 +23,7 @@ jobs:
     - name: Linting checks
       run: |
         # stop the build if there are any Python syntax errors
-        ruff shhh tests
+        ruff check shhh tests
     - name: SAST analysis
       run: |
         bandit -r shhh -x shhh/static
