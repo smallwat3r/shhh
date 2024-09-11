@@ -22,7 +22,7 @@ packaging==24.1
 pycparser==2.22
 PyMySQL==1.1.1
 python-dateutil==2.9.0.post0
-pytz==2024.1
+pytz==2024.2
 requests==2.32.3
 six==1.16.0
 SQLAlchemy==2.0.34
