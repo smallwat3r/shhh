@@ -19,7 +19,7 @@ jsmin==3.0.1
 MarkupSafe==2.1.5
 marshmallow==3.23.0
 packaging==24.1
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.10
 pycparser==2.22
 python-dateutil==2.9.0.post0
 pytz==2024.2
