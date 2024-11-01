@@ -17,7 +17,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.4
 jsmin==3.0.1
 MarkupSafe==3.0.2
-marshmallow==3.23.0
+marshmallow==3.23.1
 packaging==24.1
 psycopg2-binary==2.9.10
 pycparser==2.22
