@@ -106,8 +106,13 @@ If deployed on Heroku, you can run the migrations using:
 heroku run --app=<heroku-app-name> python3 -m flask db upgrade
 ```
 
-This will ensure the necessary tables are create in the database, and make sure your
-deployed Shhh application works as expected.
+This will ensure the necessary tables are created and up-to-date in the database, 
+and make sure your deployed Shhh application works as expected.
+
+You can write a revision using:
+``` sh
+make db c='revision "my revision"'
+```
 
 #### Development tools
 
