@@ -177,7 +177,7 @@ you've specified as `DB_NAME`, `DB_PASSWORD` and `DB_NAME` above):
 
 or
 
-* `MYSQLUSER`: MySQL username
+* `MYSQL_USER`: MySQL username
 * `MYSQL_PASSWORD`: MySQL password
 * `MYSQL_DATABASE`: MySQL database name
 
