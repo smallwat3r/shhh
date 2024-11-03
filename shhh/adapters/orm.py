@@ -14,7 +14,10 @@ secret = db.Table(
     db.Column("date_created", db.DateTime),
     db.Column("date_expires", db.DateTime),
     db.Column("external_id", db.String(20), nullable=False),
-    db.Column("tries", db.Integer, default=DEFAULT_READ_TRIES_VALUE))
+    db.Column("tries", db.Integer, default=DEFAULT_READ_TRIES_VALUE),
+    db.Index("external_id_idx", "external_id"),
+    db.Index("date_expires_idx", "date_expires"),
+)
 
 
 def start_mappers() -> None:
