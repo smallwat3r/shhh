@@ -66,7 +66,7 @@ yapf:  ## Format python code with yapf
 .PHONY: ruff
 ruff:  ## Run ruff
 	@echo "Running Ruff report..."
-	$(PYTHON) -m ruff $(SRC_DIR) $(TEST_DIR)
+	$(PYTHON) -m ruff check $(SRC_DIR) $(TEST_DIR) --exclude shhh/migrations/ --exclude shhh/static
 
 .PHONY: mypy
 mypy:  ## Run mypy
