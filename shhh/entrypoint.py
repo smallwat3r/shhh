@@ -7,6 +7,7 @@ from io import BytesIO
 from typing import TYPE_CHECKING
 
 from flask import Flask, Response, render_template as rt
+from flask_alembic import Alembic
 from flask_assets import Bundle
 from htmlmin.main import minify
 
@@ -84,6 +85,8 @@ def _register_blueprints(app: Flask) -> None:
 
 
 def _register_extensions(app: Flask) -> None:
+    alembic = Alembic(metadatas={"default": orm.metadata})
+    alembic.init_app(app)
     assets.init_app(app)
     db.init_app(app)
     scheduler.init_app(app)

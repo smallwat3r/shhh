@@ -94,24 +94,16 @@ make dc-start-adminer-mysql  # to start the app with adminer (SQL editor)
 make dc-stop-mysql           # to stop the app
 ```
 
-#### Initiate the database tables
+#### Migrations
 
-Enter a Flask shell in running container with:
+Run the migrations using:
 ``` sh
-make shell
+make db c='upgrade'
 ```
 
-If deployed on Heroku, you can access the Flask shell with:
+If deployed on Heroku, you can run the migrations using:
 ``` sh
-heroku run --app=<heroku-app-name> python3 -m flask shell
-```
-
-From the Flask shell, copy and run:
-``` python
-from shhh.adapters import orm
-from shhh.extensions import db
-orm.metadata.create_all(db.engine)
-exit()
+heroku run --app=<heroku-app-name> python3 -m flask db upgrade
 ```
 
 This will ensure the necessary tables are create in the database, and make sure your

@@ -87,6 +87,10 @@ yarn:  ## Install frontend deps using Yarn
 shell:  ## Pop up a Flask shell in Shhh
 	docker exec -it shhh-app-1 flask shell
 
+.PHONY: db
+db:  ## Run flask db command, ex: `make db c='--help'`
+	docker exec -it shhh-app-1 flask db $(c)
+
 .PHONY: logs
 logs:  ## Follow Flask logs
 	docker logs shhh-app-1 -f -n 10
