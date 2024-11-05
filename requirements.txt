@@ -1,4 +1,4 @@
-alembic==1.13.3
+alembic==1.14.0
 APScheduler==3.10.4
 blinker==1.8.2
 certifi==2024.8.30
