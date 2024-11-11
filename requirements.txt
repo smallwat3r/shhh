@@ -1,6 +1,6 @@
 alembic==1.14.0
 APScheduler==3.10.4
-blinker==1.8.2
+blinker==1.9.0
 certifi==2024.8.30
 cffi==1.17.1
 charset-normalizer==3.4.0
