@@ -7,7 +7,7 @@ charset-normalizer==3.4.0
 click==8.1.7
 cryptography==43.0.3
 cssmin==0.2.0
-Flask==3.0.3
+Flask==3.1.0
 Flask-Alembic==3.1.1
 Flask-APScheduler==1.13.1
 Flask-Assets==2.1.0
