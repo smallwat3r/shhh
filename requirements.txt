@@ -27,7 +27,7 @@ pycparser==2.22
 python-dateutil==2.9.0.post0
 pytz==2024.2
 requests==2.32.3
-six==1.16.0
+six==1.17.0
 SQLAlchemy==2.0.36
 typing_extensions==4.12.2
 tzlocal==5.2
