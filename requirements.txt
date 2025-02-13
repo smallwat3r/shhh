@@ -30,7 +30,7 @@ requests==2.32.3
 six==1.17.0
 SQLAlchemy==2.0.38
 typing_extensions==4.12.2
-tzlocal==5.2
+tzlocal==5.3
 urllib3==2.3.0
 webargs==8.6.0
 webassets==2.0
