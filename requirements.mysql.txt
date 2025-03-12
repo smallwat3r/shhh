@@ -28,7 +28,7 @@ python-dateutil==2.9.0.post0
 pytz==2025.2
 requests==2.32.3
 six==1.17.0
-SQLAlchemy==2.0.38
+SQLAlchemy==2.0.39
 typing_extensions==4.12.2
 tzlocal==5.3.1
 urllib3==2.3.0
