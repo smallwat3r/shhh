@@ -26,7 +26,7 @@ pycparser==2.22
 PyMySQL==1.1.1
 python-dateutil==2.9.0.post0
 pytz==2025.2
-requests==2.32.3
+requests==2.32.4
 six==1.17.0
 SQLAlchemy==2.0.41
 typing_extensions==4.14.1
