@@ -7,7 +7,7 @@ from http import HTTPStatus
 from io import BytesIO
 from typing import TYPE_CHECKING
 
-from flask import Flask, Request, Response, render_template as rt, g, request
+from flask import Flask, Response, render_template as rt, g, request
 from flask_alembic import Alembic
 from flask_assets import Bundle
 from htmlmin.main import minify

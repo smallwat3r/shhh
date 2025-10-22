@@ -5,7 +5,8 @@ from typing import TYPE_CHECKING
 
 from flask import Blueprint
 from flask.views import MethodView
-from webargs.flaskparser import abort, parser, use_kwargs
+from webargs.flaskparser import parser, use_kwargs
+from werkzeug.exceptions import HTTPException
 
 from shhh.api.handlers import ErrorHandler, ReadHandler, WriteHandler
 from shhh.api.schemas import ReadRequest, WriteRequest
@@ -19,7 +20,7 @@ if TYPE_CHECKING:
 
 @parser.error_handler
 def handle_parsing_error(err: ValidationError, *args, **kwargs) -> NoReturn:
-    abort(ErrorHandler(err).make_response())
+    raise HTTPException(ErrorHandler(err).make_response())
 
 
 body = functools.partial(use_kwargs, location="json")
