@@ -5,7 +5,7 @@ from dataclasses import dataclass, field, fields as dfields
 from urllib.parse import urljoin
 from typing import TYPE_CHECKING
 
-from flask import current_app as app, jsonify, request, url_for
+from flask import current_app as app, jsonify, url_for
 from marshmallow import Schema, ValidationError, fields, pre_load, validate
 
 from shhh.constants import (DEFAULT_EXPIRATION_TIME_VALUE,
@@ -77,7 +77,9 @@ class ReadResponse(CallableResponse):
 
 
 def _build_link_url(external_id: str) -> str:
-    root_host = app.config.get("SHHH_HOST", request.url_root)
+    root_host = app.config.get("SHHH_HOST")
+    if not root_host:
+        return url_for("web.read", external_id=external_id, _external=True)
     return urljoin(root_host, url_for("web.read", external_id=external_id))
 
 
@@ -90,7 +92,7 @@ class WriteResponse(CallableResponse):
     status: Status = Status.CREATED
     details: Message = Message.CREATED
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.link = _build_link_url(self.external_id)
 
 

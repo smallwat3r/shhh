@@ -17,8 +17,6 @@ services:
       - ./environments/dev-docker-mysql.env
     ports:
       - 8081:8081
-    volumes:
-      - .:/opt/shhh:delegated
   adminer:
     image: adminer
     depends_on:

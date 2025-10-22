@@ -1,51 +1,32 @@
-# This dockerfile runs the application with the bare Flask
-# server. As it's for development only purposes.
-#
-# When using Gunicorn in a more prod-like config, multiple
-# workers would require to use the --preload option, else
-# the scheduler would spawn multiple scheduler instances.
-#
-# Note it would not be comptatible with Gunicorn --reload
-# flag, which is useful to reload the app on change, for
-# development purposes.
-#
-# Example: CMD gunicorn -b :8081 -w 3 wsgi:app --preload
-#
-# To use Gunicorn, please use: alpine.gunicorn.Dockerfile
+# This Dockerfile starts the application using the basic Flask
+# development server. It is intended for development use only,
+# not for production.
 
 FROM python:3.12-alpine3.18
 
-RUN apk update \
-  && apk add --no-cache \
-    gcc \
-    g++ \
-    libffi-dev \
-    musl-dev \
-    postgresql-dev \
-    yarn \
-  && python -m pip install --upgrade pip
+RUN apk add --no-cache \
+      gcc g++ musl-dev libffi-dev openssl-dev postgresql-dev \
+      nodejs yarn && \
+    python -m pip install --upgrade pip
 
-ENV TZ UTC
+ENV TZ=UTC
+ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 WORKDIR /opt/shhh
 
-ARG GROUP=app USER=shhh UID=1001 GID=1001
-
-RUN addgroup --gid "$GID" "$GROUP" \
-    && adduser --uid "$UID" --disabled-password --gecos "" \
-        --ingroup "$GROUP" "$USER"
-
-USER $USER
-ENV PATH="/home/$USER/.local/bin:${PATH}"
-
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:${PATH}"
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --no-warn-script-location \
-    --user -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel \
+ && pip install --no-cache-dir -r requirements.txt
 
-COPY --chown=$USER:$GROUP . .
+COPY wsgi.py .
+COPY shhh ./shhh
 
-RUN yarn install --modules-folder=shhh/static/vendor
+COPY package.json .
+RUN mkdir -p /opt/shhh/shhh/static/vendor \
+ && yarn install --modules-folder=/opt/shhh/shhh/static/vendor
 
-CMD flask run --host=0.0.0.0 --port 8081 --reload
+RUN python -m flask --version
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port", "8081", "--reload"]
