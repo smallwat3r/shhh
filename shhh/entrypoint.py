@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import gzip
 import logging
+import secrets
 from http import HTTPStatus
 from io import BytesIO
 from typing import TYPE_CHECKING
 
-from flask import Flask, Response, render_template as rt
+from flask import Flask, Request, Response, render_template as rt, g, request
 from flask_alembic import Alembic
 from flask_assets import Bundle
 from htmlmin.main import minify
@@ -50,6 +51,7 @@ def create_app(env: EnvConfig) -> Flask:
         _compile_static_assets(assets)
 
     app.context_processor(_inject_global_vars)
+    _register_before_request_handlers(app)
     _register_after_request_handlers(app)
     _register_error_handlers(app)
     return app
@@ -68,9 +70,13 @@ def _get_config(env: EnvConfig) -> type[config.DefaultConfig]:
     return configurations[env]
 
 
+def _register_before_request_handlers(app: Flask) -> None:
+    app.before_request(_make_csp_nonce)
+
+
 def _register_after_request_handlers(app: Flask) -> None:
     app.after_request(_optimize_response)
-    app.after_request(_add_required_security_headers)
+    app.after_request(_add_csp)
 
 
 def _register_error_handlers(app: Flask) -> None:
@@ -124,6 +130,10 @@ def _internal_server_error(
     return rt("error.html", error=error), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
+def _make_csp_nonce() -> None:
+    g.csp_nonce = secrets.token_urlsafe(16)
+
+
 def _optimize_response(response: Response) -> Response:
     """Minify HTML and use gzip compression."""
     if response.mimetype == "text/html":
@@ -146,21 +156,32 @@ def _optimize_response(response: Response) -> Response:
     return response
 
 
-def _add_required_security_headers(response: Response) -> Response:
-    response.headers.add("X-Frame-Options", "SAMEORIGIN")
-    response.headers.add("X-Content-Type-Options", "nosniff")
-    response.headers.add("X-XSS-Protection", "1; mode=block")
-    response.headers.add("Referrer-Policy", "no-referrer-when-downgrade")
-    response.headers.add("Strict-Transport-Security",
-                         "max-age=63072000; includeSubdomains; preload")
-    response.headers.add(
+def _add_csp(response: Response) -> Response:
+    nonce = g.get("csp_nonce", "")
+    response.headers.set("X-Frame-Options", "SAMEORIGIN")
+    response.headers.set("X-Content-Type-Options", "nosniff")
+    if request.is_secure:
+        response.headers.set(
+            "Strict-Transport-Security",
+            "max-age=63072000; includeSubDomains" 
+        )
+    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.set(
+        "Permissions-Policy",
+        "accelerometer=(), camera=(), geolocation=(), gyroscope=(), "
+        "magnetometer=(), microphone=(), payment=(), usb=()"
+    )
+    response.headers.set(
         "Content-Security-Policy",
-        ("default-src 'self'; img-src 'self'; object-src 'self'; "
-         "script-src 'self' 'unsafe-inline'; "
-         "style-src 'self' 'unsafe-inline'"))
-    response.headers.add(
-        "feature-policy",
-        ("accelerometer 'none'; camera 'none'; geolocation 'none'; "
-         "gyroscope 'none'; magnetometer 'none'; microphone 'none'; "
-         "payment 'none'; usb 'none'"))
+        "default-src 'self'; "
+        "img-src 'self' data: blob:; "
+        "object-src 'none'; "
+        f"script-src 'self' 'nonce-{nonce}'; "
+        f"script-src-elem 'self' 'nonce-{nonce}'; "
+        f"style-src 'self' 'nonce-{nonce}';"
+        f"style-src-elem 'self' 'nonce-{nonce}'; "
+        "connect-src 'self';"
+        "frame-ancestors 'self'; "
+        "base-uri 'self'; "
+    )
     return response

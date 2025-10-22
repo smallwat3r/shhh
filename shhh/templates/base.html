@@ -62,7 +62,7 @@
     </section>
 
     <script src="{{ url_for('static', filename='vendor/feather-icons/dist/feather.min.js') }}"></script>
-    <script>feather.replace();</script>
+    <script nonce="{{ g.csp_nonce }}">feather.replace();</script>
     {% block js %}{% endblock %}
   </body>
 
