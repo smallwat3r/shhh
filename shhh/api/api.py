@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
 @parser.error_handler
 def handle_parsing_error(err: ValidationError, *args, **kwargs) -> NoReturn:
-    raise HTTPException(ErrorHandler(err).make_response())
+    raise HTTPException(response=ErrorHandler(err).make_response())
 
 
 body = functools.partial(use_kwargs, location="json")
