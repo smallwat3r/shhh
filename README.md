@@ -9,6 +9,11 @@
   <a href="https://github.com/smallwat3r/shhh/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/badge/License-MIT-green.svg" style="max-width:100%;"></a>
 </p>
 
+## Sunsetting...
+
+This project is being sunset in favor of [secretapi](https://github.com/smallwat3r/secretapi), 
+which offers a more streamline approach to achieving the same functionality as shhh.
+
 ## What is it?
 
 **Shhh** is a tiny Flask app to create encrypted secrets and share 
