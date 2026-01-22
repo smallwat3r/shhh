@@ -2,7 +2,7 @@
 # development server. It is intended for development use only,
 # not for production.
 
-FROM python:3.12-alpine3.18
+FROM python:3.12-alpine3.21
 
 RUN apk add --no-cache \
       gcc g++ musl-dev libffi-dev openssl-dev postgresql-dev \
@@ -10,7 +10,6 @@ RUN apk add --no-cache \
     python -m pip install --upgrade pip
 
 ENV TZ=UTC
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
 
 WORKDIR /opt/shhh
 
@@ -27,6 +26,8 @@ COPY shhh ./shhh
 COPY package.json .
 RUN mkdir -p /opt/shhh/shhh/static/vendor \
  && yarn install --modules-folder=/opt/shhh/shhh/static/vendor
+
+EXPOSE 8081
 
 RUN python -m flask --version
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port", "8081", "--reload"]
