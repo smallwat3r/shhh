@@ -28,4 +28,4 @@ def delete_expired_records() -> None:
 def _delete_records(records: Iterable[model.Secret]) -> None:
     for record in records:
         db.session.delete(record)
-        db.session.commit()
+    db.session.commit()
