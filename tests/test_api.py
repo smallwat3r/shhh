@@ -183,3 +183,10 @@ def test_api_post_database_error_triggers_rollback(app, post_payload):
     assert data["response"]["status"] == Status.ERROR
     assert data["response"]["details"] == Message.UNEXPECTED
     mock_rollback.assert_called_once()
+
+
+def test_secret_encrypt_invalid_expire_code():
+    with pytest.raises(RuntimeError, match="Could not set expiry date"):
+        model.Secret.encrypt(message="test",
+                             passphrase="Hello123",
+                             expire_code="1x")

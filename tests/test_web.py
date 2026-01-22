@@ -60,3 +60,13 @@ def test_route_not_found(app):
     with app.test_request_context(), app.test_client() as test_client:
         response = test_client.get("/notfound")
     assert response.status_code == HTTPStatus.NOT_FOUND
+
+
+def test_hsts_header_on_secure_request(app):
+    with app.test_request_context(), app.test_client() as test_client:
+        with patch("shhh.entrypoint.request") as mock_request:
+            mock_request.is_secure = True
+            response = test_client.get(url_for("web.create"))
+    assert response.status_code == HTTPStatus.OK
+    assert response.headers.get("Strict-Transport-Security") == \
+        "max-age=63072000; includeSubDomains"

@@ -19,7 +19,7 @@ paths:
       parameters:
         - in: query
           type: string
-          name: slug
+          name: external_id
           description: The secret Id
           required: true
         - in: query
