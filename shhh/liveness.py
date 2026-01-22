@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import logging
 import time
+from functools import wraps
 from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 from flask import abort, current_app as app, make_response
-from sqlalchemy import text
+from sqlalchemy import select
 
 from shhh.api.schemas import ErrorResponse
 from shhh.constants import ClientType, Message
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 def _perform_db_connectivity_query() -> None:
-    db.session.execute(text("SELECT 1;"))
+    db.session.execute(select(1))
 
 
 def _check_table_exists(table_name: str) -> bool:
@@ -112,6 +113,7 @@ def db_liveness_ping(
 
     def inner(f):
 
+        @wraps(f)
         def wrapper(*args, **kwargs):
             return _check_liveness(client, f, *args, **kwargs)
 
