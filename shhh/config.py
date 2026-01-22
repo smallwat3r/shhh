@@ -1,5 +1,6 @@
-import os
 import logging
+import os
+from urllib.parse import quote_plus
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +20,13 @@ class DefaultConfig:
     # SqlAlchemy
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # Alembic
+    ALEMBIC = {"path_separator": "os"}
+    _db_user = quote_plus(DB_USER or '')
+    _db_password = quote_plus(DB_PASSWORD or '')
     SQLALCHEMY_DATABASE_URI = (
-        f"{DB_ENGINE}://{DB_USER}:{DB_PASSWORD}"
-        f"@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+        f"{DB_ENGINE}://{_db_user}:{_db_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
     #
     # Shhh optional custom configurations
