@@ -158,16 +158,13 @@ def _add_csp(response: Response) -> Response:
     response.headers.set("X-Frame-Options", "SAMEORIGIN")
     response.headers.set("X-Content-Type-Options", "nosniff")
     if request.is_secure:
-        response.headers.set(
-            "Strict-Transport-Security",
-            "max-age=63072000; includeSubDomains" 
-        )
+        response.headers.set("Strict-Transport-Security",
+                             "max-age=63072000; includeSubDomains")
     response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
     response.headers.set(
         "Permissions-Policy",
         "accelerometer=(), camera=(), geolocation=(), gyroscope=(), "
-        "magnetometer=(), microphone=(), payment=(), usb=()"
-    )
+        "magnetometer=(), microphone=(), payment=(), usb=()")
     response.headers.set(
         "Content-Security-Policy",
         "default-src 'self'; "
@@ -179,6 +176,5 @@ def _add_csp(response: Response) -> Response:
         f"style-src-elem 'self' 'nonce-{nonce}'; "
         "connect-src 'self';"
         "frame-ancestors 'self'; "
-        "base-uri 'self'; "
-    )
+        "base-uri 'self'; ")
     return response

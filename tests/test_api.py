@@ -175,8 +175,8 @@ def test_api_post_database_error_triggers_rollback(app, post_payload):
         side_effect = Exception("DB error")
         with patch.object(db.session, "commit", side_effect=side_effect):
             with patch.object(db.session, "rollback") as mock_rollback:
-                response = test_client.post(
-                    url_for("api.secret"), json=post_payload)
+                response = test_client.post(url_for("api.secret"),
+                                            json=post_payload)
 
     assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
     data = response.get_json()

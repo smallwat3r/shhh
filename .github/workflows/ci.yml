@@ -34,7 +34,7 @@ jobs:
         pip install -r requirements.txt -r requirements.dev.txt
     - name: Format check
       run: |
-        yapf --diff --recursive shhh tests
+        yapf --diff --recursive shhh tests --exclude shhh/migrations/
     - name: Linting checks
       run: |
         ruff check shhh tests --exclude shhh/migrations/ --exclude shhh/static/

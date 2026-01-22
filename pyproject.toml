@@ -1,6 +1,6 @@
 [tool.mypy]
 python_version = "3.12"
-exclude = ["shhh/static"]
+exclude = ["shhh/static", "shhh/migrations"]
 warn_return_any = true
 warn_unused_configs = true
 ignore_missing_imports = true

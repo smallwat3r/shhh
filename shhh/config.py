@@ -26,7 +26,8 @@ class DefaultConfig:
     _db_user = quote_plus(DB_USER or '')
     _db_password = quote_plus(DB_PASSWORD or '')
     SQLALCHEMY_DATABASE_URI = (
-        f"{DB_ENGINE}://{_db_user}:{_db_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
+        f"{DB_ENGINE}://{_db_user}:{_db_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    )
 
     #
     # Shhh optional custom configurations
