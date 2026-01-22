@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 from flask import Flask, Response, render_template as rt, g, request
 from flask_alembic import Alembic
 from flask_assets import Bundle
-from htmlmin.main import minify
 
 from shhh import __version__, config
 from shhh.adapters import orm
@@ -135,10 +134,7 @@ def _make_csp_nonce() -> None:
 
 
 def _optimize_response(response: Response) -> Response:
-    """Minify HTML and use gzip compression."""
-    if response.mimetype == "text/html":
-        response.set_data(minify(response.get_data(as_text=True)))
-
+    """Use gzip compression on responses."""
     # do not gzip below 500 bytes or on JSON content
     if (response.content_length < 500
             or response.mimetype == "application/json"):
@@ -152,6 +148,7 @@ def _optimize_response(response: Response) -> Response:
     gzip_file.close()
 
     response.set_data(gzip_buffer.getvalue())
+    response.headers.remove("Content-Length")
     response.headers.add("Content-Encoding", "gzip")
     return response
 

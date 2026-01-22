@@ -6,7 +6,6 @@ Flask-APScheduler>=1,<2
 Flask-Assets>=2,<3
 Flask-SQLAlchemy>=3,<4
 gunicorn
-htmlmin
 jsmin
 psycopg2-binary>=2,<3
 requests
