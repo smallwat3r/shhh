@@ -87,13 +87,19 @@ class WriteHandler(Handler):
         self.tries = tries
 
     @db_liveness_ping(ClientType.WEB)
-    def handle(self) -> tuple[WriteResponse, HTTPStatus]:
-        encrypted_secret = model.Secret.encrypt(message=self.secret,
-                                                passphrase=self.passphrase,
-                                                expire_code=self.expire,
-                                                tries=self.tries)
-        db.session.add(encrypted_secret)
-        db.session.commit()
+    def handle(self) -> tuple[WriteResponse | ErrorResponse, HTTPStatus]:
+        try:
+            encrypted_secret = model.Secret.encrypt(message=self.secret,
+                                                    passphrase=self.passphrase,
+                                                    expire_code=self.expire,
+                                                    tries=self.tries)
+            db.session.add(encrypted_secret)
+            db.session.commit()
+        except Exception as exc:
+            db.session.rollback()
+            app.logger.exception("Failed to create secret: %s", exc)
+            return (ErrorResponse(Message.UNEXPECTED),
+                    HTTPStatus.INTERNAL_SERVER_ERROR)
         app.logger.info("%s created", str(encrypted_secret))
         return (WriteResponse(encrypted_secret.external_id,
                               encrypted_secret.expires_on_text),

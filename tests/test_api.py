@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
+from unittest.mock import patch
 from urllib.parse import urlparse
 
 import pytest
@@ -167,3 +168,17 @@ def test_api_read_secret(app, secret, post_payload):
 
     # the secret should have been deleted
     assert secret is None
+
+
+def test_api_post_database_error_triggers_rollback(app, post_payload):
+    with app.test_request_context(), app.test_client() as test_client:
+        with patch.object(db.session, "commit", side_effect=Exception("DB error")):
+            with patch.object(db.session, "rollback") as mock_rollback:
+                response = test_client.post(
+                    url_for("api.secret"), json=post_payload)
+
+    assert response.status_code == HTTPStatus.INTERNAL_SERVER_ERROR
+    data = response.get_json()
+    assert data["response"]["status"] == Status.ERROR
+    assert data["response"]["details"] == Message.UNEXPECTED
+    mock_rollback.assert_called_once()
