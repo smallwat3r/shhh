@@ -51,7 +51,7 @@ class WriteRequest(Schema):
                        validate=validate.OneOf(READ_TRIES_VALUES))
 
     @pre_load
-    def secret_sanitise_newline(self, data, **kwargs):
+    def secret_sanitise_newline(self, data: dict, **kwargs) -> dict:
         if isinstance(data.get("secret"), str):
             data["secret"] = "\n".join(data["secret"].splitlines())
         return data
@@ -78,7 +78,6 @@ class ReadResponse(CallableResponse):
 
 def _build_link_url(external_id: str) -> str:
     url = url_for("web.read", external_id=external_id, _external=True)
-    root_host = app.config.get("SHHH_HOST")
     if root_host := app.config.get("SHHH_HOST"):
         url = urljoin(root_host, url_for("web.read", external_id=external_id))
     return str(url)
