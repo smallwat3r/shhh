@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING
 from sqlalchemy.ext.hybrid import hybrid_method
 
 from cryptography.fernet import Fernet
-from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
@@ -42,8 +41,7 @@ class Secret:
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(),
                          length=32,
                          salt=salt,
-                         iterations=iterations,
-                         backend=default_backend())
+                         iterations=iterations)
         return urlsafe_b64encode(kdf.derive(passphrase.encode()))
 
     @staticmethod
@@ -97,7 +95,7 @@ class Secret:
 
     @hybrid_method
     def has_expired(self) -> bool:
-        return self.date_expires <= datetime.now()
+        return self.date_expires <= datetime.now(timezone.utc)
 
     @hybrid_method
     def has_external_id(self, external_id: str) -> bool:
