@@ -38,5 +38,6 @@ def read(external_id: str) -> str:
 
 @web.get("/robots.txt")
 def robots_dot_txt() -> Response:
-    assert app.static_folder is not None
+    if app.static_folder is None:
+        return Response("Not found", status=404)
     return send_from_directory(app.static_folder, "robots.txt")

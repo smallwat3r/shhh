@@ -1,6 +1,7 @@
 from http import HTTPStatus
+from unittest.mock import PropertyMock, patch
 
-from flask import url_for
+from flask import Flask, url_for
 
 
 def test_create_route(app):
@@ -14,6 +15,16 @@ def test_robots_dot_txt_route(app):
         response = test_client.get(url_for("web.robots_dot_txt"))
         response.close()  # avoid unclosed file warning
     assert response.status_code == HTTPStatus.OK
+
+
+def test_robots_dot_txt_no_static_folder(app):
+    with app.test_request_context(), app.test_client() as test_client:
+        with patch.object(Flask,
+                          "static_folder",
+                          new_callable=PropertyMock,
+                          return_value=None):
+            response = test_client.get(url_for("web.robots_dot_txt"))
+    assert response.status_code == HTTPStatus.NOT_FOUND
 
 
 def test_read_route(app):
