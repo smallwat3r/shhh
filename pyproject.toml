@@ -6,12 +6,14 @@ warn_unused_configs = true
 ignore_missing_imports = true
 
 [tool.ruff]
-select = ["E", "F"]
-fixable = ["ALL"]
 exclude = [".eggs", ".git", ".mypy_cache", ".ruff_cache", "venv"]
-per-file-ignores = {}
 line-length = 79
 target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+fixable = ["ALL"]
+per-file-ignores = {}
 
 [tool.yapf]
 split_before_logical_operator = true

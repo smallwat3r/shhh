@@ -172,7 +172,8 @@ def test_api_read_secret(app, secret, post_payload):
 
 def test_api_post_database_error_triggers_rollback(app, post_payload):
     with app.test_request_context(), app.test_client() as test_client:
-        with patch.object(db.session, "commit", side_effect=Exception("DB error")):
+        side_effect = Exception("DB error")
+        with patch.object(db.session, "commit", side_effect=side_effect):
             with patch.object(db.session, "rollback") as mock_rollback:
                 response = test_client.post(
                     url_for("api.secret"), json=post_payload)
