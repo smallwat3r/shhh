@@ -3,6 +3,7 @@ from flask import current_app as app
 from flask import redirect
 from flask import render_template as rt
 from flask import request, send_from_directory, url_for
+from werkzeug import Response
 
 from shhh.constants import (DEFAULT_EXPIRATION_TIME_VALUE,
                             DEFAULT_READ_TRIES_VALUE,
@@ -13,7 +14,7 @@ web = Blueprint("web", __name__, url_prefix="/")
 
 
 @web.get("/")
-def create():
+def create() -> str:
     return rt("create.html",
               secret_max_length=app.config["SHHH_SECRET_MAX_LENGTH"],
               expiration_time_values=EXPIRATION_TIME_VALUES,
@@ -23,7 +24,7 @@ def create():
 
 
 @web.get("/secret")
-def created():
+def created() -> str | Response:
     link, expires_on = request.args.get("link"), request.args.get("expires_on")
     if not link or not expires_on:
         return redirect(url_for("web.create"))
@@ -31,10 +32,11 @@ def created():
 
 
 @web.get("/secret/<external_id>")
-def read(external_id: int):
+def read(external_id: str) -> str:
     return rt("read.html", external_id=external_id)
 
 
 @web.get("/robots.txt")
-def robots_dot_txt():
-    return send_from_directory(app.static_folder, request.path[1:])
+def robots_dot_txt() -> Response:
+    assert app.static_folder is not None
+    return send_from_directory(app.static_folder, "robots.txt")
