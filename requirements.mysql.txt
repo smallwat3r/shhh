@@ -8,7 +8,7 @@ Flask-SQLAlchemy>=3,<4
 gunicorn
 htmlmin
 jsmin
-PyMySQL>=1,<2
+PyMySQL>=1.2.0,<2
 requests
 typing_extensions
 marshmallow>=4.1.2
