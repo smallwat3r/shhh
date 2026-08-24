@@ -10,5 +10,5 @@ jsmin
 psycopg2-binary>=2.9.12,<3
 requests
 typing_extensions
-marshmallow>=4.3.0
+marshmallow>=4.3.1
 webargs
